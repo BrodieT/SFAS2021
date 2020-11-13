@@ -7,10 +7,12 @@ using UnityEditor;
 #endif
 
 [Serializable]
+[CreateAssetMenu(menuName = "My Assets/Story Data")]
 public class StoryData : ScriptableObject
 {
-    [SerializeField] private List<BeatData> _beats;
+    [SerializeField] private List<BeatData> _beats = default; //A list of all the story beats
  
+    //return the beat data for the given ID
     public BeatData GetBeatById( int id )
     {
         return _beats.Find(b => b.ID == id);
@@ -19,16 +21,30 @@ public class StoryData : ScriptableObject
 #if UNITY_EDITOR
     public const string PathToAsset = "Assets/Data/Story.asset";
 
-    public static StoryData LoadData()
+    //This function Loads in the provided story data
+    public static StoryData LoadData(string path)
     {
-        StoryData data = AssetDatabase.LoadAssetAtPath<StoryData>(PathToAsset);
+        StoryData data = AssetDatabase.LoadAssetAtPath<StoryData>(path);
         if (data == null)
         {
-            data = CreateInstance<StoryData>();
-            AssetDatabase.CreateAsset(data, PathToAsset);
+            Debug.LogWarning("Story Data could not be found at given file path. Creating new story data.");
+            //data = CreateInstance<StoryData>();
+            //AssetDatabase.CreateAsset(data, path);
+            return null;
         }
 
         return data;
+    }
+
+    public static void CreateNewStoryData(string path)
+    {
+        StoryData data = CreateInstance<StoryData>();
+        AssetDatabase.CreateAsset(data, path);
+    }
+
+    public static void DeleteStoryData(string path)
+    {
+        AssetDatabase.DeleteAsset(path);
     }
 #endif
 }
