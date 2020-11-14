@@ -8,6 +8,14 @@ using UnityEditor.UIElements;
 //This class creates the story editor window
 public class StoryEditor : EditorWindow
 {
+
+    #region Singleton
+
+    public static StoryEditor Instance;
+
+
+    #endregion
+
     private enum View { List, Beat }
 
     private Vector2 _scroll = new Vector2();
@@ -28,22 +36,23 @@ public class StoryEditor : EditorWindow
 
     private void OnEnable()
     {
-        Debug.Log("OnENable");
-                GenerateToolbar();
-
+        Instance = this;
+        GenerateToolbar();
     }
     //This function handles the creation of the editor GUI for story creation
     void OnGUI()
     {
-        if (CurrentStory == null)
+        if (CurrentStory == null || CurrentData == null || CurrentBeatList == null)
             return;
         
-
-        Debug.Log("OnGUI");
 
 
         //Begin the GUI 
         EditorGUILayout.BeginVertical();
+        EditorGUILayout.Space();
+        EditorGUILayout.Space();
+        EditorGUILayout.Space();
+
         //Create a scroll view
         _scroll = EditorGUILayout.BeginScrollView(_scroll);
 
@@ -62,10 +71,26 @@ public class StoryEditor : EditorWindow
         EditorGUILayout.EndScrollView();
         EditorGUILayout.EndVertical();
 
+        CurrentData.ApplyModifiedProperties();
 
-      
+
     }
 
+    [UnityEditor.Callbacks.OnOpenAsset(1)]
+    public static bool OnOpenAsset(int instanceID, int line)
+    {
+        if (Selection.activeObject as StoryData != null)
+        {
+            Debug.Log("Opening");  
+            StoryEditor.Instance.Filename = Selection.activeObject.name;
+
+            ShowStoryEditor();
+            LoadStory(Selection.activeObject as StoryData);
+            return true; //catch open file
+        }
+
+        return false; // let unity open the file
+    }
 
     //This function will be used to generate a toolbar at the top of the story editor window
     //that will allow the saving and loading of different story data
@@ -74,131 +99,35 @@ public class StoryEditor : EditorWindow
         //Create the toolbar object
         Toolbar toolbar = new Toolbar();
 
-
-        //Create a text field for the asset name
-        TextField FilenameField = new TextField(label: "File Name");
-        FilenameField.labelElement.visible = true;
-        FilenameField.SetValueWithoutNotify(Filename);
-        FilenameField.MarkDirtyRepaint();
-        FilenameField.RegisterCallback((EventCallback<ChangeEvent<string>>)(evt => Filename = evt.newValue));
-        FilenameField.maxLength = 75;
-        //FilenameField.layout.Set(FilenameField.layout.x, FilenameField.layout.y, 100, FilenameField.layout.height); 
-        toolbar.Add(FilenameField);
-
-        //Add buttons to the toolbar for save, load, create, and delete
-
-        toolbar.Add(child: new Button(clickEvent: () =>
-        {
-            CreateNewStory();
-        })
-        { text = "New Story" }); 
-        
-        toolbar.Add(child: new Button(clickEvent: () =>
-        {
-            SaveStory();
-        })
-        { text = "Save Story" });
-
-        toolbar.Add(child: new Button(clickEvent: () =>
-        {
-            LoadStory();
-        })
-        { text = "Load Story" });
-
-        toolbar.Add(child: new Button(clickEvent: () =>
-        {
-            DeleteStory();
-        })
-        { text = "Delete Story" });
-
+        Label StoryName = new Label();
+        StoryName.text = "Story Data Name: " + Filename;
+        toolbar.Add(StoryName);
+  
         //Add the toolbar to the editor window
         rootVisualElement.Add(toolbar);
     }
 
-    //This function saves the current story
-    private void SaveStory()
+    //This function loads the story data into the editor window
+    private static void LoadStory(StoryData story)
     {
-        //If the filename field is empty then return & show error message
-        if (Filename == "")
+        if (story == null)
+            return;
+
+
+        if(StoryEditor.Instance == null)
         {
-            Debug.LogError("Please Enter a valid file name");
+            Debug.Log("Error");
             return;
         }
 
-        //If there is current data that can be saved then apply to the asset, otherwise breakout
-        if (CurrentData == null)
-        {
-            Debug.LogError("No Story Data to Save");
-            return;
-        }
-        else
-        {
-            Debug.Log("Successfully Saved Story Data");
-            //Save the changes made in the editor
-            CurrentData.ApplyModifiedProperties();
-        }
-    }
-
-    //This function loads the story data of the given filepath
-    private void LoadStory()
-    {
-        //If the filename field is empty then return & show error message
-        if (Filename == "")
-        {
-            Debug.LogError("Please Enter a valid file name");
-            return;
-        }
-
-
-        //Load in the story data & serialize it for display in editor
-        CurrentStory = StoryData.LoadData("Assets/Data/" + Filename + ".asset");
-
-        //If the current story was unable to be loaded then breakout
-        if (CurrentStory == null)
-        {
-            Debug.LogWarning("No Story Data Asset exists with the name: " + Filename);
-            return;
-        }
-
-        Debug.Log("Successfully Loaded Story Data");
-
-        CurrentData = new SerializedObject(CurrentStory);
+       StoryEditor.Instance.CurrentStory = story;
+        StoryEditor.Instance.CurrentData = new SerializedObject(StoryEditor.Instance.CurrentStory);
         //Get the list of story beats
-        CurrentBeatList = CurrentData.FindProperty("_beats");
-        _view = View.List;
+        StoryEditor.Instance.CurrentBeatList = StoryEditor.Instance.CurrentData.FindProperty("_beats");
+        StoryEditor.Instance._view = View.List;
+
     }
-
-    //This function Creates a new story data asset
-    private void CreateNewStory()
-    {
-        //If the filename field is empty then return & show error message
-        if (Filename == "")
-        {
-            Debug.LogError("Please Enter a valid file name");
-            return;
-        }
-
-        Debug.Log("Successfully Created New Story Data Asset");
-        StoryData.CreateNewStoryData("Assets/Data/" + Filename + ".asset");
-        LoadStory();
-    }
-
-    //Delete the currently loaded story
-    private void DeleteStory()
-    {
-        //If the filename field is empty then return & show error message
-        if (Filename == "")
-        {
-            Debug.LogError("Please Enter a valid file name");
-            return;
-        }
-
-        Debug.Log("Successfully Deleted Story Data");
-        StoryData.DeleteStoryData("Assets/Data/" + Filename + ".asset");
-    }
-
-
-
+ 
     //This function creates the list of story beats in the editor window
     private void OnGUI_ListView(SerializedProperty beatList)
     {
