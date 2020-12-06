@@ -3,7 +3,11 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - CameraHolder
+  - Target
+  - Metal
+  - ExplosiveBarrel
   layers:
   - Default
   - TransparentFX
@@ -14,13 +18,13 @@ TagManager:
   - 
   - 
   - Background
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Interactable
+  - OnScreen
+  - Player
+  - Ground
+  - Enemy
+  - Vaultable
+  - FirstPersonObjects
   - 
   - 
   - 

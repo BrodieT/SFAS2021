@@ -102,7 +102,18 @@ public class StoryEditor : EditorWindow
         Label StoryName = new Label();
         StoryName.text = "Story Data Name: " + Filename;
         toolbar.Add(StoryName);
-  
+
+        
+
+        toolbar.Add(child: new Button(clickEvent: () => {
+            if (CurrentBeatList != null)
+            {
+                int newBeatId = FindUniqueId(CurrentBeatList);
+                AddBeat(CurrentBeatList, newBeatId);
+            }
+        })
+        { text = "Add New Beat" });
+
         //Add the toolbar to the editor window
         rootVisualElement.Add(toolbar);
     }
@@ -185,12 +196,15 @@ public class StoryEditor : EditorWindow
         SerializedProperty choiceList = arrayElement.FindPropertyRelative("_choices");
         SerializedProperty text = arrayElement.FindPropertyRelative("_text");
         SerializedProperty id = arrayElement.FindPropertyRelative("_id");
+        SerializedProperty time = arrayElement.FindPropertyRelative("DisplayTime");
 
         EditorGUILayout.BeginVertical();
         //Display the ID as a label
         EditorGUILayout.LabelField("Beat ID: " + id.intValue.ToString());
         //Store the contents of the text area being created
         text.stringValue = EditorGUILayout.TextArea(text.stringValue, GUILayout.Height(200));
+        
+        EditorGUILayout.PropertyField(time);
 
         //Function for displaying the choices for this beat
         OnGUI_BeatViewDecision(choiceList, beatList);
@@ -203,6 +217,7 @@ public class StoryEditor : EditorWindow
             _view = View.List;
             _currentIndex = -1;
         }
+
     }
 
     //This function displays all the choices for the current beat
@@ -219,13 +234,15 @@ public class StoryEditor : EditorWindow
         //Add a button for adding more choices
         if (GUILayout.Button((choiceList.arraySize == 0 ? "Add Choice" : "Add Another Choice"), GUILayout.Height(100)))
         {
-            int newBeatId = FindUniqueId(beatList);
-            AddBeat(beatList, newBeatId);
-            AddChoice(choiceList, newBeatId);
+           // int newBeatId = FindUniqueId(beatList);
+           // AddBeat(beatList, newBeatId);
+            AddChoice(choiceList, -1);
         }
 
         EditorGUILayout.EndHorizontal();
     }
+
+    
 
     //This function displays the individual choices available
     private void OnGUI_BeatViewChoice(SerializedProperty choiceList, int index, SerializedProperty beatList)
@@ -233,6 +250,8 @@ public class StoryEditor : EditorWindow
         SerializedProperty arrayElement = choiceList.GetArrayElementAtIndex(index);
         SerializedProperty text = arrayElement.FindPropertyRelative("_text");
         SerializedProperty beatId = arrayElement.FindPropertyRelative("_beatId");
+        SerializedProperty prog = arrayElement.FindPropertyRelative("AutoProgress");
+        SerializedProperty evnt = arrayElement.FindPropertyRelative("OnSelected");
 
         EditorGUILayout.BeginVertical();
 
@@ -240,6 +259,14 @@ public class StoryEditor : EditorWindow
         text.stringValue = EditorGUILayout.TextArea(text.stringValue, GUILayout.Height(50));
         //Add label for the linked ID 
         EditorGUILayout.LabelField("Leads to Beat ID: " + beatId.intValue.ToString());
+
+        beatId.intValue = EditorGUILayout.IntField(new GUIContent("Linked ID"), beatId.intValue);
+
+
+        if(!IsIdInList(CurrentBeatList, beatId.intValue))
+        {
+            beatId.intValue = 0;
+        }
 
         //Add a button for deleting this choice
         if (GUILayout.Button("Delete"))
@@ -254,6 +281,17 @@ public class StoryEditor : EditorWindow
             GUI.FocusControl(null);
             Repaint();
         }
+        
+        prog.boolValue = (EditorGUILayout.Toggle("Automatically Progress", prog.boolValue));
+
+
+        EditorGUILayout.PropertyField(evnt);
+        
+
+        
+        CurrentData.ApplyModifiedProperties();
+
+        
 
         EditorGUILayout.EndVertical();
     }

@@ -11,15 +11,30 @@ public class TextDisplay : MonoBehaviour
     private WaitForSeconds _shortWait;
     private WaitForSeconds _longWait;
     private State _state = State.Initialising;
+    [SerializeField] private float ShortTime = 0.1f;
+    [SerializeField] private float LongTime = 0.8f;
+    private string _CurrentText = default;
 
     public bool IsIdle { get { return _state == State.Idle; } }
     public bool IsBusy { get { return _state != State.Idle; } }
 
+
+
+
+    #region Singleton
+
+    public static TextDisplay Instance;
+   
+    #endregion
+
+
     private void Awake()
     {
+        Instance = this;
+
         _displayText = GetComponent<TMP_Text>();
-        _shortWait = new WaitForSeconds(0.1f);
-        _longWait = new WaitForSeconds(0.8f);
+        _shortWait = new WaitForSeconds(ShortTime);
+        _longWait = new WaitForSeconds(LongTime);
 
         _displayText.text = string.Empty;
         _state = State.Idle;
@@ -27,6 +42,7 @@ public class TextDisplay : MonoBehaviour
 
     private IEnumerator DoShowText(string text)
     {
+        _CurrentText = text;
         int currentLetter = 0;
         char[] charArray = text.ToCharArray();
 
@@ -80,10 +96,26 @@ public class TextDisplay : MonoBehaviour
         _state = State.Idle;
     }
 
-    public void Display(string text)
+    public void QuickDisplay()
+    {
+        StopAllCoroutines();
+        QuickClear();
+        _displayText.text = _CurrentText;
+        _displayText.text += "\n";
+        _displayString = _displayText.text;
+        _state = State.Idle;
+    }
+    public void QuickClear()
+    {
+        _displayString = string.Empty;
+        _displayText.text = _displayString;
+    }
+
+    public void Display(string text, float displayTime)
     {
         if (_state == State.Idle)
         {
+            _shortWait = new WaitForSeconds(displayTime);
             StopAllCoroutines();
             _state = State.Busy;
             StartCoroutine(DoShowText(text));

@@ -11,7 +11,8 @@ using UnityEditor;
 public class StoryData : ScriptableObject
 {
     [SerializeField] private List<BeatData> _beats = default; //A list of all the story beats
- 
+    [SerializeField] public bool IsCompleted = false;
+
     //return the beat data for the given ID
     public BeatData GetBeatById( int id )
     {
