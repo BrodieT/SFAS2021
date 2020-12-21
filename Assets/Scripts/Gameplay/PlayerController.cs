@@ -248,6 +248,8 @@ public class PlayerController : MonoBehaviour
             case Interactable.InteractType.Laptop:
                 CanControl = false;
 
+
+
                 if (InteractPrompt != null)
                 {
                     InteractPrompt.gameObject.SetActive(false);
@@ -292,6 +294,7 @@ public class PlayerController : MonoBehaviour
 
             if (TargetInteractable.transform.TryGetComponent(out dialogue))
             {
+
                 dialogue.StartDisplay();
             }
             else

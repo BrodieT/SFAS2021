@@ -42,6 +42,7 @@ public class AndroidController : EnemyController
 
     private void FindNewPatrolPoint()
     {
+        Debug.Log("New Patrol Point Found");
         _currentPatrolPoint++;
         if (_currentPatrolPoint >= _patrolPoints.Count)
         {
@@ -60,8 +61,8 @@ public class AndroidController : EnemyController
         if (_playerDistance <= _meleeRange && _meleeTimer <= 0.0f)
         {
             _meleeTimer = _meleeAttackCooldown;
-            Vector3 hurtDirection = (PlayerMovement.PlayerInstance.transform.position - transform.position).normalized;
-            PlayerMovement.PlayerInstance.GetComponent<ForceReceiver>().AddForce((hurtDirection + Vector3.up).normalized, 100.0f);
+            Vector3 hurtDirection = (PlayerMovement.instance.transform.position - transform.position).normalized;
+            PlayerMovement.instance.GetComponent<ForceReceiver>().AddForce((hurtDirection + Vector3.up).normalized, 100.0f);
         }
         else if (_playerDistance <= _shootingRange && _rangedTimer <= 0.0f)
         {
@@ -70,7 +71,7 @@ public class AndroidController : EnemyController
         }
         else
         {
-            EnemyMove(PlayerMovement.PlayerInstance.transform.position);
+            EnemyMove(PlayerMovement.instance.transform.position);
         }
     }
 
@@ -83,5 +84,11 @@ public class AndroidController : EnemyController
         {
             Gizmos.DrawSphere(item.position, 0.5f);
         }
+
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, _shootingRange);
+
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, _detectionRange);
     }
 }

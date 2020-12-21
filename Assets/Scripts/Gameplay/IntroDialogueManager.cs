@@ -11,7 +11,7 @@ public class IntroDialogueManager : DialogueManager
 
     public override void UpdateInput()
     {
-        if (Story.IsCompleted == true)
+        if (_story._isCompleted == true)
         {
             GetComponentInParent<Animator>().SetTrigger("Play");
             this.enabled = false;

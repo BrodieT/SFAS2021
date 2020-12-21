@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(CharacterController))]
 public class EnemyController : MonoBehaviour
 {
@@ -38,7 +37,7 @@ public class EnemyController : MonoBehaviour
     //Determines what is considered ground
     [SerializeField] private LayerMask _groundMask = default;
     [SerializeField] private float _moveSpeed = 2.0f;
-    [SerializeField] private float _turnSpeed = 3.0f;
+    [SerializeField] public float _turnSpeed = 3.0f;
     [Header("Enemy Combat Parameters")]
     [SerializeField] public float _shootingRange = 10.0f;
     [SerializeField] public float _detectionRange = 20.0f;
@@ -66,9 +65,9 @@ public class EnemyController : MonoBehaviour
 
     public bool DetectPlayer()
     {
-        if(_playerDistance < _detectionRange && Physics.Raycast(transform.position + transform.forward, (PlayerMovement.PlayerInstance.transform.position - transform.position).normalized, out _target, _detectionRange, _playerMask))
+        if(_playerDistance < _detectionRange && Physics.Raycast(transform.position + transform.forward, (PlayerMovement.instance.transform.position - transform.position).normalized, out _target, _detectionRange, _playerMask))
         {
-            if(_target.transform.gameObject == PlayerMovement.PlayerInstance)
+            if(_target.transform.gameObject == PlayerMovement.instance)
                 return true;
         }
 
@@ -94,7 +93,7 @@ public class EnemyController : MonoBehaviour
     {
         _rangedTimer -= Time.deltaTime;
 
-        Vector3 targetPoint = PlayerMovement.PlayerInstance.transform.position - transform.position;
+        Vector3 targetPoint = PlayerMovement.instance.transform.position - transform.position;
         Quaternion targetRote = Quaternion.LookRotation(targetPoint, Vector3.up);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRote, Time.deltaTime * _turnSpeed);
 
@@ -111,7 +110,7 @@ public class EnemyController : MonoBehaviour
             _velocity.y = -2.0f;
            
         
-        _playerDistance = Vector3.Distance(transform.position, PlayerMovement.PlayerInstance.transform.position);
+        _playerDistance = Vector3.Distance(transform.position, PlayerMovement.instance.transform.position);
 
 
         if (DetectPlayer())
@@ -175,13 +174,4 @@ public class EnemyController : MonoBehaviour
    
 
 
-    private void OnDrawGizmosSelected()
-    {
-       
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, _shootingRange);
-
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, _detectionRange);
-    }
 }

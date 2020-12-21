@@ -10,42 +10,49 @@ using TMPro;
 public class DialogueManager : MonoBehaviour
 {
 
-    [SerializeField] public StoryData Story = default; //The story used at the introduction to the game
+    [SerializeField] public StoryData _story = default; //The story used at the introduction to the game
     [SerializeField] public TextDisplay _outputScreen = default; //The screen that this process will display text on
     [SerializeField] public GameObject ButtonList = default;
     [SerializeField] public GameObject ButtonPrefab = default;
 
+    [SerializeField] private GameObject _TextDisplayPrefab = default;
+
     private BeatData _currentBeat;
     private WaitForSeconds _wait;
 
-    private bool BeginStory = false;
+    private bool _beginStory = false;
 
     private void Awake()
     {
         _currentBeat = null;
         ButtonList.SetActive(false);
         _wait = new WaitForSeconds(0.5f);
-        Story.IsCompleted = false;
+        _story._isCompleted = false;
     }
 
     public void StartDisplay()
     {
+       // _outputScreen = Instantiate(_TextDisplayPrefab).GetComponentInChildren<TextDisplay>();
+
         _currentBeat = null;
         ButtonList.SetActive(false);
         _wait = new WaitForSeconds(0.5f);
-        Story.IsCompleted = false;
-        BeginStory = true;
+
+        if(_story._isRepeatable && _story._isCompleted)
+            _story._isCompleted = false;
+
+        _beginStory = true;
     }
 
     private void Update()
     {
-        if (BeginStory)
+        if (_beginStory)
         {
-            if (Story.IsCompleted)
+            if (_story._isCompleted)
             {
                 GameUtility.HideCursor();
             }
-            else if (GameUtility.IsCursorHidden)
+            else if (GameUtility._isCursorHidden)
             {
                 GameUtility.ShowCursor();
             }
@@ -73,6 +80,9 @@ public class DialogueManager : MonoBehaviour
         {
             if (_currentBeat.Decision[0].AutoProgress)
             {
+                if (_currentBeat.Decision[0].NextID < 0 || _currentBeat.Decision[0].NextID >= _story.GetBeatCount())
+                    Debug.Log("Invalid Linked ID");
+
                 DisplayBeat(_currentBeat.Decision[0].NextID);
                 return;
             }
@@ -82,17 +92,19 @@ public class DialogueManager : MonoBehaviour
         if (_currentBeat.Decision.Count == 0)
         {
             ButtonList.SetActive(false);
-            Story.IsCompleted = true;
-            PlayerController.Instance.CanControl = true;
-            PlayerController.Instance.ResetCamera();
+            _story._isCompleted = true;
+            GameUtility._isPlayerObjectBeingControlled = true;
+            PlayerAutoPilot.instance.ResetCamera();
         }
     }
 
-   
     private void DisplayBeat(int id)
     {
-       
-        BeatData data = Story.GetBeatById(id);
+        if (id <= 0)
+            id = 1;
+
+
+        BeatData data = _story.GetBeatById(id);
         StartCoroutine(DoDisplay(data));
         _currentBeat = data;
 
@@ -118,6 +130,12 @@ public class DialogueManager : MonoBehaviour
             yield return null;
         }
 
+        if (_outputScreen == null)
+            Debug.Log("Screen is null");
+
+        if (data == null)
+            Debug.Log("data is null");
+
         _outputScreen.Display(data.DisplayText, data.DisplayTime);
 
         while (_outputScreen.IsBusy)
@@ -126,7 +144,7 @@ public class DialogueManager : MonoBehaviour
         }
 
 
-        if (data.Decision.Count > 1)
+        if (data.Decision.Count >= 1)
         {
             for (int count = 0; count < data.Decision.Count; ++count)
             {

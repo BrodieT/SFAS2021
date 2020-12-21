@@ -23,10 +23,14 @@ public class StoryEditor : EditorWindow
     private View _view;
     
     //The filename of the story data being saved/loaded
-    private string Filename = "New Story Data";
+    private static string _currentStoryFileName = "New Story Data";
     StoryData CurrentStory = default;
     SerializedObject CurrentData = default;
     SerializedProperty CurrentBeatList = default;
+
+    Toolbar _toolbar = default;
+    private Label _filenameLabel = default;
+    private Label _repeatableLabel = default;
 
     [MenuItem("SFAS/Show Story Editor")]
     public static void ShowStoryEditor()
@@ -44,7 +48,8 @@ public class StoryEditor : EditorWindow
     {
         if (CurrentStory == null || CurrentData == null || CurrentBeatList == null)
             return;
-        
+
+        _filenameLabel.text = "Story Data Name: " + _currentStoryFileName;
 
 
         //Begin the GUI 
@@ -81,8 +86,7 @@ public class StoryEditor : EditorWindow
     {
         if (Selection.activeObject as StoryData != null)
         {
-            Debug.Log("Opening");  
-            StoryEditor.Instance.Filename = Selection.activeObject.name;
+            _currentStoryFileName = Selection.activeObject.name;
 
             ShowStoryEditor();
             LoadStory(Selection.activeObject as StoryData);
@@ -97,15 +101,14 @@ public class StoryEditor : EditorWindow
     private void GenerateToolbar()
     {
         //Create the toolbar object
-        Toolbar toolbar = new Toolbar();
+        _toolbar = new Toolbar();
 
-        Label StoryName = new Label();
-        StoryName.text = "Story Data Name: " + Filename;
-        toolbar.Add(StoryName);
+        _filenameLabel = new Label();
+        _filenameLabel.text = "Story Data Name: " + _currentStoryFileName;
+        _toolbar.Add(_filenameLabel);
 
-        
 
-        toolbar.Add(child: new Button(clickEvent: () => {
+        _toolbar.Add(child: new Button(clickEvent: () => {
             if (CurrentBeatList != null)
             {
                 int newBeatId = FindUniqueId(CurrentBeatList);
@@ -114,8 +117,29 @@ public class StoryEditor : EditorWindow
         })
         { text = "Add New Beat" });
 
+
+        _toolbar.Add(child: new Button(clickEvent: () => {
+            ToggleRepeatable();
+        })
+        { text = "Toggle Repeatable" });
+
+        _repeatableLabel = new Label();
+        _toolbar.Add(_repeatableLabel);
+
         //Add the toolbar to the editor window
-        rootVisualElement.Add(toolbar);
+        rootVisualElement.Add(_toolbar);
+    }
+
+    private void ToggleRepeatable()
+    {
+        if(CurrentStory != null)
+        {
+            CurrentStory._isRepeatable = !CurrentStory._isRepeatable;
+            if (CurrentStory._isRepeatable)
+                _repeatableLabel.text = "Repeatable";
+            else
+                _repeatableLabel.text = "Not Repeatable";
+        }
     }
 
     //This function loads the story data into the editor window
@@ -216,6 +240,8 @@ public class StoryEditor : EditorWindow
         {
             _view = View.List;
             _currentIndex = -1;
+
+            GUI.FocusControl(null);
         }
 
     }

@@ -64,21 +64,23 @@ public class MouseLook : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Multiply the raw look direction vector with a sensitivity parameter and delta time
-        _lookDirection *= _mouseSensitivity * Time.deltaTime;
+        if (GameUtility._isPaused || GameUtility._isPlayerObjectBeingControlled)
+        {
+            //Multiply the raw look direction vector with a sensitivity parameter and delta time
+            _lookDirection *= _mouseSensitivity * Time.deltaTime;
 
-        //Increment the rotation around the x-axis (vertical look) & clamp values to prevent full 360
-        _xRotation -= _lookDirection.y;
-        _xRotation = Mathf.Clamp(_xRotation, -90.0f, 90.0f);
+            //Increment the rotation around the x-axis (vertical look) & clamp values to prevent full 360
+            _xRotation -= _lookDirection.y;
+            _xRotation = Mathf.Clamp(_xRotation, -90.0f, 90.0f);
 
-        //Rotate only the camera object around the x-axis (vertical look) 
-        transform.localRotation = Quaternion.Euler(_xRotation, 0.0f, 0.0f);
-        //Rotate the entire player around the y-axis (horizontal look)
-        _playerBody.Rotate(Vector3.up, _lookDirection.x);
+            //Rotate only the camera object around the x-axis (vertical look) 
+            transform.localRotation = Quaternion.Euler(_xRotation, 0.0f, 0.0f);
+            //Rotate the entire player around the y-axis (horizontal look)
+            _playerBody.Rotate(Vector3.up, _lookDirection.x);
 
-        //Perform the camera bob if applicable
-        DoCameraBob();
-
+            //Perform the camera bob if applicable
+            DoCameraBob();
+        }
     }
     
     //This function handles the camera bob 

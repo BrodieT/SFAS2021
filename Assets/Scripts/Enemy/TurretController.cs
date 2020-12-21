@@ -10,14 +10,17 @@ public class TurretController : EnemyController
     private Quaternion _targetRote = new Quaternion();
     private List<Quaternion> _turretPatrolRotes = new List<Quaternion>();
     [SerializeField] private float _turretTurnSpeed = 1.0f;
-
+    [SerializeField] Transform _rotatableObject = default;
 
     // Start is called before the first frame update
     public override void Start()
     {
         base.Start();
 
-        _defaultRotation = transform.rotation.eulerAngles;
+        if (_rotatableObject == null)
+            _rotatableObject = transform;
+
+        _defaultRotation = _rotatableObject.rotation.eulerAngles;
      
         Quaternion roteA = Quaternion.Euler(_defaultRotation + (Vector3.up * _turretViewAngle));
         Quaternion roteB = Quaternion.Euler(_defaultRotation - (Vector3.up * _turretViewAngle));
@@ -42,32 +45,35 @@ public class TurretController : EnemyController
 
     public override void Patrol()
     {
-        base.Patrol();
-
-        if (Quaternion.Angle(transform.rotation, _targetRote) < 1)
+        if (Quaternion.Angle(_rotatableObject.rotation, _targetRote) < 1)
         {
             FindNewTurretRotation();
         }
         else
         {
-            transform.rotation = Quaternion.Slerp(transform.rotation, _targetRote, Time.deltaTime * _turretTurnSpeed);
+            _rotatableObject.rotation = Quaternion.Slerp(_rotatableObject.rotation, _targetRote, Time.deltaTime * (_turretTurnSpeed / 2));
         }
     }
-    
+
+    public override void Search()
+    {
+        base.Search();
+    }
+
     public override void Attack()
     {
-        base.Attack();
+
+        _rangedTimer -= Time.deltaTime;
+
+        Vector3 targetPoint = PlayerMovement.instance.transform.position - transform.position;
+        Quaternion targetRote = Quaternion.LookRotation(targetPoint, Vector3.up);
+        _rotatableObject.rotation = Quaternion.Slerp(_rotatableObject.rotation, targetRote, Time.deltaTime * _turnSpeed);
+
 
         if (_playerDistance <= _shootingRange && _rangedTimer <= 0.0f)
         {
             Debug.Log("Bang!");
             _rangedTimer = _rangedAttackCooldown;
         }
-    }
-
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
     }
 }

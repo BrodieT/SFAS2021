@@ -67,7 +67,7 @@ public class Game : MonoBehaviour
         {
             if (_currentStory == _introStory)
             {
-                _introStory.IsCompleted = true;
+                _introStory._isCompleted = true;
                 _introLaptopScreen.GetComponentInParent<Animator>().SetTrigger("Play");
                 PlayerController.Instance.CanControl = true;
             }

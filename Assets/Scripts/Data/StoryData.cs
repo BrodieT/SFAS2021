@@ -11,12 +11,18 @@ using UnityEditor;
 public class StoryData : ScriptableObject
 {
     [SerializeField] private List<BeatData> _beats = default; //A list of all the story beats
-    [SerializeField] public bool IsCompleted = false;
+    [SerializeField] public bool _isCompleted = false; //Tracks whether the story has been completed
+    [SerializeField] public bool _isRepeatable = false; //Tracks whether the story data can be repeated
 
     //return the beat data for the given ID
     public BeatData GetBeatById( int id )
     {
         return _beats.Find(b => b.ID == id);
+    }
+
+    public int GetBeatCount()
+    {
+        return _beats.Count;
     }
 
 #if UNITY_EDITOR

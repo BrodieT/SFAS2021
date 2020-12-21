@@ -7,7 +7,7 @@ public static class GameUtility
     //This function shows the cursor
     public static void ShowCursor()
     {
-        IsCursorHidden = false;
+        _isCursorHidden = false;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
     }
@@ -15,13 +15,15 @@ public static class GameUtility
     //This function hides the cursor
     public static void HideCursor()
     {
-        IsCursorHidden = true;
+        _isCursorHidden = true;
         UnityEngine.Cursor.lockState = CursorLockMode.Locked;
         UnityEngine.Cursor.visible = false;
     }
 
-    public static bool IsCursorHidden = true; //Tracks whether the cursor is hidden
-    public static bool IsPaused = false; //Tracks whether the game is paused
+    public static bool _isCursorHidden = true; //Tracks whether the cursor is hidden
+    public static bool _isPaused = false; //Tracks whether the game is paused
+
+    public static bool _isPlayerObjectBeingControlled = true;
 
 
     //These bools are used to track what gear the player picks up at the start of the game

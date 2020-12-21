@@ -39,7 +39,7 @@ MonoBehaviour:
   - _choices:
     - _text: Back
       _beatId: 0
-      AutoProgress: 1
+      AutoProgress: 0
       OnSelected:
         m_PersistentCalls:
           m_Calls: []
@@ -50,7 +50,7 @@ MonoBehaviour:
   - _choices:
     - _text: New Beat Choice
       _beatId: 0
-      AutoProgress: 1
+      AutoProgress: 0
       OnSelected:
         m_PersistentCalls:
           m_Calls: []
@@ -62,4 +62,5 @@ MonoBehaviour:
     _text: Closing Terminal
     _id: 4
     DisplayTime: 0.1
-  IsCompleted: 1
+  _isCompleted: 1
+  _isRepeatable: 1

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+[DisallowMultipleComponent()]
 [RequireComponent(typeof(CharacterController))]
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : AutoCleanupSingleton<PlayerMovement>
 {
     #region Private Attributes
 
@@ -31,12 +32,22 @@ public class PlayerMovement : MonoBehaviour
 
     //The current movement speed
     private float _currentSpeed = 0.0f;
+
+    //Determines whether the player can move
+    //This is used when mantling or vaulting to overwrite the default movement behaviours
+    private bool _canMove = true;
+
+    //Tracks whether a vault is in progress
+    private bool _isVaulting = false;
+    //Tracks whether a mantle is in progress
+    private bool _isMantling = false;
     #endregion
 
     #region Assignable In Inspector Attributes
 
+    [Header("Player Movement Settings")]
     //The normal movement speed
-    [SerializeField] float _walkSpeed = 12.0f;
+    [SerializeField] public float _walkSpeed = 12.0f;
     //The faster movement speed
     [SerializeField] float _runSpeed = 24.0f;
     //How much downward velocity the player is subject to due to gravity
@@ -47,9 +58,16 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _groundDistance = 0.4f;
     //Determines what is considered ground
     [SerializeField] private LayerMask _groundMask = default;
+
+    [Header("Advanced Player Movement Settings")]
     //Determines what objects the player can vault over
     [SerializeField] private LayerMask _vaultMask = default;
-
+    //The forces applied when vaulting an obstacle
+    [SerializeField] private float _vaultUpForce = 100.0f;
+    [SerializeField] private float _vaultForwardForce = 100.0f;
+    //The forces applied when mantling up a ledge
+    [SerializeField] private float _mantleUpForce = 20.0f;
+    [SerializeField] private float _mantleForwardForce = 5.0f;
     #endregion
 
     #region InputCallbacks
@@ -78,121 +96,179 @@ public class PlayerMovement : MonoBehaviour
     public void Crouch(InputAction.CallbackContext context)
     {
         if (context.performed)
-        {
+        { 
+            //Change the height of the character controller to the crouch height
             _controller.height = _crouchHeight;
+           
 
-
-
+            //If the player is moving faster than a run, add forward force to slide
             if (_currentSpeed > _walkSpeed)
             {
-                Debug.Log(_currentSpeed);
-                Debug.Log("Slide");
                 GetComponent<ForceReceiver>().AddForce(transform.forward, 100.0f);
             }
         }
         else
         {
+            //Return the character controller height to the standing height
             _controller.height = _defaultHeight;
         }
+
+        //Adjust the ground check position according to the new height
+        //_groundCheck.position = transform.position - (transform.up * (_controller.height / 2));
     }
 
 
     #endregion
 
-
-    #region Singleton
-
-    public static GameObject PlayerInstance;
-
-    private void Awake()
-    {
-        PlayerInstance = gameObject;
-    }
-    #endregion
+    
 
     // Start is called before the first frame update
     void Start()
     {
         //Get the character controller component
         _controller = GetComponent<CharacterController>();
+        //Store and calculate the appropriate character heights
         _defaultHeight = _controller.height;
         _crouchHeight = _defaultHeight * 0.5f;
+        //Set the default speed to the walk speed
         _currentSpeed = _walkSpeed;
+
+
     }
+
+    //This function interpolates the current move speed based on whether the player is running or walking
     private void UpdateMoveSpeed()
     {
+        //if the player is sprinting and not at top speed yet
         if(_isSprinting && _currentSpeed != _runSpeed)
         {
+            //If the current speed is close enough to the run speed, assign to the run speed
+            //Otherwise continue interpolation
             if (Mathf.Abs(_currentSpeed - _runSpeed) < 0.5f)
                 _currentSpeed = _runSpeed;
             else
                 _currentSpeed = Mathf.Lerp(_currentSpeed, _runSpeed, Time.deltaTime);
         }
-        else if(_currentSpeed != _walkSpeed)
+        else if(_currentSpeed != _walkSpeed) //If the player is not sprinting, and still moving faster than a walk
         {
+            //If the current speed is close enough to the walk speed, assign to the walk speed
+            //Otherwise continue interpolation
             if (Mathf.Abs(_currentSpeed - _walkSpeed) < 1.0f)
                 _currentSpeed = _walkSpeed;
             else
                 _currentSpeed = Mathf.Lerp(_currentSpeed, _walkSpeed, Time.deltaTime);
         }
     }
-   
+
     // Update is called once per frame
     void Update()
     {
-        UpdateMoveSpeed();
-
-        //Check if the player is touching the ground
-        _isGrounded = Physics.CheckSphere(_groundCheck.position, _groundDistance, _groundMask);
-
-        //if the player is grounded, clamp the vertical velocity
-        if (_isGrounded && _velocity.y < 0)
-            _velocity.y = -2.0f;
-
-        if (_isJumping)
+        if (GameUtility._isPaused || GameUtility._isPlayerObjectBeingControlled)
         {
-            if (DetectVaultableObject(1.0f, _vaultMask))
+            //Lerp movement speeds
+            UpdateMoveSpeed();
+
+            //Check if the player is touching the ground
+            //_isGrounded = Physics.CheckSphere(_groundCheck.position, _groundDistance, _groundMask);
+            _isGrounded = Physics.CheckCapsule(_groundCheck.transform.position, _groundCheck.transform.position + (_groundCheck.transform.up * (_defaultHeight / 2)), _groundDistance, _groundMask);
+
+            //if the player is grounded, clamp the vertical velocity
+            if (_isGrounded && _velocity.y < 0)
+                _velocity.y = -2.0f;
+
+            //Handle jumping if the jump key is pressed
+            if (_isJumping && !_isVaulting)
             {
-                if (_isGrounded)
-                    VaultObject();
+                //if there is something in front of the player that can be vaulted over
+                //otherwise perform normal jump if grounded
+                if (DetectVaultableObject(1.0f, _vaultMask))
+                {
+                    _isVaulting = true;
+
+                    if (_isGrounded)
+                        VaultObject();
+                }
+                else if (_isGrounded)
+                {
+                    //If grounded, increase vertical velocity by square root of the jump height * -2 * gravity
+                    _velocity.y = Mathf.Sqrt(_jumpHeight * -2.0f * _gravity);
+                }
+                _isJumping = false;
             }
-            else if (_isGrounded)
+
+
+
+            //Calculate the localised move direction
+            Vector3 move = (transform.right * _moveDirection.x) + (transform.forward * _moveDirection.y);
+
+            if (!_isGrounded && !_isVaulting && !_isMantling)
             {
-                //If grounded, increase vertical velocity by square root of the jump height * -2 * gravity
-                _velocity.y = Mathf.Sqrt(_jumpHeight * -2.0f * _gravity);
+                if (CanMantle())
+                {
+                    _isMantling = true;
+                    Debug.Log("Mantling up Ledge");
+                    MantleLedge();
+                }
             }
-            _isJumping = false;
+
+
+            if (_canMove)
+            {
+                _controller.Move(move * _currentSpeed * Time.deltaTime);
+            }
+            //Apply gravity * delta time squared
+            _velocity.y += _gravity * Time.deltaTime;
+            _controller.Move(_velocity * Time.deltaTime);
+
+            if (_moveDirection.magnitude > 0)
+            {
+                if (_isSprinting)
+                {
+                    GetComponent<GunController>()._isWalking = false;
+                    GetComponent<GunController>()._isRunning = true;
+                }
+                else
+                {
+                    GetComponent<GunController>()._isWalking = true;
+                    GetComponent<GunController>()._isRunning = false;
+                }
+            }
+            else
+            {
+                GetComponent<GunController>()._isWalking = false;
+                GetComponent<GunController>()._isRunning = false;
+            }
         }
-        
-
-        //Calculate the localised move direction
-        Vector3 move = (transform.right * _moveDirection.x) + (transform.forward * _moveDirection.y);
-
-       
-        _controller.Move(move * _currentSpeed * Time.deltaTime);
-
-        //Apply gravity * delta time squared
-        _velocity.y += _gravity * Time.deltaTime;
-        _controller.Move(_velocity * Time.deltaTime);
-
-        
     }
 
     private void MantleLedge()
     {
+        _canMove = false;
+        GetComponent<ForceReceiver>().AddForce(Vector3.up, _mantleUpForce);
+        GetComponent<ForceReceiver>().AddForce(transform.forward, _mantleForwardForce);
+        Invoke("SetCanMoveOn", 0.5f);
+    }
 
+    private bool CanMantle()
+    {
+        return DetectVaultableObject(1.0f, LayerMask.GetMask("Ground", "Vaultable"));
     }
 
     private void VaultObject()
     {
         Debug.Log("Vault over object");
-        //if (Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, 1.0f, _vaultMask))
-        //{
-        //   // transform.position = hit.transform.position + Vector3.up;
-        //}
-        GetComponent<Animator>().SetTrigger("Vault");
 
-      
+        _canMove = false;
+        GetComponent<ForceReceiver>().AddForce(Vector3.up, _vaultUpForce);
+        GetComponent<ForceReceiver>().AddForce(transform.forward, _vaultForwardForce);
+        Invoke("SetCanMoveOn", 0.5f);
+    }
+
+    private void SetCanMoveOn()
+    {
+        _isVaulting = false;
+        _isMantling = false;
+        _canMove = true;
     }
 
     //This function returns true if the player is moving
@@ -231,5 +307,8 @@ public class PlayerMovement : MonoBehaviour
         return false;
     }
 
-
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.blue;
+    }
 }

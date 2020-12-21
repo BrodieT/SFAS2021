@@ -8,6 +8,7 @@ TagManager:
   - Target
   - Metal
   - ExplosiveBarrel
+  - PlayerHolder
   layers:
   - Default
   - TransparentFX
