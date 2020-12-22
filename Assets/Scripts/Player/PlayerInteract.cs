@@ -82,6 +82,7 @@ public class PlayerInteract : AutoCleanupSingleton<PlayerInteract>
         //Only proceed if there is a target interactable to interact with
         if (_targetInteractable.transform == null)
         {
+            GetComponent<PlayerStats>().TakeDamage(10);
             return;
         }
 

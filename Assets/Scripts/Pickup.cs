@@ -18,6 +18,7 @@ public class Pickup : MonoBehaviour
         if(other.CompareTag("Player"))
         {
             Debug.Log("Pickup");
+            other.gameObject.GetComponent<PlayerStats>().RestoreHP(10);
            
         }
     }
