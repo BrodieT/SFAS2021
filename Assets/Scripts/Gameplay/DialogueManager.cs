@@ -9,7 +9,6 @@ using TMPro;
 
 public class DialogueManager : MonoBehaviour
 {
-
     [SerializeField] public StoryData _story = default; //The story used at the introduction to the game
     [SerializeField] public float _displayTime = 0.1f;
 
