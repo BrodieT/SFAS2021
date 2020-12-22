@@ -16,9 +16,9 @@ public class PlayerInteract : AutoCleanupSingleton<PlayerInteract>
     {
         if (context.performed && !GameUtility._isPlayerObjectBeingControlled)
         {
-            DialogueManager dM = default;
+            BranchingNarrative dM = default;
 
-            if(_targetInteractable.transform.TryGetComponent<DialogueManager>(out dM))
+            if(_targetInteractable.transform.TryGetComponent<BranchingNarrative>(out dM))
             {
                 dM._outputScreen.QuickDisplay();
             }
@@ -57,6 +57,9 @@ public class PlayerInteract : AutoCleanupSingleton<PlayerInteract>
                             break;
                         case Interactable.InteractType.Laptop:
                             _interactUI.text = "Use Terminal";
+                            break;
+                        case Interactable.InteractType.NPC:
+                            _interactUI.text = "Talk";
                             break;
                     }
 
@@ -131,6 +134,41 @@ public class PlayerInteract : AutoCleanupSingleton<PlayerInteract>
                     }
 
                     break;
+
+                case Interactable.InteractType.NPC:
+                    
+                    //Disable the UI prompt
+                    if (_interactUI != null)
+                    {
+                        _interactUI.gameObject.SetActive(false);
+                    }
+
+                    //Find the player interact position 
+                    for (int i = 0; i < _targetInteractable.transform.childCount; i++)
+                    {
+                        if (_targetInteractable.transform.GetChild(i).CompareTag("PlayerHolder"))
+                        {
+                            Transform targetTransform = _targetInteractable.transform.GetChild(i).transform;
+
+                            //Find the camera holder 
+                            for (int j = 0; j < _targetInteractable.transform.childCount; j++)
+                            {
+                                if (_targetInteractable.transform.GetChild(j).CompareTag("CameraHolder"))
+                                {
+                                    Transform targetCameraTransform = _targetInteractable.transform.GetChild(j).transform;
+
+                                    //Use the autopilot to move to the correct interact transforms
+                                    PlayerAutoPilot.instance.BeginAutoPilot(targetTransform.position, targetTransform.rotation, targetCameraTransform.position, targetCameraTransform.rotation);
+                                    //Wait for the autopilot to finish
+                                    StartCoroutine(IsTerminalReady());
+                                }
+                            }
+
+                        }
+                    }
+
+                    break;
+
             }
         }
 
@@ -151,16 +189,16 @@ public class PlayerInteract : AutoCleanupSingleton<PlayerInteract>
                 }
 
                 //Prepare the dialogue manager on the terminal to begin the story
-                DialogueManager dialogue;
+                BranchingNarrative narrative;
                 GameUtility.ShowCursor();
 
-                if (_targetInteractable.transform.TryGetComponent(out dialogue))
+                if (_targetInteractable.transform.TryGetComponent(out narrative))
                 {
-                    dialogue.StartDisplay();
+                    narrative.StartDisplay();
                 }
                 else
                 {
-                    Debug.LogError("No Dialogue Manager found on laptop interactable");
+                    Debug.LogError("No Branching Narrative found on laptop interactable");
                 }
 
                 _ready = true;

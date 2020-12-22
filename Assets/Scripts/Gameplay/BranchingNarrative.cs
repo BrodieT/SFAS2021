@@ -15,7 +15,7 @@ public class BranchingNarrative : MonoBehaviour
 
 
     [HideInInspector] public TextDisplay _outputScreen = default; //The screen that this process will display text on
-    private GameObject _buttonList = default;
+    [HideInInspector] public GameObject _buttonList = default;
     [SerializeField] public GameObject _buttonPrefab = default;
 
     private BeatData _currentBeat;
@@ -28,21 +28,19 @@ public class BranchingNarrative : MonoBehaviour
         _currentBeat = null;
         _wait = new WaitForSeconds(0.5f);
         _story._isCompleted = false;
-        
 
-        GameObject _interactableUI = transform.Find("ScreenInteractable").gameObject;
-        _interactableUI.GetComponent<Canvas>().worldCamera = PlayerInteract.instance._playerCamera;
-        _buttonList = _interactableUI.transform.GetChild(0).gameObject;
-        _buttonList.SetActive(false);
 
+
+
+        OutputSetup();
     }
 
-    public virtual void GetOutputScreen()
+    public virtual void OutputSetup()
     {
-        
+        _outputScreen.InitialiseWaitTimes(_displayTime);
     }
 
-    public void StartDisplay()
+    public virtual void StartDisplay()
     {
         _currentBeat = null;
         _buttonList.SetActive(false);
@@ -104,16 +102,21 @@ public class BranchingNarrative : MonoBehaviour
         //Complete the story if no further options are available
         if (_currentBeat.Decision.Count == 0)
         {
-            _outputScreen.Clear();
-            _buttonList.SetActive(false);
-            _story._isCompleted = true;
-            GameUtility._isPlayerObjectBeingControlled = true;
-            PlayerAutoPilot.instance.ResetCamera();
-            _outputScreen.FinishDisplay();
-            StopAllCoroutines();
-            _beginStory = false;
-            GameUtility.HideCursor();
+            FinishDisplay();
         }
+    }
+
+    public virtual void FinishDisplay()
+    {
+        
+        _story._isCompleted = true;
+        GameUtility._isPlayerObjectBeingControlled = true;
+        PlayerAutoPilot.instance.ResetCamera();
+        StopAllCoroutines();
+        _outputScreen.FinishDisplay();
+
+        _beginStory = false;
+        GameUtility.HideCursor();
     }
 
     private void DisplayBeat(int id)
