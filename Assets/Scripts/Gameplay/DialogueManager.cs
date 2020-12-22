@@ -11,31 +11,38 @@ public class DialogueManager : MonoBehaviour
 {
 
     [SerializeField] public StoryData _story = default; //The story used at the introduction to the game
-    [SerializeField] public TextDisplay _outputScreen = default; //The screen that this process will display text on
-    [SerializeField] public GameObject ButtonList = default;
-    [SerializeField] public GameObject ButtonPrefab = default;
+    [SerializeField] public float _displayTime = 0.1f;
 
-    [SerializeField] private GameObject _TextDisplayPrefab = default;
+
+
+    [HideInInspector] public TextDisplay _outputScreen = default; //The screen that this process will display text on
+    private GameObject _buttonList = default;
+    [SerializeField] public GameObject _buttonPrefab = default;
 
     private BeatData _currentBeat;
     private WaitForSeconds _wait;
 
     private bool _beginStory = false;
 
-    private void Awake()
+    private void Start()
     {
         _currentBeat = null;
-        ButtonList.SetActive(false);
         _wait = new WaitForSeconds(0.5f);
         _story._isCompleted = false;
+        _outputScreen = GetComponentInChildren<TextDisplay>();
+        _outputScreen.InitialiseWaitTimes(_displayTime);
+
+        GameObject _interactableUI = transform.Find("ScreenInteractable").gameObject;
+        _interactableUI.GetComponent<Canvas>().worldCamera = PlayerInteract.instance._playerCamera;
+        _buttonList = _interactableUI.transform.GetChild(0).gameObject; 
+        _buttonList.SetActive(false);
+
     }
 
     public void StartDisplay()
     {
-       // _outputScreen = Instantiate(_TextDisplayPrefab).GetComponentInChildren<TextDisplay>();
-
         _currentBeat = null;
-        ButtonList.SetActive(false);
+        _buttonList.SetActive(false);
         _wait = new WaitForSeconds(0.5f);
 
         if(_story._isRepeatable && _story._isCompleted)
@@ -80,8 +87,8 @@ public class DialogueManager : MonoBehaviour
         {
             if (_currentBeat.Decision[0].AutoProgress)
             {
-                if (_currentBeat.Decision[0].NextID < 0 || _currentBeat.Decision[0].NextID >= _story.GetBeatCount())
-                    Debug.Log("Invalid Linked ID");
+                if (_currentBeat.Decision[0].NextID <= 0 || _currentBeat.Decision[0].NextID >= _story.GetBeatCount())
+                    Debug.LogError("Invalid Linked ID");
 
                 DisplayBeat(_currentBeat.Decision[0].NextID);
                 return;
@@ -91,10 +98,17 @@ public class DialogueManager : MonoBehaviour
 
         if (_currentBeat.Decision.Count == 0)
         {
-            ButtonList.SetActive(false);
+            Debug.Log("Story Is Over");
+            _outputScreen.Clear();
+            _buttonList.SetActive(false);
             _story._isCompleted = true;
             GameUtility._isPlayerObjectBeingControlled = true;
             PlayerAutoPilot.instance.ResetCamera();
+            _outputScreen.FinishDisplay();
+            StopAllCoroutines();
+            _beginStory = false;
+            GameUtility.HideCursor();
+
         }
     }
 
@@ -107,16 +121,13 @@ public class DialogueManager : MonoBehaviour
         BeatData data = _story.GetBeatById(id);
         StartCoroutine(DoDisplay(data));
         _currentBeat = data;
-
-        
-
     }
 
     private void ClearButtons()
     {
-        for (int i = 0; i < ButtonList.transform.childCount; i++)
+        for (int i = 0; i < _buttonList.transform.childCount; i++)
         {
-            Destroy(ButtonList.transform.GetChild(i).gameObject);
+            Destroy(_buttonList.transform.GetChild(i).gameObject);
         }
     }
 
@@ -130,53 +141,50 @@ public class DialogueManager : MonoBehaviour
             yield return null;
         }
 
-        if (_outputScreen == null)
-            Debug.Log("Screen is null");
+        _outputScreen.Display(data.DisplayText);
 
-        if (data == null)
-            Debug.Log("data is null");
-
-        _outputScreen.Display(data.DisplayText, data.DisplayTime);
-
+        //Wait until the text has finished appearing before showing options
         while (_outputScreen.IsBusy)
         {
             yield return null;
         }
 
+        //Show the dialogue Options
 
         if (data.Decision.Count >= 1)
         {
+            _buttonList.SetActive(true);
+
             for (int count = 0; count < data.Decision.Count; ++count)
             {
                 ChoiceData choice = data.Decision[count];
-                //_output.Display(string.Format("{0}: {1}", (count + 1), choice.DisplayText));
-                //_outputScreen.Display(choice.DisplayText, data.DisplayTime);
-                ButtonList.SetActive(true);
 
-                GameObject g = Instantiate(ButtonPrefab, ButtonList.transform);
-                if (g.GetComponentInChildren<TMP_Text>())
+                GameObject g = Instantiate(_buttonPrefab, _buttonList.transform);
+
+                TMP_Text buttonText = default;
+
+                for (int i = 0; i < g.transform.childCount; i++)
                 {
-                    g.GetComponentInChildren<TMP_Text>().text = choice.DisplayText;
-                    g.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(delegate { DisplayBeat(choice.NextID); choice.OnSelected.Invoke(true); });
+                    if(g.transform.GetChild(i).TryGetComponent<TMP_Text>(out buttonText))
+                    {
+                        //Show the display text on the button
+                        buttonText.text = choice.DisplayText;
 
-                }
+                        //Add a listener to the button to display the linked story beat when clicked
+                        g.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(delegate
+                        { DisplayBeat(choice.NextID); choice.OnSelected.Invoke(true); });
 
-
-                while (_outputScreen.IsBusy)
-                {
-                    yield return null;
+                        break;
+                    }
                 }
             }
-        }
 
-        if (data.Decision.Count > 0)
-        {
+            //Show the blinking cursor while awaiting input
             _outputScreen.ShowWaitingForInput();
+
         }
 
     }
-
-
 
 }
 

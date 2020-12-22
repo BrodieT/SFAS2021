@@ -150,13 +150,12 @@ public class PlayerInteract : AutoCleanupSingleton<PlayerInteract>
                     _ready = true;
                 }
 
+                //Prepare the dialogue manager on the terminal to begin the story
                 DialogueManager dialogue;
-
                 GameUtility.ShowCursor();
 
                 if (_targetInteractable.transform.TryGetComponent(out dialogue))
                 {
-
                     dialogue.StartDisplay();
                 }
                 else

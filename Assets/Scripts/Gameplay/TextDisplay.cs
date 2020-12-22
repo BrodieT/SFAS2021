@@ -8,40 +8,44 @@ public class TextDisplay : MonoBehaviour
 
     private TMP_Text _displayText;
     private string _displayString;
-    private WaitForSeconds _shortWait;
-    private WaitForSeconds _longWait;
+    private WaitForSeconds _displayWaitTime;
+    private WaitForSeconds _cursorBlinkTime;
     private State _state = State.Initialising;
-    [SerializeField] private float ShortTime = 0.1f;
-    [SerializeField] private float LongTime = 0.8f;
     private string _CurrentText = default;
 
     public bool IsIdle { get { return _state == State.Idle; } }
     public bool IsBusy { get { return _state != State.Idle; } }
 
-
-
-
-    #region Singleton
-
-    public static TextDisplay Instance;
-   
-    #endregion
-
-
-    private void Awake()
+    private void Start()
     {
-        Instance = this;
-
         _displayText = GetComponent<TMP_Text>();
-        _shortWait = new WaitForSeconds(ShortTime);
-        _longWait = new WaitForSeconds(LongTime);
-
         _displayText.text = string.Empty;
         _state = State.Idle;
     }
 
+    public void FinishDisplay()
+    {
+        _displayText.text = string.Empty;
+        _state = State.Idle;
+    }
+
+    public void InitialiseWaitTimes(float displayTime)
+    {
+        _displayWaitTime = new WaitForSeconds(displayTime);
+        _cursorBlinkTime = new WaitForSeconds(0.8f);
+    }
+
     private IEnumerator DoShowText(string text)
     {
+        //If the text display is currently busy, wait for it to finish current task
+        while(_state != State.Idle)
+        {
+            Debug.Log("Display is busy. Waiting to display");
+            yield return null;
+        }
+
+        _state = State.Busy;
+
         _CurrentText = text;
         int currentLetter = 0;
         char[] charArray = text.ToCharArray();
@@ -49,7 +53,7 @@ public class TextDisplay : MonoBehaviour
         while (currentLetter < charArray.Length)
         {
             _displayText.text += charArray[currentLetter++];
-            yield return _shortWait;
+            yield return _displayWaitTime;
         }
 
         _displayText.text += "\n";
@@ -63,14 +67,21 @@ public class TextDisplay : MonoBehaviour
 
         while (enabled)
         {
+            if (IsBusy)
+            {
+                enabled = false;
+            }
+
             _displayText.text = string.Format( "{0}> {1}", _displayString, ( on ? "|" : " " ));
             on = !on;
-            yield return _longWait;
+            yield return _cursorBlinkTime;
         }
     }
 
     private IEnumerator DoClearText()
     {
+        _state = State.Busy;
+
         int currentLetter = 0;
         char[] charArray = _displayText.text.ToCharArray();
 
@@ -98,11 +109,21 @@ public class TextDisplay : MonoBehaviour
 
     public void QuickDisplay()
     {
+        //If the display is not busy then there is nothing still to display
+        if (_state != State.Busy)
+            return;
+
+        //Stop current display processes
         StopAllCoroutines();
+        //Quickly clear any leftovers
         QuickClear();
+
+        //Immediately display the current text
         _displayText.text = _CurrentText;
         _displayText.text += "\n";
         _displayString = _displayText.text;
+
+        //Return to the idle state
         _state = State.Idle;
     }
     public void QuickClear()
@@ -111,33 +132,18 @@ public class TextDisplay : MonoBehaviour
         _displayText.text = _displayString;
     }
 
-    public void Display(string text, float displayTime)
+    public void Display(string text)
     {
-        if (_state == State.Idle)
-        {
-            _shortWait = new WaitForSeconds(displayTime);
-            StopAllCoroutines();
-            _state = State.Busy;
-            StartCoroutine(DoShowText(text));
-        }
+        StartCoroutine(DoShowText(text));        
     }
 
     public void ShowWaitingForInput()
     {
-        if (_state == State.Idle)
-        {
-            StopAllCoroutines();
-            StartCoroutine(DoAwaitingInput());
-        }
+        StartCoroutine(DoAwaitingInput());        
     }
 
     public void Clear()
     {
-        if (_state == State.Idle)
-        {
-            StopAllCoroutines();
-            _state = State.Busy;
-            StartCoroutine(DoClearText());
-        }
+        StartCoroutine(DoClearText());
     }
 }

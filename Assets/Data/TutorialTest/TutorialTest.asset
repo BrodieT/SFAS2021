@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bf5d5e33bab057c43929a11bc8f25f44, type: 3}
-  m_Name: TestTerminalEntry
+  m_Name: TutorialTest
   m_EditorClassIdentifier: 
   _beats:
   - _choices:
-    - _text: Equipment Tutorial
+    - _text: Parkour
       _beatId: 2
       AutoProgress: 0
       OnSelected:
         m_PersistentCalls:
           m_Calls: []
-    - _text: Traversal Tutorial
+    - _text: Combat
       _beatId: 3
       AutoProgress: 0
       OnSelected:
@@ -32,35 +32,32 @@ MonoBehaviour:
       OnSelected:
         m_PersistentCalls:
           m_Calls: []
-    _text: This is the tester terminal. Here you can find plenty of information about
-      the game. And there will be plenty of options
+    _text: This is the tester terminal.
     _id: 1
     DisplayTime: 0.25
   - _choices:
     - _text: Back
-      _beatId: 0
+      _beatId: 1
       AutoProgress: 0
       OnSelected:
         m_PersistentCalls:
           m_Calls: []
-    _text: 'You can pick up your equipment on the nearby table to help you traverse
-      the levels and defeat enemies. '
+    _text: You can do parkour
     _id: 2
     DisplayTime: 0.1
   - _choices:
-    - _text: New Beat Choice
-      _beatId: 0
+    - _text: Back
+      _beatId: 1
       AutoProgress: 0
       OnSelected:
         m_PersistentCalls:
           m_Calls: []
-    _text: "You can use the grapple gun to either zip to, or swing from grapple points.
-      \nAdditionally, you can run along vertical surfaces to wall run.\n"
+    _text: You can defeat enemies
     _id: 3
     DisplayTime: 0.1
   - _choices: []
     _text: Closing Terminal
     _id: 4
     DisplayTime: 0.1
-  _isCompleted: 1
+  _isCompleted: 0
   _isRepeatable: 1

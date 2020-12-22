@@ -95,7 +95,6 @@ public class PlayerAutoPilot : AutoCleanupSingleton<PlayerAutoPilot>
         //Wait until the destination is closer
         while(Vector3.Distance(transform.position, pos) > 1.0f)
         {
-            Debug.Log("Navigating");
             yield return null;
         }
 
@@ -122,8 +121,6 @@ public class PlayerAutoPilot : AutoCleanupSingleton<PlayerAutoPilot>
         //Wait until destination is closer
         while (Vector3.Distance(transform.position, pos) > 1.0f)
         {
-            Debug.Log("Navigating");
-
             yield return null;
         }
 
