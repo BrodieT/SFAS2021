@@ -264,11 +264,18 @@ public class PlayerMovement : AutoCleanupSingleton<PlayerMovement>
         Invoke("SetCanMoveOn", 0.5f);
     }
 
-    private void SetCanMoveOn()
+    public void SetCanMoveOn()
     {
         _isVaulting = false;
         _isMantling = false;
         _canMove = true;
+    }
+
+    public void SetCanMoveOff()
+    {
+        _isVaulting = false;
+        _isMantling = false;
+        _canMove = false;
     }
 
     //This function returns true if the player is moving

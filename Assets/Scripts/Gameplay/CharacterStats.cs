@@ -51,18 +51,26 @@ public class CharacterStats : MonoBehaviour
 
     IEnumerator ChangeHP(int target)
     {
-        while(_currentHP != target)
+        bool done = false;
+        while(_currentHP != target && !done)
         {
             _currentHP += _regenRate;
 
             if(_currentHP >= _maxHP)
             {
                 _currentHP = _maxHP;
-                //StopCoroutine(ChangeHP(target));
+                done = true;
+            }
+
+            if(_currentHP == target)
+            {
+                done = true;
             }
 
             UpdateUI();
             yield return new WaitForSeconds(1.0f);
         }
+
+        UpdateUI();
     }
 }
