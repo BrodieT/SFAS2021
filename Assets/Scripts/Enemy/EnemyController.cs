@@ -67,7 +67,7 @@ public class EnemyController : MonoBehaviour
     {
         if(_playerDistance < _detectionRange && Physics.Raycast(transform.position + transform.forward, (PlayerMovement.instance.transform.position - transform.position).normalized, out _target, _detectionRange, _playerMask))
         {
-            if(_target.transform.gameObject == PlayerMovement.instance)
+            if(_target.transform.gameObject == PlayerMovement.instance.gameObject)
                 return true;
         }
 
@@ -114,8 +114,10 @@ public class EnemyController : MonoBehaviour
 
 
         if (DetectPlayer())
+        {
+            Debug.Log("i see player");
             _currentState = EnemyState.Hostile;
-        
+        }
 
 
 

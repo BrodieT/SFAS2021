@@ -72,7 +72,7 @@ public class TurretController : EnemyController
 
         if (_playerDistance <= _shootingRange && _rangedTimer <= 0.0f)
         {
-            Debug.Log("Bang!");
+            GetComponent<GunController>().ShootGun();
             _rangedTimer = _rangedAttackCooldown;
         }
     }

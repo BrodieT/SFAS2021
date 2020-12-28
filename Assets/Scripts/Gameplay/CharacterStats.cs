@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+[DisallowMultipleComponent]
 public class CharacterStats : MonoBehaviour
 {
     [SerializeField] private int _maxHP = 100;
@@ -13,6 +14,7 @@ public class CharacterStats : MonoBehaviour
     void Start()
     {
         _currentHP = _maxHP;
+        UpdateUI();
     }
 
    public int GetHP()
@@ -32,16 +34,21 @@ public class CharacterStats : MonoBehaviour
 
     public void TakeDamage(int amount)
     {
-        if (_currentHP - amount < 0)
+        if (_currentHP - amount <= 0)
         {
             _currentHP = 0;
-            Debug.Log("I am dead");
+            Die();
         }
         else
         {
             _currentHP -= amount;
         }
         UpdateUI();
+    }
+
+    public virtual void Die()
+    {
+        Debug.Log("I am dead");
     }
 
     public virtual void UpdateUI()

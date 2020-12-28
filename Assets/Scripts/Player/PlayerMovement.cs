@@ -41,6 +41,9 @@ public class PlayerMovement : AutoCleanupSingleton<PlayerMovement>
     private bool _isVaulting = false;
     //Tracks whether a mantle is in progress
     private bool _isMantling = false;
+
+    //The players gun controller used for updating animations
+    private PlayerGunController _playerGunController = default;
     #endregion
 
     #region Assignable In Inspector Attributes
@@ -133,7 +136,7 @@ public class PlayerMovement : AutoCleanupSingleton<PlayerMovement>
         //Set the default speed to the walk speed
         _currentSpeed = _walkSpeed;
 
-
+        _playerGunController = GetComponent<PlayerGunController>();
     }
 
     //This function interpolates the current move speed based on whether the player is running or walking
@@ -224,19 +227,19 @@ public class PlayerMovement : AutoCleanupSingleton<PlayerMovement>
             {
                 if (_isSprinting)
                 {
-                    GetComponent<GunController>()._isWalking = false;
-                    GetComponent<GunController>()._isRunning = true;
+                    _playerGunController._isWalking = false;
+                    _playerGunController._isRunning = true;
                 }
                 else
                 {
-                    GetComponent<GunController>()._isWalking = true;
-                    GetComponent<GunController>()._isRunning = false;
+                    _playerGunController._isWalking = true;
+                    _playerGunController._isRunning = false;
                 }
             }
             else
             {
-                GetComponent<GunController>()._isWalking = false;
-                GetComponent<GunController>()._isRunning = false;
+                _playerGunController._isWalking = false;
+                _playerGunController._isRunning = false;
             }
         }
     }

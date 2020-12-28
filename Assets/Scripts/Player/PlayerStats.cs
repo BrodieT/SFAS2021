@@ -5,13 +5,13 @@ using UnityEngine.UI;
 
 public class PlayerStats : CharacterStats
 {
-    [SerializeField] Image HealthBar = default;
+    [SerializeField] Image _healthBar = default;
 
 
     public override void UpdateUI()
     {
         base.UpdateUI();
-        HealthBar.fillAmount = GetPercentHP();
+        _healthBar.fillAmount = GetPercentHP();
     }
     
 }
