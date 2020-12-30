@@ -100,6 +100,14 @@
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "Press"
+                },
+                {
+                    "name": "Reload",
+                    "type": "Button",
+                    "id": "779e1934-a707-404c-9ad0-ae02d0ac9ea1",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "Press"
                 }
             ],
             "bindings": [
@@ -229,7 +237,7 @@
                     "id": "8c8e490b-c610-4785-884f-f04217b23ca4",
                     "path": "<Pointer>/delta",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "NormalizeVector2",
                     "groups": ";Keyboard&Mouse",
                     "action": "Look",
                     "isComposite": false,
@@ -282,7 +290,7 @@
                 {
                     "name": "",
                     "id": "e9af2546-1e77-4048-bb34-038565c19e05",
-                    "path": "<Gamepad>/buttonSouth",
+                    "path": "<Gamepad>/buttonEast",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
@@ -359,7 +367,7 @@
                 {
                     "name": "",
                     "id": "e5dc60e0-1802-4146-bc85-d90b1a344abb",
-                    "path": "<Gamepad>/buttonNorth",
+                    "path": "<Gamepad>/buttonSouth",
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
@@ -474,6 +482,28 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "Grapple",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "303a0847-0dd9-42c8-a003-5c0d27e4184f",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Reload",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1448a256-6deb-4d11-89de-a91848d19086",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Reload",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

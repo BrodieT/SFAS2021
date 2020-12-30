@@ -9,10 +9,18 @@ public class EnemyStats : CharacterStats
     [SerializeField] Image _healthBar = default;
     [SerializeField] TMP_Text _percentageTxt = default;
 
+   
+
     public override void Die()
     {
         base.Die();
         Debug.Log("Enemy is dead");
+
+        //if(GetComponent<EnemyController>() as TurretController)
+        //{
+        //    QuestEventSystem.instance.OnKilledTurret();
+        //}
+
         _healthBar.gameObject.SetActive(false);
     }
 

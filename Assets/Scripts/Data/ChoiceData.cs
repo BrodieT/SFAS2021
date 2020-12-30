@@ -20,7 +20,3 @@ public class ChoiceData
     public int NextID { get { return _beatId; } } //return the linked ID
 }
 
-[Serializable]
-public class CustomEvent : UnityEvent<bool> { 
-  
-}

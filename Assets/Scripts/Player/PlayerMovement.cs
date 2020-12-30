@@ -254,6 +254,7 @@ public class PlayerMovement : AutoCleanupSingleton<PlayerMovement>
 
     private bool CanMantle()
     {
+
         return DetectVaultableObject(1.0f, LayerMask.GetMask("Ground", "Vaultable"));
     }
 
@@ -311,7 +312,9 @@ public class PlayerMovement : AutoCleanupSingleton<PlayerMovement>
             //check that the player can see over the object (ie nothing would block the vault)
             if(!Physics.Raycast(ray, 3.0f))
             {
-                return true;
+                //Ensure the player is moving into the ledge rather than away from it
+                if (_moveDirection.y > 0)
+                    return true;
             }
         }
         return false;

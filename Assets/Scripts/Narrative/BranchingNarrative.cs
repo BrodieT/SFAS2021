@@ -178,7 +178,7 @@ public class BranchingNarrative : MonoBehaviour
 
                         //Add a listener to the button to display the linked story beat when clicked
                         g.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(delegate
-                        { DisplayBeat(choice.NextID); choice.OnSelected.Invoke(true); });
+                        { DisplayBeat(choice.NextID); choice.OnSelected?.Invoke(); });
 
                         break;
                     }

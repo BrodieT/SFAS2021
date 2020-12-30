@@ -208,6 +208,8 @@ public class StoryEditor : EditorWindow
             //Add a text field for the beat contents to go
             EditorGUILayout.PropertyField(text);
             EditorGUILayout.EndHorizontal();
+
+            EditorUtility.DrawUILine(Color.black);
         }
 
         EditorGUILayout.EndVertical();
