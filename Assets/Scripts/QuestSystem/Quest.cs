@@ -19,7 +19,7 @@ public class QuestStage
 {
     [SerializeField] public int _stageID = -1; //The unique identifier of this quest stage within the context of the quest it is a part of.
     [SerializeField] public string _stageObjective = default; //The goal of this quest stage as displayed in the quest log UI & main UI when active.
-    [SerializeField] public CustomEvent _onQuestStageComplete = default; //The event that is called upon completion of this stage.
+    //[SerializeField] public CustomEvent _onQuestStageComplete = default; //The event that is called upon completion of this stage.
     [SerializeField] public int _linkedStageID = -1; //The quest stage that will follow upon completion of this stage.
     [SerializeField] public List<QuestSubStage> _subStages = new List<QuestSubStage>(); //The list of objectives that make up this quest stage.
 }
@@ -29,6 +29,6 @@ public class QuestSubStage
 {
     [SerializeField] public int _subStageID = -1; //The unique identifier of this sub-stage within the context of the quest stage it is a part of.
     [SerializeField] public string _subStageObjective = default; //The goal of this sub-stage as displayed in the quest log UI & the main UI when active.
-    [SerializeField] public CustomEvent _onSubStageCompleted = default; //The event that is called upon completion of this sub-stage.
+    //[SerializeField] public CustomEvent _onSubStageCompleted = default; //The event that is called upon completion of this sub-stage.
     [SerializeField] public int _linkedSubStageID = -1; //The ID of the sub-stage that will follow this one
 }

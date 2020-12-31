@@ -114,8 +114,7 @@ public class EnemyController : MonoBehaviour
 
 
         if (DetectPlayer())
-        {
-            Debug.Log("i see player");
+        { 
             _currentState = EnemyState.Hostile;
         }
 

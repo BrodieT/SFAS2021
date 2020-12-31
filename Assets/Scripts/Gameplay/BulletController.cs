@@ -25,7 +25,6 @@ public class BulletController : MonoBehaviour
         {
             if (other.TryGetComponent<CharacterStats>(out CharacterStats stats))
             {
-                Debug.Log("Hit " + other.name);
                 stats.TakeDamage(_damageAmount);
             }
 

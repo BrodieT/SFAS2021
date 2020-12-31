@@ -12,20 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0f37a862a7378841bafbf2e89d17003, type: 3}
   m_Name: Test
   m_EditorClassIdentifier: 
-  _questID: -1
-  _questName: Turret Destruction
-  _questDescription: 
+  _questID: 0
+  _questName: Main Story
+  _questDescription: You have to get to the palace and save the prince
   _questStages:
   - _stageID: 0
-    _stageObjective: New Quest Stage
-    _onQuestStageComplete:
-      m_PersistentCalls:
-        m_Calls: []
+    _stageObjective: Get out of the flooded district
     _linkedStageID: 0
     _subStages:
-    - _subStageID: -1
-      _subStageObjective: New Sub-Stage
-      _onSubStageCompleted:
-        m_PersistentCalls:
-          m_Calls: []
-      _linkedSubStageID: 0
+    - _subStageID: 0
+      _subStageObjective: Destroy the Turret blocking your path
+      _linkedSubStageID: 1
+    - _subStageID: 1
+      _subStageObjective: Talk to the guard
+      _linkedSubStageID: 2
+    - _subStageID: 2
+      _subStageObjective: Go through the gate
+      _linkedSubStageID: -1
+  - _stageID: 1
+    _stageObjective: Storm the Palace
+    _linkedStageID: -1
+    _subStages: []

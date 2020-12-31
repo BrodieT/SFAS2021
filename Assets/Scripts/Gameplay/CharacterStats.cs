@@ -9,6 +9,7 @@ public class CharacterStats : MonoBehaviour
     [SerializeField] private int _maxHP = 100;
     [SerializeField] private int _regenRate = 1;
     private int _currentHP = 0;
+    [HideInInspector] public bool _isDead = false;
 
     // Start is called before the first frame update
     void Start()
@@ -48,7 +49,7 @@ public class CharacterStats : MonoBehaviour
 
     public virtual void Die()
     {
-        Debug.Log("I am dead");
+        _isDead = true;
     }
 
     public virtual void UpdateUI()

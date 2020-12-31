@@ -14,7 +14,6 @@ public class EnemyStats : CharacterStats
     public override void Die()
     {
         base.Die();
-        Debug.Log("Enemy is dead");
 
         //if(GetComponent<EnemyController>() as TurretController)
         //{
