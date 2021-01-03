@@ -20,14 +20,20 @@ public class PlayerQuestLog : AutoCleanupSingleton<PlayerQuestLog>
     public void AddNewActiveQuest(Quest quest)
     {
         Debug.Log(quest._questName + " added to active quests");
-        _activeQuests.Add(new QuestLogEntry(quest));
+        _activeQuests.Add(_allQuests.Find(x => x._quest._questID == quest._questID));
+
+        if (_activeQuests.Count == 1)
+            SetQuestAsCurrent(0);
+        //_activeQuests.Add(new QuestLogEntry(quest));
     }
 
     public void SetQuestAsCurrent(int ID)
     {
         _currentQuestID = ID;
-    //    _mainObjective.text = _activeQuests[ID].GetCurrentQuestStage()._stageObjective;
-    //    _currentObjective.text = _activeQuests[ID].GetCurrentSubStage()._subStageObjective;
+        QuestMarker.instance.UpdateQuestTarget(_activeQuests[_currentQuestID].GetQuestMarkerLocation());
+
+        //    _mainObjective.text = _activeQuests[ID].GetCurrentQuestStage()._stageObjective;
+        //    _currentObjective.text = _activeQuests[ID].GetCurrentSubStage()._subStageObjective;
     }
 
     private void Update()
@@ -64,7 +70,7 @@ public class PlayerQuestLog : AutoCleanupSingleton<PlayerQuestLog>
             }
         }
 
-
+        QuestMarker.instance.UpdateQuestTarget(_activeQuests[targetIndex].GetQuestMarkerLocation());
 
     }
 
@@ -88,7 +94,6 @@ public class QuestLogEntry
     public bool _isActive = false;
     public bool _isCompleted = false;
     public List<QuestStageLog> _questStages = new List<QuestStageLog>();
-
 
     [HideInInspector] public int _currentQuestStageID = -1;
     [HideInInspector] public int _currentSubStageID = -1;
@@ -127,6 +132,11 @@ public class QuestLogEntry
         return _quest._questStages[_currentQuestStageID];
     }
 
+    public Transform GetQuestMarkerLocation()
+    {
+        return _questStages[_currentQuestStageID]._subStages[_currentSubStageID]._questMarkerLocation;
+    }
+
     public QuestSubStage GetCurrentSubStage()
     {
         return _quest._questStages[_currentQuestStageID]._subStages[_currentSubStageID];
@@ -163,7 +173,7 @@ public class QuestSubStageLog
     [SerializeField] public bool _isCompleted;
     [SerializeField] public bool _isActive;
     [SerializeField] public CustomEvent _onCompleted;
-
+    [SerializeField] public Transform _questMarkerLocation = default;
     public QuestSubStageLog(QuestSubStage subStage)
     {
         _subStage = subStage;

@@ -8,3 +8,9 @@ public class CustomEvent : UnityEvent
 {
 
 }
+
+[System.Serializable]
+public class DialogueQuestEvent : UnityEvent < Quest, int>
+{
+
+}

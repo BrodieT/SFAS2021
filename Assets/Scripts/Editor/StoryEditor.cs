@@ -280,6 +280,9 @@ public class StoryEditor : EditorWindow
         SerializedProperty beatId = arrayElement.FindPropertyRelative("_beatId");
         SerializedProperty prog = arrayElement.FindPropertyRelative("AutoProgress");
         SerializedProperty evnt = arrayElement.FindPropertyRelative("OnSelected");
+        SerializedProperty stageID = arrayElement.FindPropertyRelative("_stageID");
+        SerializedProperty subStageID = arrayElement.FindPropertyRelative("_subStageID");
+        SerializedProperty quest = arrayElement.FindPropertyRelative("_linkedQuest");
 
         EditorGUILayout.BeginVertical();
 
@@ -313,10 +316,13 @@ public class StoryEditor : EditorWindow
         prog.boolValue = (EditorGUILayout.Toggle("Automatically Progress", prog.boolValue));
 
 
-        EditorGUILayout.PropertyField(evnt);
-        
+        //EditorGUILayout.PropertyField(evnt);
+        EditorUtility.DrawUILine(Color.black);
+        EditorGUILayout.PropertyField(quest);
 
-        
+        stageID.intValue = EditorGUILayout.IntField("Linked Quest Stage ID", stageID.intValue);
+        subStageID.intValue = EditorGUILayout.IntField("Linked Quest Sub-Stage ID", subStageID.intValue);
+
         CurrentData.ApplyModifiedProperties();
 
         

@@ -18,7 +18,7 @@ MonoBehaviour:
   _questStages:
   - _stageID: 0
     _stageObjective: Get out of the flooded district
-    _linkedStageID: 0
+    _linkedStageID: 1
     _subStages:
     - _subStageID: 0
       _subStageObjective: Destroy the Turret blocking your path
@@ -32,4 +32,7 @@ MonoBehaviour:
   - _stageID: 1
     _stageObjective: Storm the Palace
     _linkedStageID: -1
-    _subStages: []
+    _subStages:
+    - _subStageID: 0
+      _subStageObjective: Clear the Area
+      _linkedSubStageID: -1
