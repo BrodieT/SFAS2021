@@ -48,7 +48,7 @@ public class PlayerGunController : GunController
     }
     private void Start()
     {
-        _playerCamera = PlayerInteract.instance._playerCamera;
+        _playerCamera = Game_Manager.instance._playerCamera;
     }
 
     private void Update()

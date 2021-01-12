@@ -37,11 +37,13 @@ public class PlayerMovement : AutoCleanupSingleton<PlayerMovement>
     //This is used when mantling or vaulting to overwrite the default movement behaviours
     private bool _canMove = true;
 
+    private WallRun _wallRunner = default;
+
     //Tracks whether a vault is in progress
     private bool _isVaulting = false;
     //Tracks whether a mantle is in progress
     private bool _isMantling = false;
-
+    public bool _recieveGravity { get; set; }
     //The players gun controller used for updating animations
     private PlayerGunController _playerGunController = default;
     #endregion
@@ -84,9 +86,14 @@ public class PlayerMovement : AutoCleanupSingleton<PlayerMovement>
     //Input callback for when the jump button is pressed
     public void Jump(InputAction.CallbackContext context)
     {
-        if(context.performed)
-            _isJumping = true;
+        if (context.performed)
+        {
+            if (_wallRunner._isWallRunning)
+                _wallRunner.AddJumpForce();
+            else
+                _isJumping = true;
 
+        }
     }
 
     //Input callback for determining if the sprint button is pressed
@@ -123,7 +130,21 @@ public class PlayerMovement : AutoCleanupSingleton<PlayerMovement>
 
     #endregion
 
+    public bool GetGrounded()
+    {
+        return _isGrounded;
+    }
     
+    public Vector3 GetVelocity()
+    {
+        return _velocity;
+    }
+
+    public void SetVelocity(Vector3 vel)
+    {
+        _velocity = vel;
+    }
+   
 
     // Start is called before the first frame update
     void Start()
@@ -135,8 +156,9 @@ public class PlayerMovement : AutoCleanupSingleton<PlayerMovement>
         _crouchHeight = _defaultHeight * 0.5f;
         //Set the default speed to the walk speed
         _currentSpeed = _walkSpeed;
-
+        _wallRunner = GetComponent<WallRun>();
         _playerGunController = GetComponent<PlayerGunController>();
+        _recieveGravity = true;
     }
 
     //This function interpolates the current move speed based on whether the player is running or walking
@@ -219,8 +241,12 @@ public class PlayerMovement : AutoCleanupSingleton<PlayerMovement>
             {
                 _controller.Move(move * _currentSpeed * Time.deltaTime);
             }
-            //Apply gravity * delta time squared
-            _velocity.y += _gravity * Time.deltaTime;
+
+            if (_recieveGravity)
+            {
+                //Apply gravity * delta time squared
+                _velocity.y += _gravity * Time.deltaTime;
+            }
             _controller.Move(_velocity * Time.deltaTime);
 
             if (_moveDirection.magnitude > 0)

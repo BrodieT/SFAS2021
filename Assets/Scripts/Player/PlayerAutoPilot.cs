@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class PlayerAutoPilot : AutoCleanupSingleton<PlayerAutoPilot>
+[DisallowMultipleComponent]
+[RequireComponent(typeof(CharacterController))]
+public class PlayerAutoPilot : MonoBehaviour
 {
     NavMeshAgent _myNavMeshAgent = default;
     float _radius = 0.0f;
@@ -20,7 +22,7 @@ public class PlayerAutoPilot : AutoCleanupSingleton<PlayerAutoPilot>
         _height = GetComponent<CharacterController>().height;
         _radius = GetComponent<CharacterController>().radius;
         _speed  = PlayerMovement.instance._walkSpeed;
-        _playerCamera = PlayerInteract.instance._playerCamera;
+        _playerCamera = Game_Manager.instance._playerCamera;
         _isAutoPiloting = false;
         _defaultCamPos = _playerCamera.transform.localPosition;
         _defaultCamRote = _playerCamera.transform.localRotation;

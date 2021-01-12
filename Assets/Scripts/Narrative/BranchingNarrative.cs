@@ -12,7 +12,7 @@ public class BranchingNarrative : MonoBehaviour
     [SerializeField] public StoryData _story = default; //The story used at the introduction to the game
     [SerializeField] public float _displayTime = 0.1f;
 
-
+    private PlayerAutoPilot _autopilot = default;
 
     [HideInInspector] public TextDisplay _outputScreen = default; //The screen that this process will display text on
     [HideInInspector] public GameObject _buttonList = default;
@@ -30,7 +30,11 @@ public class BranchingNarrative : MonoBehaviour
         _story._isCompleted = false;
 
 
-
+        if (!Game_Manager.instance._player.TryGetComponent<PlayerAutoPilot>(out _autopilot))
+        { 
+            Debug.LogWarning("No Autopilot found. Manually Adding one now.");
+            _autopilot = Game_Manager.instance._player.AddComponent(typeof(PlayerAutoPilot)) as PlayerAutoPilot;
+        }
 
         OutputSetup();
     }
@@ -111,7 +115,7 @@ public class BranchingNarrative : MonoBehaviour
         
         _story._isCompleted = true;
         GameUtility._isPlayerObjectBeingControlled = true;
-        PlayerAutoPilot.instance.ResetCamera();
+        _autopilot.ResetCamera();
         StopAllCoroutines();
         _outputScreen.FinishDisplay();
 

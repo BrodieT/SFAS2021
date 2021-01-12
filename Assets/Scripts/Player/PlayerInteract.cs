@@ -4,14 +4,25 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.InputSystem;
 
-public class PlayerInteract : AutoCleanupSingleton<PlayerInteract>
+public class PlayerInteract : MonoBehaviour
 {
-    [SerializeField] public Camera _playerCamera = default; //Local store of the player camera
+    private Camera _playerCamera = default; //Local store of the player camera
     [SerializeField] private float _interactRange = 5.0f; //The range at which players can interact with objects
     [SerializeField] private TMP_Text _interactUI = default; //The UI prompt for showing what interactable is being looked at
     [SerializeField] private LayerMask _interactLayer = default; //The layers that can be interacted with
     private RaycastHit _targetInteractable = default; //The currently selected interactable
-    
+    private PlayerAutoPilot _autopilot = default;
+    private void Start()
+    {
+        _playerCamera = Game_Manager.instance._playerCamera;
+        if (!Game_Manager.instance._player.TryGetComponent<PlayerAutoPilot>(out _autopilot))
+        {
+            Debug.LogWarning("No Autopilot found. Manually Adding one now.");
+            PlayerAutoPilot autoPilot = Game_Manager.instance._player.AddComponent(typeof(PlayerAutoPilot)) as PlayerAutoPilot;
+        }
+    }
+
+
     public void SkipDialogue(InputAction.CallbackContext context)
     {
         if (context.performed && !GameUtility._isPlayerObjectBeingControlled)
@@ -123,9 +134,10 @@ public class PlayerInteract : AutoCleanupSingleton<PlayerInteract>
                                 if (_targetInteractable.transform.GetChild(j).CompareTag("CameraHolder"))
                                 {
                                     Transform targetCameraTransform = _targetInteractable.transform.GetChild(j).transform;
-
                                     //Use the autopilot to move to the correct interact transforms
-                                    PlayerAutoPilot.instance.BeginAutoPilot(targetTransform.position, targetTransform.rotation, targetCameraTransform.position, targetCameraTransform.rotation);
+                                    _autopilot.BeginAutoPilot(targetTransform.position, targetTransform.rotation, targetCameraTransform.position, targetCameraTransform.rotation);
+
+                                 
                                     //Wait for the autopilot to finish
                                     StartCoroutine(IsTerminalReady());
                                 }
@@ -159,7 +171,7 @@ public class PlayerInteract : AutoCleanupSingleton<PlayerInteract>
                                     Transform targetCameraTransform = _targetInteractable.transform.GetChild(j).transform;
 
                                     //Use the autopilot to move to the correct interact transforms
-                                    PlayerAutoPilot.instance.BeginAutoPilot(targetTransform.position, targetTransform.rotation, targetCameraTransform.position, targetCameraTransform.rotation);
+                                    _autopilot.BeginAutoPilot(targetTransform.position, targetTransform.rotation, targetCameraTransform.position, targetCameraTransform.rotation);
                                     //Wait for the autopilot to finish
                                     StartCoroutine(IsTerminalReady());
                                 }
@@ -181,7 +193,7 @@ public class PlayerInteract : AutoCleanupSingleton<PlayerInteract>
         
         while(!_ready)
         {
-            if(!PlayerAutoPilot.instance._isAutoPiloting)
+            if(!_autopilot._isAutoPiloting)
             {
                 if(_targetInteractable.transform == null)
                 {

@@ -26,7 +26,7 @@ public class PlayerGrapple : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-       _playerCamera = PlayerInteract.instance._playerCamera;
+        _playerCamera = Game_Manager.instance._playerCamera;
     }
 
     private void DoGrapple()

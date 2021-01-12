@@ -6,9 +6,11 @@ public class Billboard : MonoBehaviour
 {
     private Camera _mainCamera;
     void Start()
-    {
+    {     
         //Store the main camera
-        _mainCamera = PlayerInteract.instance._playerCamera;
+
+        _mainCamera = Game_Manager.instance._playerCamera;
+
     }
 
     void LateUpdate()

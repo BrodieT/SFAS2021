@@ -7,12 +7,12 @@ public class QuestMarker : AutoCleanupSingleton<QuestMarker>
 {
     [SerializeField] Image _questMarker = default; //The quest marker image
     private Transform _target = default; //The location the marker will point to
-    private Camera _player = default; //local ref to the player camera
+    private Camera _playerCamera = default; //local ref to the player camera
     private TMP_Text _distanceCount = default; //the text display for the distance the player is to the target
     [SerializeField] Vector3 _markerOffset = new Vector3(0, 1, 0);
     private void Start()
     {
-        _player = PlayerInteract.instance._playerCamera;
+        _playerCamera = Game_Manager.instance._playerCamera;
         _distanceCount = transform.GetComponentInChildren<TMP_Text>();
     }
     
@@ -35,10 +35,10 @@ public class QuestMarker : AutoCleanupSingleton<QuestMarker>
             float maxY = Screen.height - minY;
 
             //Calculate where the marker should be in screen space
-            Vector2 markerScreenPos = _player.WorldToScreenPoint(_target.position + _markerOffset);
+            Vector2 markerScreenPos = _playerCamera.WorldToScreenPoint(_target.position + _markerOffset);
 
             //Check if the marker is behind the player and position at the bounds if this is the case
-            if (Vector3.Dot(_target.position - _player.transform.position, _player.transform.forward) < 0)
+            if (Vector3.Dot(_target.position - _playerCamera.transform.position, _playerCamera.transform.forward) < 0)
             {
                 //The target is behind the player
                 if (markerScreenPos.x < Screen.width / 2)
@@ -55,7 +55,7 @@ public class QuestMarker : AutoCleanupSingleton<QuestMarker>
             _questMarker.transform.position = markerScreenPos;
 
             //Calculate and update the marker distance accordingly 
-            _distanceCount.text = ((int)(Vector3.Distance(_player.transform.position, _target.position))).ToString();
+            _distanceCount.text = ((int)(Vector3.Distance(_playerCamera.transform.position, _target.position))).ToString();
         }
     }
 }

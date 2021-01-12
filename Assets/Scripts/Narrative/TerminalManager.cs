@@ -7,7 +7,8 @@ public class TerminalManager : BranchingNarrative
         _outputScreen = GetComponentInChildren<TextDisplay>();
 
         GameObject _interactableUI = transform.Find("ScreenInteractable").gameObject;
-        _interactableUI.GetComponent<Canvas>().worldCamera = PlayerInteract.instance._playerCamera;
+        _interactableUI.GetComponent<Canvas>().worldCamera = Game_Manager.instance._playerCamera;
+
         _buttonList = _interactableUI.transform.GetChild(0).gameObject;
         _buttonList.SetActive(false);
 

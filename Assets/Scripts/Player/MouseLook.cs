@@ -77,7 +77,7 @@ public class MouseLook : MonoBehaviour
             _xRotation = Mathf.Clamp(_xRotation, -90.0f, 90.0f);
 
             //Rotate only the camera object around the x-axis (vertical look) 
-            transform.localRotation = Quaternion.Euler(_xRotation, 0.0f, 0.0f);
+            transform.localRotation = Quaternion.Euler(_xRotation, 0.0f, transform.localEulerAngles.z);
             //Rotate the entire player around the y-axis (horizontal look)
             _playerBody.Rotate(Vector3.up, look.x);
 

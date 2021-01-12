@@ -40,8 +40,8 @@ public class PlayerQuestLog : AutoCleanupSingleton<PlayerQuestLog>
     {
         if (_currentQuestID < _activeQuests.Count)
         {
-            Debug.Log(_activeQuests[_currentQuestID].GetCurrentQuestStage()._stageObjective);
-            Debug.Log(_activeQuests[_currentQuestID].GetCurrentSubStage()._subStageObjective);
+            //Debug.Log(_activeQuests[_currentQuestID].GetCurrentQuestStage()._stageObjective);
+            //Debug.Log(_activeQuests[_currentQuestID].GetCurrentSubStage()._subStageObjective);
         }
     }
 
