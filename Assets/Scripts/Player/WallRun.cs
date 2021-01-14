@@ -11,7 +11,7 @@ public class WallRun : MonoBehaviour
     [SerializeField] float _pushOffForce = 10.0f; //How much force will be applied when pushing off of wall
     Vector3 _pushOffDirection = new Vector3(); //The direction the push off force will be applied in (normal to the wall)
     [SerializeField] float _upwardBiasForce = 0.0f; //How much of an upward force will be applied when pushing off from wall
-
+    [SerializeField] float _wallRunDuration = 5.0f;
     private PlayerMovement _movement = default;
     private Camera _playerCamera = default;
     public bool _isWallRunning { get; private set; }
@@ -22,26 +22,51 @@ public class WallRun : MonoBehaviour
         _playerCamera = Game_Manager.instance._playerCamera;
     }
 
+    private void StopWallRun()
+    {
+        Debug.Log("Times up");
+        _movement._recieveGravity = true;
+    }
+
     private void FixedUpdate()
     {
+        if (_isWallRunning)
+        {
+            if (_movement.IsMoving())
+            {
+                _movement._recieveGravity = false;
+            }
+            else
+            {
+                _movement._recieveGravity = true;
+            }
+        }
+
+
+
         if (Physics.Raycast(transform.position, transform.right, out wall, _wallDetectionRange, _runnableSurfaces) && !_movement.GetGrounded())
         {
             if (!_isWallRunning)
             {
-                Debug.Log("Started Wall Running. (Right)");
                 _pushOffDirection = wall.normal;
                 _isWallRunning = true;
                 _movement.SetVelocity(new Vector3(_movement.GetVelocity().x, 0.0f, _movement.GetVelocity().z));
                 StopAllCoroutines();
                 StartCoroutine(RotateCamera(_cameraTiltAngle, Vector3.forward, _tiltTime));
                 _movement._recieveGravity = false;
+                
+                if (IsInvoking("StopWallRun"))
+                {
+                    CancelInvoke("StopWallRun");
+                }
+
+                Invoke("StopWallRun", _wallRunDuration);
             }
         }
         else if (Physics.Raycast(transform.position, -transform.right, out wall, _wallDetectionRange, _runnableSurfaces) && !_movement.GetGrounded())
         {
             if (!_isWallRunning)
             {
-                Debug.Log("Started Wall Running. (Left)");
                 _pushOffDirection = wall.normal;
 
                 _isWallRunning = true;
@@ -49,13 +74,18 @@ public class WallRun : MonoBehaviour
                 StopAllCoroutines();
                 StartCoroutine(RotateCamera(-_cameraTiltAngle, Vector3.forward, _tiltTime));
                 _movement._recieveGravity = false;
+
+                if (IsInvoking("StopWallRun"))
+                {
+                    CancelInvoke("StopWallRun");
+                }
+                Invoke("StopWallRun", _wallRunDuration);
             }
         }
         else
         {
             if (_isWallRunning)
             {
-                Debug.Log("Stopped Wall Running");
                 _isWallRunning = false;
                 StopAllCoroutines();
                 StartCoroutine(RotateCamera(0.0f, Vector3.forward, _tiltTime)); 
@@ -66,6 +96,7 @@ public class WallRun : MonoBehaviour
 
     public void AddJumpForce()
     {
+        _isWallRunning = false;
         GetComponent<ForceReceiver>().AddForce(_pushOffDirection , _pushOffForce);
         GetComponent<ForceReceiver>().AddForce(Vector3.up , _upwardBiasForce);
     }

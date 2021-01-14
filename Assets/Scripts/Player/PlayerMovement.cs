@@ -145,6 +145,7 @@ public class PlayerMovement : AutoCleanupSingleton<PlayerMovement>
         _velocity = vel;
     }
    
+   
 
     // Start is called before the first frame update
     void Start()
