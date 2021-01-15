@@ -18,7 +18,7 @@ public class WallRun : MonoBehaviour
     RaycastHit wall = default;
     private void Start()
     {
-        _movement = PlayerMovement.instance;
+        _movement = Game_Manager.instance._player.GetComponent<PlayerMovement>();
         _playerCamera = Game_Manager.instance._playerCamera;
     }
 

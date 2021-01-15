@@ -21,7 +21,7 @@ public class PlayerAutoPilot : MonoBehaviour
     {
         _height = GetComponent<CharacterController>().height;
         _radius = GetComponent<CharacterController>().radius;
-        _speed  = PlayerMovement.instance._walkSpeed;
+        _speed  = Game_Manager.instance._player.GetComponent<PlayerMovement>()._walkSpeed;
         _playerCamera = Game_Manager.instance._playerCamera;
         _isAutoPiloting = false;
         _defaultCamPos = _playerCamera.transform.localPosition;

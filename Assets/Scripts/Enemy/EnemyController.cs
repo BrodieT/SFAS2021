@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(NavMeshAgent))]
 public class EnemyController : MonoBehaviour
 {
     //Tracks the current state and behaviours of the enemy
@@ -19,8 +20,8 @@ public class EnemyController : MonoBehaviour
     private RaycastHit _target = default;
     public float _rangedTimer { get; set; }
 
-    private NavMeshAgent _agent = default;
-    private CharacterController _controller = default;
+    [HideInInspector] public NavMeshAgent _agent = default;
+    [HideInInspector] public CharacterController _controller = default;
   
 
     private Vector3 _velocity = new Vector3();
@@ -47,7 +48,7 @@ public class EnemyController : MonoBehaviour
     private float _searchTimer = 0.0f;
     [SerializeField] private float _timeSearching = 5.0f;
 
-   
+    [HideInInspector] public Transform _player = default;
 
     // Start is called before the first frame update
     public virtual void Start()
@@ -57,17 +58,19 @@ public class EnemyController : MonoBehaviour
 
         _agent.updatePosition = false;
         _agent.updateRotation = false;
+       
+        _player = Game_Manager.instance._player.transform;
 
 
-        
+
 
     }
 
     public bool DetectPlayer()
     {
-        if(_playerDistance < _detectionRange && Physics.Raycast(transform.position + transform.forward, (PlayerMovement.instance.transform.position - transform.position).normalized, out _target, _detectionRange, _playerMask))
+        if(_playerDistance < _detectionRange && Physics.Raycast(transform.position + transform.forward, (_player.position - transform.position).normalized, out _target, _detectionRange, _playerMask))
         {
-            if(_target.transform.gameObject == PlayerMovement.instance.gameObject)
+            if(_target.transform.gameObject == _player.gameObject)
                 return true;
         }
 
@@ -93,7 +96,7 @@ public class EnemyController : MonoBehaviour
     {
         _rangedTimer -= Time.deltaTime;
 
-        Vector3 targetPoint = PlayerMovement.instance.transform.position - transform.position;
+        Vector3 targetPoint = _player.position - transform.position;
         Quaternion targetRote = Quaternion.LookRotation(targetPoint, Vector3.up);
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRote, Time.deltaTime * _turnSpeed);
 
@@ -110,7 +113,7 @@ public class EnemyController : MonoBehaviour
             _velocity.y = -2.0f;
            
         
-        _playerDistance = Vector3.Distance(transform.position, PlayerMovement.instance.transform.position);
+        _playerDistance = Vector3.Distance(transform.position, _player.position);
 
 
         if (DetectPlayer())

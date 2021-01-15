@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 [DisallowMultipleComponent()]
 [RequireComponent(typeof(CharacterController))]
-public class PlayerMovement : AutoCleanupSingleton<PlayerMovement>
+public class PlayerMovement : MonoBehaviour
 {
     #region Private Attributes
 

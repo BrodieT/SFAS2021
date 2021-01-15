@@ -65,7 +65,7 @@ public class TurretController : EnemyController
 
         _rangedTimer -= Time.deltaTime;
 
-        Vector3 targetPoint = PlayerMovement.instance.transform.position - transform.position;
+        Vector3 targetPoint = _player.position - transform.position;
         Quaternion targetRote = Quaternion.LookRotation(targetPoint, Vector3.up);
         _rotatableObject.rotation = Quaternion.Slerp(_rotatableObject.rotation, targetRote, Time.deltaTime * _turnSpeed);
 

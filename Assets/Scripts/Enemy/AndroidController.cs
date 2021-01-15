@@ -61,8 +61,8 @@ public class AndroidController : EnemyController
         if (_playerDistance <= _meleeRange && _meleeTimer <= 0.0f)
         {
             _meleeTimer = _meleeAttackCooldown;
-            Vector3 hurtDirection = (PlayerMovement.instance.transform.position - transform.position).normalized;
-            PlayerMovement.instance.GetComponent<ForceReceiver>().AddForce((hurtDirection + Vector3.up).normalized, 100.0f);
+            Vector3 hurtDirection = (_player.position - transform.position).normalized;
+            _player.GetComponent<ForceReceiver>().AddForce((hurtDirection + Vector3.up).normalized, 100.0f);
         }
         else if (_playerDistance <= _shootingRange && _rangedTimer <= 0.0f)
         {
@@ -71,7 +71,7 @@ public class AndroidController : EnemyController
         }
         else
         {
-            EnemyMove(PlayerMovement.instance.transform.position);
+            EnemyMove(_player.position);
         }
     }
 

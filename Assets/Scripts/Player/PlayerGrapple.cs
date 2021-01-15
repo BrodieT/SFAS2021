@@ -14,6 +14,7 @@ public class PlayerGrapple : MonoBehaviour
     [SerializeField] private float _zipGrappleTime = 3.0f; //the time it takes for the player to zip to the destination
     [SerializeField] private float _grappleFireTime = 2.0f; //the time it takes for the grapple hook to reach the destination
     [SerializeField] private GameObject _grappleHookPrefab = default; //The prefab for the grapple hook itself
+    private PlayerMovement _playerMovement = default;
 
     public void Grapple(InputAction.CallbackContext context)
     {
@@ -27,6 +28,7 @@ public class PlayerGrapple : MonoBehaviour
     void Start()
     {
         _playerCamera = Game_Manager.instance._playerCamera;
+        _playerMovement = Game_Manager.instance._player.GetComponent<PlayerMovement>();
     }
 
     private void DoGrapple()
@@ -72,7 +74,7 @@ public class PlayerGrapple : MonoBehaviour
         }
 
         //disable traditional player movement
-        PlayerMovement.instance.SetCanMoveOff();
+        _playerMovement.SetCanMoveOff();
 
         //Move the player to the destination
         for (float i = 0; i < 1.0f; i += (Time.deltaTime / _zipGrappleTime))
@@ -83,7 +85,7 @@ public class PlayerGrapple : MonoBehaviour
             {
                 //Disengage grapple and cleanup when close enough
                 Destroy(hook);
-                PlayerMovement.instance.SetCanMoveOn();
+                _playerMovement.SetCanMoveOn();
                 break;
             }
             yield return null;
