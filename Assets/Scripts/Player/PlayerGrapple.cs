@@ -15,10 +15,10 @@ public class PlayerGrapple : MonoBehaviour
     [SerializeField] private float _grappleFireTime = 2.0f; //the time it takes for the grapple hook to reach the destination
     [SerializeField] private GameObject _grappleHookPrefab = default; //The prefab for the grapple hook itself
     private PlayerMovement _playerMovement = default;
-
+    [SerializeField] private LayerMask _grapplableSurfaces = default;
     public void Grapple(InputAction.CallbackContext context)
     {
-        if (GameUtility._isPlayerObjectBeingControlled && context.performed)
+        if (GameUtility._isPlayerObjectBeingControlled && context.performed && !GameUtility._isPaused)
         {
             DoGrapple();
         }
@@ -35,7 +35,7 @@ public class PlayerGrapple : MonoBehaviour
     {
         RaycastHit hit = default;
         //Raycast where the player is aiming
-        if (Physics.Raycast(_playerCamera.transform.position, _playerCamera.transform.forward, out hit, _grappleRange))
+        if (Physics.Raycast(_playerCamera.transform.position, _playerCamera.transform.forward, out hit, _grappleRange, _grapplableSurfaces))
         {
             //ensure the targetted point is above the player on the y-axis
             if (hit.point.y > transform.position.y)

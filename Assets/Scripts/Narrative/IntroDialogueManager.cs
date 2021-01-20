@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IntroDialogueManager : DialogueManager
+public class IntroDialogueManager : TerminalManager
 {
-    private void Awake()
-    {
-        StartDisplay();
-    }
+    //private void Start()
+    //{
+    //    StartDisplay();
+    //}
 
     public override void UpdateInput()
     {
         if (_story._isCompleted == true)
         {
-            GetComponentInParent<Animator>().SetTrigger("Play");
+            //GetComponentInParent<Animator>().SetTrigger("Play");
             this.enabled = false;
         }
 

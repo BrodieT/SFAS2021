@@ -9,8 +9,8 @@ public class EnemyStats : CharacterStats
     [SerializeField] Image _healthBar = default;
     [SerializeField] TMP_Text _percentageTxt = default;
 
-   
-
+    [SerializeField] CustomEvent _onDeath;
+    
     public override void Die()
     {
         base.Die();
@@ -21,6 +21,12 @@ public class EnemyStats : CharacterStats
         //}
 
         _healthBar.gameObject.SetActive(false);
+
+        if(_onDeath != null)
+        {
+            _onDeath?.Invoke();
+        }
+
     }
 
     public override void UpdateUI()

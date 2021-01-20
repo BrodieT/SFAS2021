@@ -12,7 +12,6 @@ public class ChoiceData
     [SerializeField] public DialogueQuestEvent OnSelected = default;
     [SerializeField] public Quest _linkedQuest = default;
     [SerializeField] public int _stageID = -1;
-    [SerializeField] public int _subStageID = -1;
 
     public bool IsAutoProgress()
     {

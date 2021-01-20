@@ -25,20 +25,23 @@ public class PlayerInteract : MonoBehaviour
 
     public void SkipDialogue(InputAction.CallbackContext context)
     {
-        if (context.performed && !GameUtility._isPlayerObjectBeingControlled)
+        if (!GameUtility._isPaused)
         {
-            BranchingNarrative dM = default;
-
-            if(_targetInteractable.transform.TryGetComponent<BranchingNarrative>(out dM))
+            if (context.performed && !GameUtility._isPlayerObjectBeingControlled)
             {
-                dM._outputScreen.QuickDisplay();
+                BranchingNarrative dM = default;
+
+                if (_targetInteractable.transform.TryGetComponent<BranchingNarrative>(out dM))
+                {
+                    dM._outputScreen.QuickDisplay();
+                }
             }
         }
     }
 
     public void Interact(InputAction.CallbackContext context)
     {
-        if (GameUtility._isPlayerObjectBeingControlled)
+        if (GameUtility._isPlayerObjectBeingControlled && !GameUtility._isPaused)
         {
             Interact();
         }
@@ -46,7 +49,7 @@ public class PlayerInteract : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (GameUtility._isPlayerObjectBeingControlled)
+        if (GameUtility._isPlayerObjectBeingControlled && !GameUtility._isPaused)
         {
             //Raycast to determine if the player is looking at an interactable
             if (Physics.Raycast(_playerCamera.transform.position, _playerCamera.transform.forward, out _targetInteractable, _interactRange, _interactLayer))
@@ -71,6 +74,13 @@ public class PlayerInteract : MonoBehaviour
                             break;
                         case Interactable.InteractType.NPC:
                             _interactUI.text = "Talk";
+                            break;
+                        case Interactable.InteractType.Door:
+                            _interactUI.text = "Open Door";
+
+                            break;
+                        case Interactable.InteractType.LoadDoor:
+                            _interactUI.text = "Enter";
                             break;
                     }
 
@@ -180,6 +190,12 @@ public class PlayerInteract : MonoBehaviour
                         }
                     }
 
+                    break;
+                case Interactable.InteractType.LoadDoor:
+                    if(_targetInteractable.transform.TryGetComponent<SceneSwitcher>(out SceneSwitcher switcher))
+                    {
+                        switcher.GoToTargetScene();
+                    }
                     break;
 
             }

@@ -1,0 +1,271 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0f37a862a7378841bafbf2e89d17003, type: 3}
+  m_Name: Tutorial
+  m_EditorClassIdentifier: 
+  _questID: 0
+  _questName: Tutorial Simulation
+  _questDescription: Complete the turotial gauntlet to familiarise youself wwith
+    your abilities.
+  _questStages:
+  - _stageID: 0
+    _stageObjective: Collect your gear.
+    _linkedStageID: 1
+    _subStages:
+    - _subStageID: 0
+      _subStageObjective: Approach the obstacle and press the jump button to vault
+        over it
+      _linkedSubStageID: 1
+    - _subStageID: 1
+      _subStageObjective: Press and Hold the Crouch button while moving to pass below
+        the next obstacle
+      _linkedSubStageID: 2
+    - _subStageID: 2
+      _subStageObjective: Pressing the Crouch button while Sprinting allows you to
+        slide under obstacles
+      _linkedSubStageID: 3
+    - _subStageID: 3
+      _subStageObjective: Jumping towards a wall while moving forward will allow
+        you to run along the wall's surface
+      _linkedSubStageID: 4
+    - _subStageID: 4
+      _subStageObjective: Aim at the target and press the Grapple button to get across
+        the gap
+      _linkedSubStageID: 5
+    - _subStageID: 5
+      _subStageObjective: Press the Fire button to shoot your gun. Defeat the Turret
+        up ahead to progress.
+      _linkedSubStageID: 6
+    - _subStageID: 6
+      _subStageObjective: Return to your stasis pod to complete the tutorial
+      _linkedSubStageID: -1
+  - _stageID: 1
+    _stageObjective: Press the Jump button when approaching the obstacle to vault
+      over it.
+    _linkedStageID: 2
+    _subStages:
+    - _subStageID: 0
+      _subStageObjective: Approach the obstacle and press the jump button to vault
+        over it
+      _linkedSubStageID: 1
+    - _subStageID: 1
+      _subStageObjective: Press and Hold the Crouch button while moving to pass below
+        the next obstacle
+      _linkedSubStageID: 2
+    - _subStageID: 2
+      _subStageObjective: Pressing the Crouch button while Sprinting allows you to
+        slide under obstacles
+      _linkedSubStageID: 3
+    - _subStageID: 3
+      _subStageObjective: Jumping towards a wall while moving forward will allow
+        you to run along the wall's surface
+      _linkedSubStageID: 4
+    - _subStageID: 4
+      _subStageObjective: Aim at the target and press the Grapple button to get across
+        the gap
+      _linkedSubStageID: 5
+    - _subStageID: 5
+      _subStageObjective: Press the Fire button to shoot your gun. Defeat the Turret
+        up ahead to progress.
+      _linkedSubStageID: 6
+    - _subStageID: 6
+      _subStageObjective: Return to your stasis pod to complete the tutorial
+      _linkedSubStageID: -1
+  - _stageID: 2
+    _stageObjective: Press the Crouch button to pass below the obstacle.
+    _linkedStageID: 3
+    _subStages:
+    - _subStageID: 0
+      _subStageObjective: Approach the obstacle and press the jump button to vault
+        over it
+      _linkedSubStageID: 1
+    - _subStageID: 1
+      _subStageObjective: Press and Hold the Crouch button while moving to pass below
+        the next obstacle
+      _linkedSubStageID: 2
+    - _subStageID: 2
+      _subStageObjective: Pressing the Crouch button while Sprinting allows you to
+        slide under obstacles
+      _linkedSubStageID: 3
+    - _subStageID: 3
+      _subStageObjective: Jumping towards a wall while moving forward will allow
+        you to run along the wall's surface
+      _linkedSubStageID: 4
+    - _subStageID: 4
+      _subStageObjective: Aim at the target and press the Grapple button to get across
+        the gap
+      _linkedSubStageID: 5
+    - _subStageID: 5
+      _subStageObjective: Press the Fire button to shoot your gun. Defeat the Turret
+        up ahead to progress.
+      _linkedSubStageID: 6
+    - _subStageID: 6
+      _subStageObjective: Return to your stasis pod to complete the tutorial
+      _linkedSubStageID: -1
+  - _stageID: 3
+    _stageObjective: Pressing the Crouch button while Sprinting allows you to slide
+      under obstacles.
+    _linkedStageID: 4
+    _subStages:
+    - _subStageID: 0
+      _subStageObjective: Approach the obstacle and press the jump button to vault
+        over it
+      _linkedSubStageID: 1
+    - _subStageID: 1
+      _subStageObjective: Press and Hold the Crouch button while moving to pass below
+        the next obstacle
+      _linkedSubStageID: 2
+    - _subStageID: 2
+      _subStageObjective: Pressing the Crouch button while Sprinting allows you to
+        slide under obstacles
+      _linkedSubStageID: 3
+    - _subStageID: 3
+      _subStageObjective: Jumping towards a wall while moving forward will allow
+        you to run along the wall's surface
+      _linkedSubStageID: 4
+    - _subStageID: 4
+      _subStageObjective: Aim at the target and press the Grapple button to get across
+        the gap
+      _linkedSubStageID: 5
+    - _subStageID: 5
+      _subStageObjective: Press the Fire button to shoot your gun. Defeat the Turret
+        up ahead to progress.
+      _linkedSubStageID: 6
+    - _subStageID: 6
+      _subStageObjective: Return to your stasis pod to complete the tutorial
+      _linkedSubStageID: -1
+  - _stageID: 4
+    _stageObjective: Jump onto the walls to wall run across the gap.
+    _linkedStageID: 5
+    _subStages:
+    - _subStageID: 0
+      _subStageObjective: Approach the obstacle and press the jump button to vault
+        over it
+      _linkedSubStageID: 1
+    - _subStageID: 1
+      _subStageObjective: Press and Hold the Crouch button while moving to pass below
+        the next obstacle
+      _linkedSubStageID: 2
+    - _subStageID: 2
+      _subStageObjective: Pressing the Crouch button while Sprinting allows you to
+        slide under obstacles
+      _linkedSubStageID: 3
+    - _subStageID: 3
+      _subStageObjective: Jumping towards a wall while moving forward will allow
+        you to run along the wall's surface
+      _linkedSubStageID: 4
+    - _subStageID: 4
+      _subStageObjective: Aim at the target and press the Grapple button to get across
+        the gap
+      _linkedSubStageID: 5
+    - _subStageID: 5
+      _subStageObjective: Press the Fire button to shoot your gun. Defeat the Turret
+        up ahead to progress.
+      _linkedSubStageID: 6
+    - _subStageID: 6
+      _subStageObjective: Return to your stasis pod to complete the tutorial
+      _linkedSubStageID: -1
+  - _stageID: 5
+    _stageObjective: Aim at the target and press the Grapple button to get across
+      the gap.
+    _linkedStageID: 6
+    _subStages:
+    - _subStageID: 0
+      _subStageObjective: Approach the obstacle and press the jump button to vault
+        over it
+      _linkedSubStageID: 1
+    - _subStageID: 1
+      _subStageObjective: Press and Hold the Crouch button while moving to pass below
+        the next obstacle
+      _linkedSubStageID: 2
+    - _subStageID: 2
+      _subStageObjective: Pressing the Crouch button while Sprinting allows you to
+        slide under obstacles
+      _linkedSubStageID: 3
+    - _subStageID: 3
+      _subStageObjective: Jumping towards a wall while moving forward will allow
+        you to run along the wall's surface
+      _linkedSubStageID: 4
+    - _subStageID: 4
+      _subStageObjective: Aim at the target and press the Grapple button to get across
+        the gap
+      _linkedSubStageID: 5
+    - _subStageID: 5
+      _subStageObjective: Press the Fire button to shoot your gun. Defeat the Turret
+        up ahead to progress.
+      _linkedSubStageID: 6
+    - _subStageID: 6
+      _subStageObjective: Return to your stasis pod to complete the tutorial
+      _linkedSubStageID: -1
+  - _stageID: 6
+    _stageObjective: Aim at the Turret and press the Fire button to shoot at the
+      enemy.
+    _linkedStageID: 7
+    _subStages:
+    - _subStageID: 0
+      _subStageObjective: Approach the obstacle and press the jump button to vault
+        over it
+      _linkedSubStageID: 1
+    - _subStageID: 1
+      _subStageObjective: Press and Hold the Crouch button while moving to pass below
+        the next obstacle
+      _linkedSubStageID: 2
+    - _subStageID: 2
+      _subStageObjective: Pressing the Crouch button while Sprinting allows you to
+        slide under obstacles
+      _linkedSubStageID: 3
+    - _subStageID: 3
+      _subStageObjective: Jumping towards a wall while moving forward will allow
+        you to run along the wall's surface
+      _linkedSubStageID: 4
+    - _subStageID: 4
+      _subStageObjective: Aim at the target and press the Grapple button to get across
+        the gap
+      _linkedSubStageID: 5
+    - _subStageID: 5
+      _subStageObjective: Press the Fire button to shoot your gun. Defeat the Turret
+        up ahead to progress.
+      _linkedSubStageID: 6
+    - _subStageID: 6
+      _subStageObjective: Return to your stasis pod to complete the tutorial
+      _linkedSubStageID: -1
+  - _stageID: 7
+    _stageObjective: Return to your stasis pod to complete the simulation.
+    _linkedStageID: -1
+    _subStages:
+    - _subStageID: 0
+      _subStageObjective: Approach the obstacle and press the jump button to vault
+        over it
+      _linkedSubStageID: 1
+    - _subStageID: 1
+      _subStageObjective: Press and Hold the Crouch button while moving to pass below
+        the next obstacle
+      _linkedSubStageID: 2
+    - _subStageID: 2
+      _subStageObjective: Pressing the Crouch button while Sprinting allows you to
+        slide under obstacles
+      _linkedSubStageID: 3
+    - _subStageID: 3
+      _subStageObjective: Jumping towards a wall while moving forward will allow
+        you to run along the wall's surface
+      _linkedSubStageID: 4
+    - _subStageID: 4
+      _subStageObjective: Aim at the target and press the Grapple button to get across
+        the gap
+      _linkedSubStageID: 5
+    - _subStageID: 5
+      _subStageObjective: Press the Fire button to shoot your gun. Defeat the Turret
+        up ahead to progress.
+      _linkedSubStageID: 6
+    - _subStageID: 6
+      _subStageObjective: Return to your stasis pod to complete the tutorial
+      _linkedSubStageID: -1

@@ -24,7 +24,6 @@ public class WallRun : MonoBehaviour
 
     private void StopWallRun()
     {
-        Debug.Log("Times up");
         _movement._recieveGravity = true;
     }
 

@@ -1,0 +1,185 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &914395990607566608
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 914395990607566614}
+  - component: {fileID: 914395990607566609}
+  - component: {fileID: 914395990607566602}
+  - component: {fileID: 914395990607566615}
+  - component: {fileID: 914395990607566612}
+  - component: {fileID: 914395990607566613}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &914395990607566614
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 914395990607566608}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -52.371582, y: -0.93461514, z: -39.059097}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &914395990607566609
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 914395990607566608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f527a78c37f8d7a40b8edb62527430c9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _gameUI: {fileID: 0}
+  _settingsMenu: {fileID: 0}
+  _pauseMenu: {fileID: 0}
+  _dialogueWindow: {fileID: 0}
+--- !u!114 &914395990607566602
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 914395990607566608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91e82c7b3d12b4a43bd117b3b5f8fd7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _fallThreshold: -10
+  _fallCheckFrequency: 5
+--- !u!114 &914395990607566615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 914395990607566608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e8047b33f3d77f04299060b87d2b4dc2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _allQuests:
+  - _name: Main Story
+    _prevQuest: {fileID: 11400000, guid: c1aab5c5c9e691a4eaa025c5a473b01e, type: 2}
+    _quest: {fileID: 11400000, guid: c1aab5c5c9e691a4eaa025c5a473b01e, type: 2}
+    _isActive: 0
+    _isCompleted: 0
+    _questStages:
+    - _name: Get out of the flooded district
+      _stage:
+        _stageID: 0
+        _stageObjective: Get out of the flooded district
+        _linkedStageID: 0
+        _subStages:
+        - _subStageID: 0
+          _subStageObjective: Destroy the Turret blocking your path
+          _linkedSubStageID: 1
+        - _subStageID: 1
+          _subStageObjective: Talk to the guard
+          _linkedSubStageID: 2
+        - _subStageID: 2
+          _subStageObjective: Go through the gate
+          _linkedSubStageID: -1
+      _isCompleted: 0
+      _isActive: 0
+      _onCompleted:
+        m_PersistentCalls:
+          m_Calls: []
+      _subStages:
+      - _name: Destroy the Turret blocking your path
+        _subStage:
+          _subStageID: 0
+          _subStageObjective: Destroy the Turret blocking your path
+          _linkedSubStageID: 1
+        _isCompleted: 0
+        _isActive: 0
+        _onCompleted:
+          m_PersistentCalls:
+            m_Calls: []
+        _questMarkerLocation: {fileID: 0}
+      - _name: Talk to the guard
+        _subStage:
+          _subStageID: 1
+          _subStageObjective: Talk to the guard
+          _linkedSubStageID: 2
+        _isCompleted: 0
+        _isActive: 0
+        _onCompleted:
+          m_PersistentCalls:
+            m_Calls: []
+        _questMarkerLocation: {fileID: 0}
+      - _name: Go through the gate
+        _subStage:
+          _subStageID: 2
+          _subStageObjective: Go through the gate
+          _linkedSubStageID: -1
+        _isCompleted: 0
+        _isActive: 0
+        _onCompleted:
+          m_PersistentCalls:
+            m_Calls: []
+        _questMarkerLocation: {fileID: 0}
+    - _name: Storm the Palace
+      _stage:
+        _stageID: 1
+        _stageObjective: Storm the Palace
+        _linkedStageID: -1
+        _subStages: []
+      _isCompleted: 0
+      _isActive: 0
+      _onCompleted:
+        m_PersistentCalls:
+          m_Calls: []
+      _subStages: []
+    _currentQuestStageID: 0
+    _currentSubStageID: 0
+  _activeQuests: []
+  _currentQuestID: 0
+  _mainObjective: {fileID: 0}
+  _currentObjective: {fileID: 0}
+--- !u!114 &914395990607566612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 914395990607566608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2079626850941643b211d7ee0059b62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _quest: {fileID: 11400000, guid: c1aab5c5c9e691a4eaa025c5a473b01e, type: 2}
+--- !u!114 &914395990607566613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 914395990607566608}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b89a1667475aae41b94b8322186e31d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _player: {fileID: 0}
+  _playerCamera: {fileID: 0}

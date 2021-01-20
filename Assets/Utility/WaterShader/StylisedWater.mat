@@ -51,11 +51,11 @@ Material:
     - Vector1_221530D4: 1.1
     - Vector1_2C794CBE: 0.05
     - Vector1_53A97537: 10
-    - Vector1_5EEF0227: 100
+    - Vector1_5EEF0227: 200
     - Vector1_5FC6E811: 1
     - Vector1_6190F47: 2
-    - Vector1_99F87092: 1
-    - Vector1_F748FC82: 2
+    - Vector1_99F87092: 0.1
+    - Vector1_F748FC82: 1
     - _AlphaClip: 0
     - _Blend: 0
     - _BumpScale: 1

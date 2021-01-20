@@ -41,6 +41,8 @@ public class MouseLook : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Debug.Log("ML Hide Cursor");
+
         //Hide the cursor using the game utility static script
         GameUtility.HideCursor();
 
@@ -66,8 +68,7 @@ public class MouseLook : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-        if (GameUtility._isPaused || GameUtility._isPlayerObjectBeingControlled)
+        if (!GameUtility._isPaused && GameUtility._isPlayerObjectBeingControlled)
         {
             //Multiply the raw look direction vector with a sensitivity parameter and delta time
             Vector2 look = _lookDirection * _mouseSensitivity * Time.deltaTime;

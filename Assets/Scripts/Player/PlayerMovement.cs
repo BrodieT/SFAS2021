@@ -86,7 +86,7 @@ public class PlayerMovement : MonoBehaviour
     //Input callback for when the jump button is pressed
     public void Jump(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.performed && !GameUtility._isPaused)
         {
             if (_wallRunner._isWallRunning)
                 _wallRunner.AddJumpForce();
@@ -105,22 +105,25 @@ public class PlayerMovement : MonoBehaviour
     //Input callback for when the jump button is pressed
     public void Crouch(InputAction.CallbackContext context)
     {
-        if (context.performed)
-        { 
-            //Change the height of the character controller to the crouch height
-            _controller.height = _crouchHeight;
-           
-
-            //If the player is moving faster than a run, add forward force to slide
-            if (_currentSpeed > _walkSpeed)
-            {
-                GetComponent<ForceReceiver>().AddForce(transform.forward, 100.0f);
-            }
-        }
-        else
+        if (!GameUtility._isPaused)
         {
-            //Return the character controller height to the standing height
-            _controller.height = _defaultHeight;
+            if (context.performed)
+            {
+                //Change the height of the character controller to the crouch height
+                _controller.height = _crouchHeight;
+
+
+                //If the player is moving faster than a run, add forward force to slide
+                if (_currentSpeed > _walkSpeed)
+                {
+                    GetComponent<ForceReceiver>().AddForce(transform.forward, 100.0f);
+                }
+            }
+            else
+            {
+                //Return the character controller height to the standing height
+                _controller.height = _defaultHeight;
+            }
         }
 
         //Adjust the ground check position according to the new height
@@ -189,7 +192,7 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (GameUtility._isPaused || GameUtility._isPlayerObjectBeingControlled)
+        if (!GameUtility._isPaused && GameUtility._isPlayerObjectBeingControlled)
         {
             //Lerp movement speeds
             UpdateMoveSpeed();
@@ -233,7 +236,7 @@ public class PlayerMovement : MonoBehaviour
                 {
                     _isMantling = true;
                     Debug.Log("Mantling up Ledge");
-                    MantleLedge();
+                    //MantleLedge();
                 }
             }
 

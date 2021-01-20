@@ -13,20 +13,23 @@ public class PlayerGunController : GunController
     [SerializeField] private Animator _gunAnimator = default;
     public void Fire(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.performed && !GameUtility._isPaused && GameUtility._isPlayerObjectBeingControlled)
         {
             ShootGun();
         }
     }
     public void Aim(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (!GameUtility._isPaused)
         {
-            _isAiming = true;
-        }
-        else
-        {
-            _isAiming = false;
+            if (context.performed)
+            {
+                _isAiming = true;
+            }
+            else
+            {
+                _isAiming = false;
+            }
         }
     }
 
@@ -37,7 +40,7 @@ public class PlayerGunController : GunController
 
     public override void ShootGun()
     {
-        if (CanShoot())
+        if (CanShoot() && !GameUtility._isPaused)
         {
             _gunAnimator.SetTrigger("Shoot");
 

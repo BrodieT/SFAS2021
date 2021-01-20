@@ -128,71 +128,71 @@ public class QuestEditor : EditorWindow
         EditorGUILayout.Space();
 
 
-        SerializedProperty subStageList = currentStage.FindPropertyRelative("_subStages");
+        //SerializedProperty subStageList = currentStage.FindPropertyRelative("_subStages");
 
-        EditorGUILayout.BeginVertical();
-        EditorUtility.DrawUILine(Color.red);
-        EditorGUILayout.Space(20);
-
-
-        for (int subStageCount = 0; subStageCount < subStageList.arraySize; ++subStageCount)
-        {
-            SerializedProperty currentSubStage = subStageList.GetArrayElementAtIndex(subStageCount);
-
-            EditorGUILayout.BeginVertical();
+        //EditorGUILayout.BeginVertical();
+        //EditorUtility.DrawUILine(Color.red);
+        //EditorGUILayout.Space(20);
 
 
-            EditorGUILayout.BeginHorizontal();
+        //for (int subStageCount = 0; subStageCount < subStageList.arraySize; ++subStageCount)
+        //{
+        //    SerializedProperty currentSubStage = subStageList.GetArrayElementAtIndex(subStageCount);
 
-            //Show the quest stage ID
-            SerializedProperty subStageID = currentSubStage.FindPropertyRelative("_subStageID");
-            subStageID.intValue = EditorGUILayout.IntField("Sub-Stage ID", subStageID.intValue);
-
-            EditorGUILayout.Space();
-
-            //Show the linked quest stage ID
-            SerializedProperty linkedSubStageID = currentSubStage.FindPropertyRelative("_linkedSubStageID");
-            linkedSubStageID.intValue = EditorGUILayout.IntField("Linked Sub-Stage ID", linkedSubStageID.intValue);
-
-            EditorGUILayout.EndHorizontal();
-
-            EditorGUILayout.Space();
-
-            //Show the quest name
-            SerializedProperty subStageObjective = currentSubStage.FindPropertyRelative("_subStageObjective");
-            subStageObjective.stringValue = EditorGUILayout.TextField("Sub-Stage Objective", subStageObjective.stringValue);
-
-            EditorGUILayout.Space();
-
-            //Section for adding custom event calls to this quest stage
-            //SerializedProperty subStageCompleteEvent = currentSubStage.FindPropertyRelative("_onSubStageCompleted");
-            //EditorGUILayout.PropertyField(subStageCompleteEvent);
-
-            //Add a button for deleting this beat
-            if (GUILayout.Button("Delete Sub-Stage"))
-            {
-                subStageList.DeleteArrayElementAtIndex(subStageCount);
-                break;
-            }
-
-            EditorGUILayout.EndVertical();
-
-            EditorGUILayout.Space(15);
-            EditorUtility.DrawUILine(Color.white);
-            EditorGUILayout.Space(15);
-
-        }
-
-        EditorGUILayout.Space(15);
-
-        //Add a button for adding more choices
-        if (GUILayout.Button((subStageList.arraySize == 0 ? "Add Sub-Stage" : "Add Another Sub-Stage"), GUILayout.Height(100)))
-        {
-            AddSubStage(subStageList, -1);
-        }
+        //    EditorGUILayout.BeginVertical();
 
 
-        EditorGUILayout.EndVertical();
+        //    EditorGUILayout.BeginHorizontal();
+
+        //    //Show the quest stage ID
+        //    SerializedProperty subStageID = currentSubStage.FindPropertyRelative("_subStageID");
+        //    subStageID.intValue = EditorGUILayout.IntField("Sub-Stage ID", subStageID.intValue);
+
+        //    EditorGUILayout.Space();
+
+        //    //Show the linked quest stage ID
+        //    SerializedProperty linkedSubStageID = currentSubStage.FindPropertyRelative("_linkedSubStageID");
+        //    linkedSubStageID.intValue = EditorGUILayout.IntField("Linked Sub-Stage ID", linkedSubStageID.intValue);
+
+        //    EditorGUILayout.EndHorizontal();
+
+        //    EditorGUILayout.Space();
+
+        //    //Show the quest name
+        //    SerializedProperty subStageObjective = currentSubStage.FindPropertyRelative("_subStageObjective");
+        //    subStageObjective.stringValue = EditorGUILayout.TextField("Sub-Stage Objective", subStageObjective.stringValue);
+
+        //    EditorGUILayout.Space();
+
+        //    //Section for adding custom event calls to this quest stage
+        //    //SerializedProperty subStageCompleteEvent = currentSubStage.FindPropertyRelative("_onSubStageCompleted");
+        //    //EditorGUILayout.PropertyField(subStageCompleteEvent);
+
+        //    //Add a button for deleting this beat
+        //    if (GUILayout.Button("Delete Sub-Stage"))
+        //    {
+        //        subStageList.DeleteArrayElementAtIndex(subStageCount);
+        //        break;
+        //    }
+
+        //    EditorGUILayout.EndVertical();
+
+        //    EditorGUILayout.Space(15);
+        //    EditorUtility.DrawUILine(Color.white);
+        //    EditorGUILayout.Space(15);
+
+        //}
+
+        //EditorGUILayout.Space(15);
+
+        ////Add a button for adding more choices
+        //if (GUILayout.Button((subStageList.arraySize == 0 ? "Add Sub-Stage" : "Add Another Sub-Stage"), GUILayout.Height(100)))
+        //{
+        //    AddSubStage(subStageList, -1);
+        //}
+
+
+        //EditorGUILayout.EndVertical();
 
         EditorGUILayout.Space(30);
         EditorUtility.DrawUILine(Color.red);

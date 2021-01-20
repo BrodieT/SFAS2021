@@ -59,29 +59,32 @@ public class BranchingNarrative : MonoBehaviour
 
     public virtual void Update()
     {
-        if (_beginStory)
+        if (!GameUtility._isPaused)
         {
-            //Toggle the cursor where appropriate if the story is in progress
-            if (_story._isCompleted)
+            if (_beginStory)
             {
-                GameUtility.HideCursor();
-            }
-            else if (GameUtility._isCursorHidden)
-            {
-                GameUtility.ShowCursor();
-            }
+                ////Toggle the cursor where appropriate if the story is in progress
+                //if (_story._isCompleted)
+                //{
+                //    GameUtility.HideCursor();
+                //}
+                //else if (GameUtility._isCursorHidden)
+                //{
+                //    GameUtility.ShowCursor();
+                //}
 
-            //If an invalid beat is selected while the screen is idle, revert to the first beat
-            //Otherwise update input
-            if (_outputScreen.IsIdle)
-            {
-                if (_currentBeat == null)
+                //If an invalid beat is selected while the screen is idle, revert to the first beat
+                //Otherwise update input
+                if (_outputScreen.IsIdle)
                 {
-                    DisplayBeat(1);
-                }
-                else
-                {
-                    UpdateInput();
+                    if (_currentBeat == null)
+                    {
+                        DisplayBeat(1);
+                    }
+                    else
+                    {
+                        UpdateInput();
+                    }
                 }
             }
         }
@@ -120,6 +123,7 @@ public class BranchingNarrative : MonoBehaviour
         _outputScreen.FinishDisplay();
 
         _beginStory = false;
+        Debug.Log("BN Hide Cursor");
         GameUtility.HideCursor();
     }
 
@@ -185,9 +189,9 @@ public class BranchingNarrative : MonoBehaviour
                         { 
                             DisplayBeat(choice.NextID);
 
-                            if (choice._linkedQuest != null && choice._stageID >= 0 && choice._subStageID >= 0)
+                            if (choice._linkedQuest != null && choice._stageID >= 0)
                             {
-                                PlayerQuestLog.instance.ProgressQuest(choice._linkedQuest._questID, choice._stageID, choice._subStageID);
+                                PlayerQuestLog.instance.ProgressQuest(choice._linkedQuest._questID, choice._stageID);
                             }
                             
                             //choice.OnSelected?.Invoke();
