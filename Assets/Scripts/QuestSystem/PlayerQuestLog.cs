@@ -28,11 +28,13 @@ public class PlayerQuestLog : AutoCleanupSingleton<PlayerQuestLog>
             _allQuests[index]._currentQuestStageID = 0;
             _allQuests[index].GetCurrentQuestStage()._isActive = true;
             SetQuestAsCurrent(_allQuests[index]._quest._questID);
-
         }
     }
 
-   
+    private void Start()
+    {
+        UpdateQuestmarker(-1);
+    }
 
     //This function returns the currently active quest
     public QuestLogEntry GetCurrentQuest()
@@ -57,8 +59,15 @@ public class PlayerQuestLog : AutoCleanupSingleton<PlayerQuestLog>
         if (index < 0)
             return;
 
-        //Update the current ID
-        _currentQuestIndex = index;
+        if (_currentQuestIndex == index)
+        {
+            _currentQuestIndex = -1;
+        }
+        else
+        {
+            //Update the current ID
+            _currentQuestIndex = index;
+        }
 
 
         //Update the quest marker
@@ -72,21 +81,32 @@ public class PlayerQuestLog : AutoCleanupSingleton<PlayerQuestLog>
     {
         if (id >= 0 && id < _allQuests.Count)
         {
+            Game_Manager.instance._UIManager.ShowQuestUI();
 
-            //If a quest marker is active and in the scene
+            //If a quest marker in the scene
             if (Game_Manager.instance._UIManager.GetQuestMarker(out QuestMarker marker))
             {
                 //If the current objective has a linked quest marker
                 if (_allQuests[id].GetQuestMarkerLocation(out Transform questMarker))
                 {
+                    Game_Manager.instance._UIManager.ShowQuestMarker();
                     //Update the marker position
                     marker.UpdateQuestTarget(questMarker);
+                }
+                else
+                {
+                    Game_Manager.instance._UIManager.HideQuestMarker();
                 }
             }
 
             //Update the In-Game UI text
             _currentQuestName.text = _allQuests[id]._quest._questName;
             _currentQuestObjective.text = _allQuests[id].GetCurrentQuestStage()._stage._stageObjective;
+        }
+        else
+        {
+            Game_Manager.instance._UIManager.HideQuestUI();
+            Game_Manager.instance._UIManager.HideQuestMarker();
         }
     }
 
@@ -121,7 +141,6 @@ public class PlayerQuestLog : AutoCleanupSingleton<PlayerQuestLog>
                 if (_allQuests[targetIndex].GetNextQuest(out Quest next))
                 {
                     AddNewActiveQuest(next);
-                    SetQuestAsCurrent(next._questID);
                     return;
                 }
 

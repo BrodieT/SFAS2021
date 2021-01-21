@@ -1,0 +1,92 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf5d5e33bab057c43929a11bc8f25f44, type: 3}
+  m_Name: RobotStartup
+  m_EditorClassIdentifier: 
+  _beats:
+  - _choices:
+    - _text: ...
+      _beatId: 2
+      AutoProgress: 1
+      OnSelected:
+        m_PersistentCalls:
+          m_Calls: []
+      _linkedQuest: {fileID: 0}
+      _stageID: -1
+    _text: '********** INITIALISING AUTOMATRON V7.1.08 **********
+
+
+      COPYRIGHT
+      2020 ROBOTICS CORPORATION (R)
+
+      LOADER V1.1
+
+      EXEC VERSION 41.10
+
+      64K
+      RAM SYSTEM
+
+      38911 BYTES FREE
+
+      NO MISSION DATA FOUND
+
+      LOAD
+      ROM(1):DEITRIX 303
+
+
+      INITIATING BOOTUP SEQUENCE...'
+    _id: 1
+    DisplayTime: 0.025
+  - _choices:
+    - _text: 
+      _beatId: 3
+      AutoProgress: 1
+      OnSelected:
+        m_PersistentCalls:
+          m_Calls: []
+      _linkedQuest: {fileID: 0}
+      _stageID: 0
+    _text: "Hey you! You're finally awake?\n\nIt took me forever to hack into these
+      old world terminals.\n\nI'm glad you're still with us, but now I need your
+      help. \n"
+    _id: 2
+    DisplayTime: 0.025
+  - _choices:
+    - _text: Affirmative
+      _beatId: 4
+      AutoProgress: 0
+      OnSelected:
+        m_PersistentCalls:
+          m_Calls: []
+      _linkedQuest: {fileID: 11400000, guid: a2874c4027072a847ad863b9490e890b, type: 2}
+      _stageID: -1
+    - _text: Negative
+      _beatId: 4
+      AutoProgress: 0
+      OnSelected:
+        m_PersistentCalls:
+          m_Calls: []
+      _linkedQuest: {fileID: 11400000, guid: 1b33a3669e9e82b449487e6311696ead, type: 2}
+      _stageID: -1
+    _text: "The city is in turmoil, it's residents' livlihoods destroyed by the tyranical
+      dictator and his vile mechanicals.\n\nYou're the last Peacemaker left, help
+      me AT-47, you're our only hope.\n\nBefore we begin, would you like to refamiliarise
+      yourself with your abilities? \nIt has been a while after all, don't want you
+      getting rusty...\n\nif you'll pardon the phrasing... "
+    _id: 3
+    DisplayTime: 0.025
+  - _choices: []
+    _text: ...
+    _id: 4
+    DisplayTime: 0.025
+  _isCompleted: 1
+  _isRepeatable: 0

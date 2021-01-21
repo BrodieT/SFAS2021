@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.Events;
 using TMPro;
 
@@ -111,7 +112,7 @@ public class BranchingNarrative : MonoBehaviour
         _autopilot.ResetCamera();
         StopAllCoroutines();
         _outputScreen.FinishDisplay();
-
+        Game_Manager.instance._player.GetComponent<PlayerInteract>()._targetInteractable = null;
         _beginStory = false;
 
         _onComplete?.Invoke();
@@ -129,17 +130,11 @@ public class BranchingNarrative : MonoBehaviour
         _currentBeat = data;
     }
 
-    private void ClearButtons()
-    {
-        for (int i = 0; i < _buttonList.transform.childCount; i++)
-        {
-            Destroy(_buttonList.transform.GetChild(i).gameObject);
-        }
-    }
 
+   
     IEnumerator DoDisplay(BeatData data)
     {
-        ClearButtons();
+        GameUtility.DestroyAllChildren(_buttonList.transform);
         _outputScreen.Clear();
 
         while (_outputScreen.IsBusy)
@@ -155,48 +150,54 @@ public class BranchingNarrative : MonoBehaviour
             yield return null;
         }
 
-        //Show the dialogue Options
-
-        if (data.Decision.Count >= 1)
+        if (data.Decision.Count == 1 && data.Decision[0].AutoProgress)
         {
-            _buttonList.SetActive(true);
-
-            for (int count = 0; count < data.Decision.Count; ++count)
+            //Do nothing
+        }
+        else
+        {
+            //Show the dialogue Options
+            if (data.Decision.Count >= 1)
             {
-                ChoiceData choice = data.Decision[count];
+                // GameUtility.DestroyAllChildren(_buttonList.transform);
 
-                GameObject g = Instantiate(_buttonPrefab, _buttonList.transform);
+                _buttonList.SetActive(true);
 
-                TMP_Text buttonText = default;
-
-                for (int i = 0; i < g.transform.childCount; i++)
+                for (int count = 0; count < data.Decision.Count; ++count)
                 {
-                    if (g.transform.GetChild(i).TryGetComponent<TMP_Text>(out buttonText))
+                    ChoiceData choice = data.Decision[count];
+
+                    GameObject g = Instantiate(_buttonPrefab, _buttonList.transform);
+
+                    TMP_Text buttonText = g.transform.GetComponentInChildren<TMP_Text>();
+                    if (buttonText != null)
                     {
                         //Show the display text on the button
                         buttonText.text = choice.DisplayText;
+                    }
 
+                    if (g.transform.TryGetComponent<Button>(out Button button))
+                    {
                         //Add a listener to the button to display the linked story beat when clicked
-                        g.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(delegate
-                        { 
+                        button.onClick.AddListener(delegate
+                        {
                             DisplayBeat(choice.NextID);
 
-                            if (choice._linkedQuest != null && choice._stageID >= 0)
+                            if (choice._linkedQuest != null)
                             {
-                                PlayerQuestLog.instance.ProgressQuest(choice._linkedQuest._questID, choice._stageID);
+                                if (choice._stageID < 0)
+                                    PlayerQuestLog.instance.AddNewActiveQuest(choice._linkedQuest);
+                                else
+                                    PlayerQuestLog.instance.ProgressQuest(choice._linkedQuest._questID, choice._stageID);
                             }
-                            
-                            //choice.OnSelected?.Invoke();
-                        });
 
-                        break;
+                        });
                     }
                 }
+
+                //Show the blinking cursor while awaiting input
+                _outputScreen.ShowWaitingForInput();
             }
-
-            //Show the blinking cursor while awaiting input
-            _outputScreen.ShowWaitingForInput();
-
         }
 
     }

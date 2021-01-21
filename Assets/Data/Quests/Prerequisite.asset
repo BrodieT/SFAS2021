@@ -10,15 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b0f37a862a7378841bafbf2e89d17003, type: 3}
-  m_Name: Test
+  m_Name: Prerequisite
   m_EditorClassIdentifier: 
-  _questID: 1
-  _questName: Main Story
-  _questDescription: You have to get to the palace and save the prince
+  _questName: Unbound
+  _questDescription: Begin your quest to cleanse this city of scum and villainy
   _questStages:
   - _stageID: 0
-    _stageObjective: Get out of the flooded district
-    _linkedStageID: 1
-  - _stageID: 1
-    _stageObjective: Storm the Palace
+    _stageObjective: Leave the warehouse and Venture Forth!
     _linkedStageID: -1

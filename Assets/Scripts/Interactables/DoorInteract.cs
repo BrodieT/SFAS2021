@@ -7,7 +7,6 @@ public class DoorInteract : Interactable
 {
     [SerializeField] private bool _isLoadDoor = false; //Determines whether interacting with this door will switch scenes
     [SerializeField] private SceneLoader.SceneName _linkedScene = SceneLoader.SceneName.None; //The scene that will be switched to if this is a load door
-
     private bool _isOpen = false; //Tracks whether the door is open or not
 
     public void OnValidate()

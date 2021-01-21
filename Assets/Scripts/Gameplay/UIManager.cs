@@ -20,37 +20,10 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject _pauseMenu = default;
     [SerializeField] private UnityEvent _onGamePaused = default;
 
-    public bool _isFullyUnlockedUI { get; private set; }
-
-    //This function unlocks all UI elements after the tutorial has been completed
-    public void FullyUnlockUI()
-    {
-        _questLog.SetActive(true);
-        _questMarker.SetActive(true);
-        _reticle.SetActive(true);
-        _hud.SetActive(true);
-        _isFullyUnlockedUI = true;
-    }
-
-    //This function is called on startup to show only the basic UI elements during the tutorial section of the game
-    private void ShowLockedUI()
-    {
-        _mainCanvas.SetActive(true);
-        _questLog.SetActive(true);
-        _questMarker.SetActive(true);
-        _reticle.SetActive(true);
-        _dialogueWindow.SetActive(false);
-        _hud.SetActive(false);
-
-        _isFullyUnlockedUI = false;
-
-    }
-
     public bool GetQuestMarker(out QuestMarker marker)
     {
-        if(_questMarker.activeSelf)
+        if(_questMarker.TryGetComponent<QuestMarker>(out marker))
         {
-            marker = _questMarker.GetComponent<QuestMarker>();
             return true;
         }
 
@@ -58,6 +31,11 @@ public class UIManager : MonoBehaviour
         return false;
     }
 
+    public GameObject GetQuestMarkerObject()
+    {
+        return _questMarker;
+    }
+   
     public void PauseGame(InputAction.CallbackContext context)
     {
         if (context.performed)
@@ -87,12 +65,35 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        ShowLockedUI();
-        FullyUnlockUI();
+        _mainCanvas.SetActive(true);
+        _reticle.SetActive(true);
+        _dialogueWindow.SetActive(false);
+        _hud.SetActive(false);
+
     }
 
     public GameObject GetDialogueWindow()
     {
         return _dialogueWindow;
+    }
+
+    public void HideQuestUI()
+    {
+        _questLog.SetActive(false);
+    }
+
+    public void HideQuestMarker()
+    {
+        _questMarker.SetActive(false);
+    }
+
+    public void ShowQuestUI()
+    {
+        _questLog.SetActive(true);
+    }
+
+    public void ShowQuestMarker()
+    {
+        _questMarker.SetActive(true);
     }
 }

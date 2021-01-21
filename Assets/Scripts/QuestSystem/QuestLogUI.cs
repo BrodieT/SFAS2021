@@ -60,6 +60,14 @@ public class QuestLogUI : MonoBehaviour
 
     private void UpdateQuestBreakdown()
     {
+        if(_currentQuestBreakdown == null)
+        {
+            _questName.text = "No Quest To Show";
+            _questDescription.text = "";
+            GameUtility.DestroyAllChildren(_objectivesList.transform);
+            return;
+        }
+
         //Update the name and description of the quest
         _questName.text = _currentQuestBreakdown._quest.name;
         _questDescription.text = _currentQuestBreakdown._quest._questDescription;

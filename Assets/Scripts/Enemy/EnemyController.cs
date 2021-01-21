@@ -35,7 +35,6 @@ public class EnemyController : MonoBehaviour
     [SerializeField] public float _shootingRange = 10.0f; //How far the enemy can shoot
     [SerializeField] public float _detectionRange = 20.0f; //how far the enemy can detect the player from
     [SerializeField] public float _rangedAttackCooldown = 2.0f; //How many seconds between ranged attacks
-    [SerializeField] private LayerMask _playerMask = default; //Determines what is considered the  player
 
     [Header("Enemy Search Parameters")]
     [SerializeField] private float _timeSearching = 5.0f; //How long the enemy will search for when suspicious
@@ -60,7 +59,7 @@ public class EnemyController : MonoBehaviour
     public bool DetectPlayer()
     {
         //If the player is in range and the raycast can hit them (ie nothing blocking line of sight) return true
-        if(_playerDistance < _detectionRange && Physics.Raycast(transform.position + transform.forward, (_player.position - transform.position).normalized, out _target, _detectionRange, _playerMask))
+        if(_playerDistance < _detectionRange && Physics.Raycast(transform.position + transform.forward, (_player.position - transform.position).normalized, out _target, _detectionRange))
         {
             if(_target.transform.gameObject == _player.gameObject)
                 return true;

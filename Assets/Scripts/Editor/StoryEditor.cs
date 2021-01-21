@@ -321,7 +321,7 @@ public class StoryEditor : EditorWindow
         EditorGUILayout.PropertyField(quest);
 
         stageID.intValue = EditorGUILayout.IntField("Linked Quest Stage ID", stageID.intValue);
-        subStageID.intValue = EditorGUILayout.IntField("Linked Quest Sub-Stage ID", subStageID.intValue);
+
 
         CurrentData.ApplyModifiedProperties();
 

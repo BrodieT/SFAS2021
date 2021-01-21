@@ -235,7 +235,6 @@ public class PlayerMovement : MonoBehaviour
                 if (CanMantle())
                 {
                     _isMantling = true;
-                    Debug.Log("Mantling up Ledge");
                     //MantleLedge();
                 }
             }
@@ -290,8 +289,6 @@ public class PlayerMovement : MonoBehaviour
 
     private void VaultObject()
     {
-        Debug.Log("Vault over object");
-
         _canMove = false;
         GetComponent<ForceReceiver>().AddForce(Vector3.up, _vaultUpForce);
         GetComponent<ForceReceiver>().AddForce(transform.forward, _vaultForwardForce);

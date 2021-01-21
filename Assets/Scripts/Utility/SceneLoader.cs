@@ -14,6 +14,7 @@ public class SceneLoader : AutoCleanupSingleton<SceneLoader>
     private Canvas _currentLoadingScreen = default; //The instatiated version of the loading screen
     public static bool _isFinishedLoading = false; //bool to track is the current scene load process is finished
     private List<SceneData> _allScenes = new List<SceneData>(); //A list of all possible scenes and the corresponding build index
+    private SceneName _previousScene = 0;
 
     [System.Serializable] 
     public enum SceneName { None = 0, MainMenu = 1, Warehouse = 2, City = 3, Sewers = 4, Shop = 5, Palace = 6, End = 7} //Identifiers for each scene to be loaded
@@ -39,6 +40,10 @@ public class SceneLoader : AutoCleanupSingleton<SceneLoader>
     {
         //Ensure this is carried between scenes
         DontDestroyOnLoad(this.gameObject);
+
+        _allScenes.Add(new SceneData(SceneName.Warehouse, 0));
+        _allScenes.Add(new SceneData(SceneName.City, 1));
+
     }
 
     //This function will begin loading the desired scene

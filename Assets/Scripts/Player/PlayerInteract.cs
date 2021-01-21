@@ -34,9 +34,9 @@ public class PlayerInteract : MonoBehaviour
             {
                 if (_targetInteractable != null)
                 {
-                    if (_targetInteractable.transform.TryGetComponent<BranchingNarrative>(out BranchingNarrative dM))
+                    if (_targetInteractable.transform.TryGetComponent<BranchingNarrative>(out BranchingNarrative narrative))
                     {
-                        dM._outputScreen.QuickDisplay();
+                        narrative._outputScreen.QuickDisplay();
                     }
                 }
             }
@@ -93,16 +93,4 @@ public class PlayerInteract : MonoBehaviour
         
 
     }
-
-    //public void Interact(Interactable obj)
-    //{
-    //    //Only proceed if there is a target interactable to interact with
-    //    if (obj == null)
-    //    {
-    //        return;
-    //    }
-
-    //    obj.DoInteract();    
-
-    //}
 }
