@@ -20,6 +20,8 @@ MonoBehaviour:
       OnSelected:
         m_PersistentCalls:
           m_Calls: []
+      _linkedQuest: {fileID: 0}
+      _stageID: -1
     _text: '********** INITIALISING AUTOMATRON V7.1.08 **********
 
 
@@ -63,6 +65,8 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 0
             m_CallState: 2
+      _linkedQuest: {fileID: 0}
+      _stageID: -1
     - _text: Negative
       _beatId: 4
       AutoProgress: 0
@@ -81,10 +85,15 @@ MonoBehaviour:
               m_StringArgument: 
               m_BoolArgument: 0
             m_CallState: 2
-    _text: 'Greetings AT-47,
-
-
-      Would you like to begin training simulation?'
+      _linkedQuest: {fileID: 0}
+      _stageID: -1
+    _text: "Hey you! You're finally awake?\n\nIt took me forever to hack into these
+      old world terminals.\n\nI'm glad you're still with us, but now I need your
+      help. \n\nThe city is in turmoil, it's residents' livlihoods destroyed by the
+      tyranical dictator and his vile mechanicals.\n\nYou're the last Peacemaker
+      left, help me AT-47, you're our only hope.\n\nBefore we begin, would you like
+      to refamiliarise yourself with your abilities? \nIt has been a while after
+      all, don't want you getting rusty...\n\n if you'll pardon the phrasing...\n"
     _id: 2
     DisplayTime: 0.025
   - _choices: []
@@ -95,4 +104,5 @@ MonoBehaviour:
     _text: Exiting Charging Pod...
     _id: 4
     DisplayTime: 0.025
-  IsCompleted: 1
+  _isCompleted: 0
+  _isRepeatable: 0

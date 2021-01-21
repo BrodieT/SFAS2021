@@ -1,12 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEditor;
-using UnityEngine.UIElements;
-using UnityEditor.UIElements;
+using UnityEngine.Events;
 using TMPro;
 
+[DisallowMultipleComponent]
 public class BranchingNarrative : MonoBehaviour
 {
     [SerializeField] public StoryData _story = default; //The story used at the introduction to the game
@@ -17,13 +15,15 @@ public class BranchingNarrative : MonoBehaviour
     [HideInInspector] public TextDisplay _outputScreen = default; //The screen that this process will display text on
     [HideInInspector] public GameObject _buttonList = default;
     [SerializeField] public GameObject _buttonPrefab = default;
+    [SerializeField] UnityEvent _onComplete = default;
+
 
     private BeatData _currentBeat;
     private WaitForSeconds _wait;
 
     private bool _beginStory = false;
 
-    private void Start()
+    public virtual void Start()
     {
         _currentBeat = null;
         _wait = new WaitForSeconds(0.5f);
@@ -63,16 +63,6 @@ public class BranchingNarrative : MonoBehaviour
         {
             if (_beginStory)
             {
-                ////Toggle the cursor where appropriate if the story is in progress
-                //if (_story._isCompleted)
-                //{
-                //    GameUtility.HideCursor();
-                //}
-                //else if (GameUtility._isCursorHidden)
-                //{
-                //    GameUtility.ShowCursor();
-                //}
-
                 //If an invalid beat is selected while the screen is idle, revert to the first beat
                 //Otherwise update input
                 if (_outputScreen.IsIdle)
@@ -123,7 +113,9 @@ public class BranchingNarrative : MonoBehaviour
         _outputScreen.FinishDisplay();
 
         _beginStory = false;
-        Debug.Log("BN Hide Cursor");
+
+        _onComplete?.Invoke();
+
         GameUtility.HideCursor();
     }
 

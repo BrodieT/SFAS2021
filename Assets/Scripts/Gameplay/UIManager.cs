@@ -1,8 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.Events;
+using TMPro;
 
-public class UIManager : AutoCleanupSingleton<UIManager>
+public class UIManager : MonoBehaviour
 {
     [Header ("Game UI")]
     [SerializeField] private GameObject _mainCanvas = default;
@@ -15,7 +18,7 @@ public class UIManager : AutoCleanupSingleton<UIManager>
    
     [Header("Game Menus")]
     [SerializeField] private GameObject _pauseMenu = default;
-
+    [SerializeField] private UnityEvent _onGamePaused = default;
 
     public bool _isFullyUnlockedUI { get; private set; }
 
@@ -33,7 +36,6 @@ public class UIManager : AutoCleanupSingleton<UIManager>
     private void ShowLockedUI()
     {
         _mainCanvas.SetActive(true);
-        _interactPrompt.SetActive(false);
         _questLog.SetActive(true);
         _questMarker.SetActive(true);
         _reticle.SetActive(true);
@@ -56,27 +58,37 @@ public class UIManager : AutoCleanupSingleton<UIManager>
         return false;
     }
 
-    public void PauseGame()
+    public void PauseGame(InputAction.CallbackContext context)
     {
-        if (!GameUtility._isPaused)
+        if (context.performed)
         {
-            GameUtility._isPaused = true;
-            Time.timeScale = 0;
-            _pauseMenu.SetActive(true);
-            GameUtility.ShowCursor();
+            if (!GameUtility._isPaused)
+            {
+                _onGamePaused?.Invoke();
+                GameUtility._isPaused = true;
+                Time.timeScale = 0;
+                _pauseMenu.SetActive(true);
+                GameUtility.ShowCursor();
+            }
+            else
+            {
+                GameUtility._isPaused = false;
+                Time.timeScale = 1;
+                _pauseMenu.SetActive(false);
+                GameUtility.HideCursor();
+            }
         }
-        else
-        {
-            GameUtility._isPaused = false;
-            Time.timeScale = 1;
-            _pauseMenu.SetActive(false);
-            GameUtility.HideCursor();
-        }
+    }
+
+    public TMP_Text GetInteractPrompt()
+    {
+        return _interactPrompt.GetComponent<TMP_Text>();
     }
 
     private void Start()
     {
         ShowLockedUI();
+        FullyUnlockUI();
     }
 
     public GameObject GetDialogueWindow()

@@ -8,69 +8,79 @@ using TMPro;
 public class QuestLogUI : MonoBehaviour
 {
     [SerializeField] private GameObject _questStageEntryPrefab = default; //The UI prefab used to display quest stages
-    [SerializeField] private GameObject _questSubStageEntryPrefab = default; //The UI prefab used to display quest stages
     [SerializeField] private GameObject _objectivesList = default; //The gameobject where the objective prefab will be instantiated under
-    [SerializeField] private TMP_Text _questName = default;
-    [SerializeField] private TMP_Text _questDescription = default;
-    private PlayerQuestLog _questLog = default;
-    [SerializeField] TMPro.FontStyles _completedFontStyle = default;
+
+    [SerializeField] private GameObject _questListEntryPrefab = default; //The UI prefab used to display the quests in the quest list
+    [SerializeField] private GameObject _questList = default; //The gameobject the quests will be listed under
+
+
+    [SerializeField] private TMP_Text _questName = default; //The name of the current quest in the breakdown
+    [SerializeField] private TMP_Text _questDescription = default; //The description of the quest in the breakdown
+
+    private PlayerQuestLog _questLog = default; //Local store of the player's quest log
+    [SerializeField] TMPro.FontStyles _completedFontStyle = default; //Strikethrough font style to show completed objectives
+    private QuestLogEntry _currentQuestBreakdown = default;
+
     // Start is called before the first frame update
     void Start()
     {
         _questLog = PlayerQuestLog.instance;
-        StartCoroutine(TempUpdate());
     }
 
-    IEnumerator TempUpdate()
+   
+    public void QuestLogOpened()
     {
-        while (true)
-        {
-            UpdateUI();
+        ShowQuestBreakdown(_questLog.GetCurrentQuest());
+        UpdateQuestList();
+        UpdateQuestBreakdown();
+    }
 
-            yield return new WaitForSeconds(20.0f);
+    private void ShowQuestBreakdown(QuestLogEntry newQuest)
+    {
+        _currentQuestBreakdown = newQuest;
+        UpdateQuestBreakdown();
+    }
+
+    public void SetQuestAsCurrent(QuestLogEntry quest)
+    {
+        _questLog.SetQuestAsCurrent(quest._quest._questID);
+    }
+
+    private void UpdateQuestList()
+    {
+        GameUtility.DestroyAllChildren(_questList.transform);
+
+        foreach (QuestLogEntry quest in _questLog.GetAllActiveQuests())
+        {
+            GameObject newQuest = Instantiate(_questListEntryPrefab, _questList.transform);
+            newQuest.transform.GetComponentInChildren<TMP_Text>().text = quest._name;
+            newQuest.GetComponentInChildren<Button>().onClick.AddListener(delegate { ShowQuestBreakdown(quest); SetQuestAsCurrent(quest); });
         }
     }
 
-
-    public void UpdateUI()
+    private void UpdateQuestBreakdown()
     {
-        if (_questLog.GetActiveQuest() == null)
-            return;
-        
         //Update the name and description of the quest
-        _questName.text = _questLog.GetActiveQuest()._quest.name;
-        _questDescription.text = _questLog.GetActiveQuest()._quest._questDescription;
+        _questName.text = _currentQuestBreakdown._quest.name;
+        _questDescription.text = _currentQuestBreakdown._quest._questDescription;
 
-        //Cleanup the objectives list since last update
-        for (int i = 0; i < _objectivesList.transform.childCount; i++)
-        {
-            Destroy(_objectivesList.transform.GetChild(0).gameObject);
-        }
+        
+        GameUtility.DestroyAllChildren(_objectivesList.transform);
 
         //Loop through the quest stages and instantiate an objective entry for each active one
-        foreach (QuestStageLog stage in _questLog.GetActiveQuest()._questStages)
+        foreach (QuestStageLog stage in _currentQuestBreakdown._questStages)
         {
-            GameObject entry = Instantiate(_questStageEntryPrefab, _objectivesList.transform);
-            entry.transform.GetComponentInChildren<TMP_Text>().text = "- " + stage._stage._stageObjective;
-
-            //Strikethrough objective if complete
-            if (stage._isCompleted)
+            if (stage._isActive || stage._isCompleted)
             {
-                entry.transform.GetComponentInChildren<TMP_Text>().fontStyle = _completedFontStyle;
+                GameObject entry = Instantiate(_questStageEntryPrefab, _objectivesList.transform);
+                entry.transform.GetComponentInChildren<TMP_Text>().text = "- " + stage._stage._stageObjective;
+
+                //Strikethrough objective if complete
+                if (stage._isCompleted)
+                {
+                    entry.transform.GetComponentInChildren<TMP_Text>().fontStyle = _completedFontStyle;
+                }
             }
-
-            //foreach (QuestSubStageLog substage in stage._subStages)
-            //{
-            //    GameObject sub_entry = Instantiate(_questSubStageEntryPrefab, entry.transform.GetChild(1));//.GetChild(0).GetChild(0));
-            //    sub_entry.transform.GetComponentInChildren<TMP_Text>().text = "- " + substage._subStage._subStageObjective;
-
-            //    //Strikethrough objective if complete
-            //    if (substage._isCompleted)
-            //    {
-            //        sub_entry.transform.GetComponentInChildren<TMP_Text>().fontStyle = _completedFontStyle;
-            //    }
-            //}
-
         }
     }
 

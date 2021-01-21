@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Linq;
-
+using UnityEngine.Events;
 
 //This script updates the players quest log data as well as the in-game UI
 public class PlayerQuestLog : AutoCleanupSingleton<PlayerQuestLog>
@@ -25,19 +25,17 @@ public class PlayerQuestLog : AutoCleanupSingleton<PlayerQuestLog>
         if (index >= 0)
         {
             _allQuests[index]._isActive = true;
-            //If there are no other quests in the log then automatically select this one
-            if (GetActiveQuestCount() == 1)
-                SetQuestAsCurrent(index);
+            _allQuests[index]._currentQuestStageID = 0;
+            _allQuests[index].GetCurrentQuestStage()._isActive = true;
+            SetQuestAsCurrent(_allQuests[index]._quest._questID);
+
         }
     }
 
-    private int GetActiveQuestCount()
-    {
-        return _allQuests.FindAll(x => x._isActive == true).Count;
-    }
+   
 
     //This function returns the currently active quest
-    public QuestLogEntry GetActiveQuest()
+    public QuestLogEntry GetCurrentQuest()
     {
         if (_currentQuestIndex < 0)
             return null;
@@ -45,8 +43,13 @@ public class PlayerQuestLog : AutoCleanupSingleton<PlayerQuestLog>
         return _allQuests[_currentQuestIndex];
     }
 
+    public List<QuestLogEntry> GetAllActiveQuests()
+    {
+        return _allQuests.Where(x => x._isActive == true).ToList();
+    }
+
     //This function selects a new active quest and updates the UI and quest marker accordingly
-    public void SetQuestAsCurrent(int ID)
+    public void SetQuestAsCurrent(System.Guid ID)
     {
         int index = -1;
         index = _allQuests.FindIndex(x => x._quest._questID == ID);
@@ -71,7 +74,7 @@ public class PlayerQuestLog : AutoCleanupSingleton<PlayerQuestLog>
         {
 
             //If a quest marker is active and in the scene
-            if (UIManager.instance.GetQuestMarker(out QuestMarker marker))
+            if (Game_Manager.instance._UIManager.GetQuestMarker(out QuestMarker marker))
             {
                 //If the current objective has a linked quest marker
                 if (_allQuests[id].GetQuestMarkerLocation(out Transform questMarker))
@@ -88,7 +91,7 @@ public class PlayerQuestLog : AutoCleanupSingleton<PlayerQuestLog>
     }
 
     //This function progresses the provided quest using the provided quest stage's linked ID
-    public void ProgressQuest(int questID, int questStageID)
+    public void ProgressQuest(System.Guid questID, int questStageID)
     {
         //Find the index of the current quest being progressed
         int targetIndex = -1;
@@ -104,7 +107,7 @@ public class PlayerQuestLog : AutoCleanupSingleton<PlayerQuestLog>
         //If the quest stage being progressed is the current quest stage
         if (_allQuests[targetIndex].GetCurrentQuestStage()._stage._stageID == questStageID)
         {
-            _allQuests[targetIndex].GetCurrentQuestStage()._isCompleted = true;
+            _allQuests[targetIndex].GetCurrentQuestStage().CompleteStage();
 
             //Set the new stage ID to be the linked ID of the current stage
             _allQuests[targetIndex]._currentQuestStageID = _allQuests[targetIndex].GetCurrentQuestStage()._stage._linkedStageID;
@@ -123,6 +126,10 @@ public class PlayerQuestLog : AutoCleanupSingleton<PlayerQuestLog>
                 }
 
 
+            }
+            else
+            {
+                _allQuests[targetIndex].GetCurrentQuestStage()._isActive = true;
             }
         }
 
@@ -157,8 +164,9 @@ public class QuestLogEntry
     public QuestLogEntry(Quest q)
     {
         UpdateValues(q);
+
     }
-    
+
     public void UpdateValues(Quest q)
     {
         _questStages.Clear();
@@ -173,10 +181,7 @@ public class QuestLogEntry
 
         if (q._questStages.Count > 0)
             _currentQuestStageID = 0;
-
-        //if(q._questStages[0]._subStages.Count > 0)
-        //    _currentSubStageID = 0;
-        
+                
         foreach (QuestStage stage in q._questStages)
         {
             _questStages.Add(new QuestStageLog(stage));
@@ -208,6 +213,8 @@ public class QuestLogEntry
         }
     }
     
+    
+
     public void CompleteQuest()
     {
         _currentQuestStageID = 0;
@@ -235,8 +242,9 @@ public class QuestStageLog
 {
     [HideInInspector] public string _name = default; //Used only for clarity in the inspector
     [HideInInspector] public QuestStage _stage;
-    [SerializeField] public bool _isCompleted;
-    [SerializeField] public CustomEvent _onCompleted;
+    [SerializeField] public bool _isActive = false;
+    [SerializeField] public bool _isCompleted = false;
+    [SerializeField] public UnityEvent _onCompleted;
     [SerializeField] public Transform _questMarkerLocation = default;
 
     //[SerializeField] public List<QuestSubStageLog> _subStages = new List<QuestSubStageLog>();
@@ -245,5 +253,12 @@ public class QuestStageLog
     {
         _stage = stage;
         _name = stage._stageObjective;
+    }
+
+    public void CompleteStage()
+    {
+        _isActive = false;
+        _isCompleted = true;
+        _onCompleted?.Invoke();
     }
 }

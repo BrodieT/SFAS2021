@@ -10,18 +10,22 @@ public class TabGroup : MonoBehaviour
     [SerializeField] Sprite _tabIdle = default; //The sprite displayed when the tab button is idle
     [SerializeField] Sprite _tabSelected = default; //The sprite displayed when selecting a tab button
     [SerializeField] Sprite _tabHover = default; //The sprite displayed when highlighting a tab button
+    [SerializeField] private TabButton _defaultTab = default;
 
     private TabButton _selectedTab = default; //The currently selected tab in this group  
     private List<TabButton> _tabButtons = new List<TabButton>(); //The list of tab buttons
 
-    private void Start()
+   public void Initialise()
     {
-        if (_tabButtons.Count > 0)
-        {
-            //Select the first tab by default 
-            OnTabSelected(_tabButtons[0]);
-        }
+        Debug.Log("Resetting tab group");
+        ResetTabs();
+
+        if (_defaultTab._background != null)
+            OnTabSelected(_defaultTab);
+
     }
+    
+ 
 
     //This function is used to add a tab button to this tab group
     public void Subscribe(TabButton button)
@@ -32,6 +36,9 @@ public class TabGroup : MonoBehaviour
         }
 
         _tabButtons.Add(button);
+
+        if (button == _defaultTab)
+            OnTabSelected(button);
     }
    
     //This function is called when the mouse pointer enters a tab

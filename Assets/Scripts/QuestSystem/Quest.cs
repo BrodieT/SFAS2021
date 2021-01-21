@@ -2,16 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-using UnityEngine.Events;
 
 [Serializable]
 [CreateAssetMenu(menuName = "My Assets/Quest")]
 public class Quest : ScriptableObject
 {
-    [SerializeField] public int _questID = -1; //Unique identifier for this specific quest. Useful for searching lists in quest log.
+    [SerializeField] public Guid _questID = Guid.NewGuid();//Unique identifier for this specific quest. Useful for searching lists in quest log.
     [SerializeField] public string _questName = default; //The name of this quest as displayed in the quest log UI.
     [SerializeField] public string _questDescription = default; //The description of this quest as shown in the quest log UI. Provides context.
-    [SerializeField] public List<QuestStage> _questStages = new List<QuestStage>(); //The list of stages in this quest.
+    [SerializeField] public List<QuestStage> _questStages = new List<QuestStage>(); //The list of stages in this quest.    
 }
 
 [Serializable]

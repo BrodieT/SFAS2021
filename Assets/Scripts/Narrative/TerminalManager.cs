@@ -2,6 +2,11 @@
 using UnityEngine;
 public class TerminalManager : BranchingNarrative
 {
+    public override void Start()
+    {
+        base.Start();
+    }
+
     public override void OutputSetup()
     {
         _outputScreen = GetComponentInChildren<TextDisplay>();

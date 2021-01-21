@@ -16,7 +16,7 @@ public class SceneLoader : AutoCleanupSingleton<SceneLoader>
     private List<SceneData> _allScenes = new List<SceneData>(); //A list of all possible scenes and the corresponding build index
 
     [System.Serializable] 
-    public enum SceneName { MainMenu = 0, Warehouse = 1, City = 2, Sewers = 3, Shop =4, Palace = 5, End = 6} //Identifiers for each scene to be loaded
+    public enum SceneName { None = 0, MainMenu = 1, Warehouse = 2, City = 3, Sewers = 4, Shop = 5, Palace = 6, End = 7} //Identifiers for each scene to be loaded
     
     [System.Serializable] 
     //Struct to link the scene name component with the build index of the scene
@@ -44,6 +44,9 @@ public class SceneLoader : AutoCleanupSingleton<SceneLoader>
     //This function will begin loading the desired scene
     public void LoadLevel(SceneName scene)
     {
+        if (scene == SceneName.None)
+            return;
+
         _isFinishedLoading = false;
         //Instantiate the loading screen and get the text component
         _currentLoadingScreen = Instantiate(_loadingScreenPrefab, new Vector3(0, 0, 10), Quaternion.identity);

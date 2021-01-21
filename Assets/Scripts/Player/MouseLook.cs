@@ -41,7 +41,6 @@ public class MouseLook : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("ML Hide Cursor");
 
         //Hide the cursor using the game utility static script
         GameUtility.HideCursor();

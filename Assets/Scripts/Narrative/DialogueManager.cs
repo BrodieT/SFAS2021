@@ -13,7 +13,7 @@ public class DialogueManager : BranchingNarrative
 
     public override void OutputSetup()
     {
-        _dialogueUI = UIManager.instance.GetDialogueWindow();
+        _dialogueUI = Game_Manager.instance._UIManager.GetDialogueWindow();
         _outputScreen = _dialogueUI.transform.GetComponentInChildren<TextDisplay>();
         _buttonList = _dialogueUI.transform.GetChild(1).gameObject;
         base.OutputSetup();

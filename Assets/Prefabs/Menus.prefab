@@ -683,7 +683,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &6202423366042910257
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1310,7 +1310,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: This is Page 3.
+  m_text: Settings Go Here
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1598,11 +1598,11 @@ RectTransform:
   m_Father: {fileID: 5234499334839180070}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.0000006973628}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0, y: 1}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &6704721034272565324
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1620,15 +1620,15 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 0
+  m_ChildAlignment: 1
   m_Spacing: 5
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 0
-  m_ChildControlHeight: 0
+  m_ChildControlWidth: 1
+  m_ChildControlHeight: 1
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
-  m_ReverseArrangement: 0
+  m_ReverseArrangement: 1
 --- !u!114 &7550459343414648112
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1641,7 +1641,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_HorizontalFit: 2
+  m_HorizontalFit: 0
   m_VerticalFit: 2
 --- !u!1 &1695971393994486594
 GameObject:
@@ -1912,7 +1912,7 @@ GameObject:
   - component: {fileID: 48212122820720996}
   - component: {fileID: 8134483982243862821}
   m_Layer: 5
-  m_Name: Content
+  m_Name: QuestListContent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1934,7 +1934,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000029790413}
+  m_AnchoredPosition: {x: 0.000027398599, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &48212122820720996
@@ -2536,8 +2536,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _questStageEntryPrefab: {fileID: 441719132232696360, guid: 717dfc8c3cc33964f80456e1639a6ab0, type: 3}
-  _questSubStageEntryPrefab: {fileID: 441719132232696360, guid: 7ba21b6215f71d9418682533bc121dc4, type: 3}
   _objectivesList: {fileID: 1423030112946439452}
+  _questListEntryPrefab: {fileID: 441719132232696360, guid: 7ba21b6215f71d9418682533bc121dc4, type: 3}
+  _questList: {fileID: 2022209505200403199}
   _questName: {fileID: 2103274554240880008}
   _questDescription: {fileID: 3008723278668039831}
   _completedFontStyle: 64
@@ -3085,6 +3086,7 @@ MonoBehaviour:
   _tabIdle: {fileID: 21300000, guid: 067cc427a2cecf04289395955e4799d1, type: 3}
   _tabSelected: {fileID: 21300000, guid: d8f9dda5c22a2bc43a0a1639e8093fae, type: 3}
   _tabHover: {fileID: 21300000, guid: 78582e4b2cd802f4da0a091d3bb6d28b, type: 3}
+  _defaultTab: {fileID: 1436471063376126616}
 --- !u!1 &3275519940465557923
 GameObject:
   m_ObjectHideFlags: 0
@@ -3123,7 +3125,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 300}
+  m_SizeDelta: {x: 800, y: 350}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5224261615388191592
 CanvasRenderer:
@@ -3176,7 +3178,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Content: {fileID: 5296030805804982164}
-  m_Horizontal: 1
+  m_Horizontal: 0
   m_Vertical: 1
   m_MovementType: 1
   m_Elasticity: 0.1
@@ -3205,8 +3207,9 @@ GameObject:
   - component: {fileID: 5686855709164391770}
   - component: {fileID: 6853682850582695241}
   - component: {fileID: 8464888854051917318}
+  - component: {fileID: 4455177443386041352}
   m_Layer: 5
-  m_Name: QuestBreakdown
+  m_Name: QuestBreakdownPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3289,15 +3292,29 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 0
+  m_ChildAlignment: 4
   m_Spacing: 0
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 1
+  m_ChildControlWidth: 0
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &4455177443386041352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3329449670356603028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 1
+  m_VerticalFit: 1
 --- !u!1 &3664811919861249549
 GameObject:
   m_ObjectHideFlags: 0
@@ -3528,7 +3545,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 200}
+  m_SizeDelta: {x: 1155, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1048504208213888252
 CanvasRenderer:
@@ -3806,7 +3823,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: This is Page 3.
+  m_text: Achievements List goes here
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -3908,7 +3925,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -4428,7 +4445,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &5360937215294628027
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4989,6 +5006,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4954605163941535662}
   - component: {fileID: 5211992001870573554}
+  - component: {fileID: 5632650106956517439}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -5034,15 +5052,29 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 0
-  m_Spacing: 0
+  m_ChildAlignment: 4
+  m_Spacing: 50
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
-  m_ChildControlWidth: 1
-  m_ChildControlHeight: 1
+  m_ChildControlWidth: 0
+  m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &5632650106956517439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4931532649592334613}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 2
+  m_VerticalFit: 0
 --- !u!1 &4943097309460543422
 GameObject:
   m_ObjectHideFlags: 0
@@ -5181,7 +5213,7 @@ GameObject:
   - component: {fileID: 7869633437085358898}
   - component: {fileID: 7557969269170638754}
   m_Layer: 5
-  m_Name: QuestList
+  m_Name: QuestListPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5206,7 +5238,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 500, y: 650}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &3163535303798958319
 CanvasRenderer:
@@ -6439,8 +6471,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _questStageEntryPrefab: {fileID: 441719132232696360, guid: 717dfc8c3cc33964f80456e1639a6ab0, type: 3}
-  _questSubStageEntryPrefab: {fileID: 441719132232696360, guid: 7ba21b6215f71d9418682533bc121dc4, type: 3}
   _objectivesList: {fileID: 8243635843656532179}
+  _questListEntryPrefab: {fileID: 0}
+  _questList: {fileID: 0}
   _questName: {fileID: 3111238162405649312}
   _questDescription: {fileID: 5600218172681488227}
   _completedFontStyle: 64
@@ -6972,7 +7005,19 @@ MonoBehaviour:
   _tabPage: {fileID: 2660780499988446679}
   _onSelected:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8862211034918234895}
+        m_TargetAssemblyTypeName: QuestLogUI, Assembly-CSharp
+        m_MethodName: QuestLogOpened
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   _onDeselected:
     m_PersistentCalls:
       m_Calls: []
@@ -7246,7 +7291,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 100}
+  m_SizeDelta: {x: 1155, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5423361815989129509
 CanvasRenderer:
@@ -9737,7 +9782,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}

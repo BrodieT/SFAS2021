@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-
-
-using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 
+//This script creates a custom editor window for the creation of quests
 public class QuestEditor : EditorWindow
 {
     private static string _currentQuestFilename = "New Quest"; //The filename of the opened quest
@@ -15,7 +13,7 @@ public class QuestEditor : EditorWindow
     SerializedObject _currentQuestData = default; //the serialized data from the current quest
     private Vector2 _scroll = new Vector2(); //The scroll vector in the editor
     SerializedProperty _currentQuestStages = default;
-    Toolbar _toolbar = default;
+
     private enum View { List = 0, Stage = 1}
     private View _view = 0;
     private int _currentIndex = -1;
@@ -223,9 +221,11 @@ public class QuestEditor : EditorWindow
         EditorGUILayout.Space(25);
         EditorGUILayout.BeginVertical();
 
+
+
         //Show the quest ID
-        SerializedProperty questID = _currentQuestData.FindProperty("_questID");
-        questID.intValue = EditorGUILayout.IntField("Quest ID", questID.intValue);
+        //SerializedProperty questID = _currentQuestData.FindProperty("_questID");
+        //questID.intValue = EditorGUILayout.IntField("Quest ID", questID.intValue);
 
         EditorGUILayout.Space();
 
@@ -316,19 +316,6 @@ public class QuestEditor : EditorWindow
         }
 
         EditorGUILayout.EndVertical();
-    }
-
-
-    private void AddSubStage(SerializedProperty subStageList, int subStageID = -1, string initialText = "New Sub-Stage")
-    {
-        int index = subStageList.arraySize;
-        subStageList.arraySize += 1;
-        SerializedProperty arrayElement = subStageList.GetArrayElementAtIndex(index);
-        SerializedProperty text = arrayElement.FindPropertyRelative("_subStageObjective");
-        SerializedProperty id = arrayElement.FindPropertyRelative("_subStageID");
-
-        text.stringValue = initialText;
-        id.intValue = subStageID;
     }
 
     private void AddQuestStage(SerializedProperty questStageList, int questStageID, string initialText = "New Quest Stage")

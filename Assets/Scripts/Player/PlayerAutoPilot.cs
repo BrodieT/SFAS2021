@@ -14,10 +14,10 @@ public class PlayerAutoPilot : MonoBehaviour
     Camera _playerCamera = default;
     private Vector3 _defaultCamPos = default; //The default camera transform
     private Quaternion _defaultCamRote = default; //The default camera transform
-
+    private float _baseOffset = 1.5f;
     public bool _isAutoPiloting { get; private set; }
 
-    private void Start()
+    private void Awake()
     {
         _height = GetComponent<CharacterController>().height;
         _radius = GetComponent<CharacterController>().radius;

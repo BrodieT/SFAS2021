@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class IntroDialogueManager : TerminalManager
 {
-    //private void Start()
-    //{
-    //    StartDisplay();
-    //}
+    public override void Start()
+    {
+        base.Start();
+
+        PlayerInteract interact = Game_Manager.instance._player.GetComponent<PlayerInteract>();
+        interact._targetInteractable = GetComponent<Interactable>();
+        interact.Interact();
+    }
 
     public override void UpdateInput()
     {
@@ -18,7 +22,5 @@ public class IntroDialogueManager : TerminalManager
         }
 
         base.UpdateInput();
-
-        
     }
 }

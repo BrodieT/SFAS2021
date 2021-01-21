@@ -20,7 +20,7 @@ public class PlayerGunController : GunController
     }
     public void Aim(InputAction.CallbackContext context)
     {
-        if (!GameUtility._isPaused)
+        if (!GameUtility._isPaused && GameUtility._isPlayerObjectBeingControlled)
         {
             if (context.performed)
             {
