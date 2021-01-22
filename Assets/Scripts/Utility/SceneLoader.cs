@@ -97,7 +97,7 @@ public class SceneLoader : AutoCleanupSingleton<SceneLoader>
         //Artificially increase the load time slightly to prevent the loading screen from flashing up too quickly
         yield return new WaitForSeconds(5.0f);
         //begin loading
-        AsyncOperation operation = SceneManager.LoadSceneAsync(scene);
+        AsyncOperation operation = SceneManager.LoadSceneAsync(scene, LoadSceneMode.Single);
 
         while (!operation.isDone)
         {

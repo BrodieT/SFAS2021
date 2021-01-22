@@ -20,6 +20,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject _pauseMenu = default;
     [SerializeField] private UnityEvent _onGamePaused = default;
 
+    [Header("Debug")]
+    [SerializeField] private bool _debugMode = false;
     public bool GetQuestMarker(out QuestMarker marker)
     {
         if(_questMarker.TryGetComponent<QuestMarker>(out marker))
@@ -65,11 +67,20 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        _mainCanvas.SetActive(true);
-        _reticle.SetActive(true);
-        _dialogueWindow.SetActive(false);
-        _hud.SetActive(false);
-
+        if (_debugMode)
+        {
+            _mainCanvas.SetActive(true);
+            _reticle.SetActive(true);
+            _dialogueWindow.SetActive(false);
+            _hud.SetActive(false);
+        }
+        else
+        {
+            _mainCanvas.SetActive(true);
+            _reticle.SetActive(true);
+            _dialogueWindow.SetActive(false);
+            _hud.SetActive(true);
+        }
     }
 
     public GameObject GetDialogueWindow()
