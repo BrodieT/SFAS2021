@@ -146,9 +146,12 @@ public class ChargerController : EnemyController
     {
         //Draw a green sphere for each of the patrol points for this enemy  
         Gizmos.color = Color.green;
-        foreach (Transform item in _patrolPoints)
+        if (_patrolPoints != null && _patrolPoints.Count > 0)
         {
-            Gizmos.DrawSphere(item.position, 0.5f);
+            foreach (Transform item in _patrolPoints)
+            {
+                Gizmos.DrawSphere(item.position, 0.5f);
+            }
         }
 
         //Draw a red wire sphere to represent the charge attack range
@@ -161,7 +164,8 @@ public class ChargerController : EnemyController
 
         //Draw a black sphere for the charge destination
         Gizmos.color = Color.black;
-        Gizmos.DrawSphere(targetPoint, 1.0f);
+        if(targetPoint != null)
+            Gizmos.DrawSphere(targetPoint, 1.0f);
     }
 
     private void OnTriggerEnter(Collider other)

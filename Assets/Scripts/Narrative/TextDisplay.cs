@@ -6,7 +6,7 @@ public class TextDisplay : MonoBehaviour
 {
     public enum State { Initialising, Idle, Busy }
 
-    private TMP_Text _displayText;
+    [SerializeField] private TMP_Text _displayText;
     private string _displayString;
     private WaitForSeconds _displayWaitTime;
     private WaitForSeconds _cursorBlinkTime;
@@ -18,7 +18,8 @@ public class TextDisplay : MonoBehaviour
 
     private void Start()
     {
-        _displayText = GetComponent<TMP_Text>();
+        if(_displayText == null)
+            _displayText = GetComponent<TMP_Text>();
         _displayText.text = string.Empty;
         _state = State.Idle;
     }

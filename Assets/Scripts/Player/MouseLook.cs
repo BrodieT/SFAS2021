@@ -12,6 +12,10 @@ public class MouseLook : MonoBehaviour
     private Vector2 _lookDirection = new Vector2();
     //The sensitivity of the mouse for camera rotation 
     [SerializeField] private float _mouseSensitivity = 100.0f;
+
+    [Header("Audio")]
+    [SerializeField] List<AudioClip> _footstepSounds = new List<AudioClip>();
+
     //The vertical look rotation to be clamped
     private float _xRotation = 0.0f;
     //Local store of the player movement component, used for a camera bob
@@ -95,6 +99,9 @@ public class MouseLook : MonoBehaviour
             //otherwise, return to it's default position
             if (_playerMovement.IsMoving())
             {
+                if (!_isPlayingAudio)
+                    StartCoroutine(PlayFootsteps());
+
                 //using delta time, increment the bob timer with the appropriate speed depending on whether the player is sprinting or not
                 //This results in a larger bob when moving faster
                 if (_playerMovement.IsSprinting())
@@ -114,4 +121,25 @@ public class MouseLook : MonoBehaviour
         }
     }
 
+    private bool _isPlayingAudio = false;
+    IEnumerator PlayFootsteps()
+    {
+        _isPlayingAudio = true;
+        AudioSource source = GetComponent<AudioSource>();
+
+        while (_playerMovement.IsMoving())
+        {
+            if (_playerMovement.IsSprinting())
+                yield return new WaitForSeconds(0.25f);
+            else
+                yield return new WaitForSeconds(0.5f);
+
+            source.PlayOneShot(_footstepSounds[Random.Range(0, _footstepSounds.Count)]);
+        }
+
+        _isPlayingAudio = false;
+    }
+
+
+    
 }

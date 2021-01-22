@@ -73,6 +73,9 @@ public class PlayerMovement : MonoBehaviour
     //The forces applied when mantling up a ledge
     [SerializeField] private float _mantleUpForce = 20.0f;
     [SerializeField] private float _mantleForwardForce = 5.0f;
+
+
+ 
     #endregion
 
     #region InputCallbacks
@@ -92,14 +95,14 @@ public class PlayerMovement : MonoBehaviour
                 _wallRunner.AddJumpForce();
             else
                 _isJumping = true;
-
         }
     }
 
     //Input callback for determining if the sprint button is pressed
     public void Sprint(InputAction.CallbackContext context)
     {
-        _isSprinting = context.ReadValueAsButton();   
+        _isSprinting = context.ReadValueAsButton();
+        
     }
 
     //Input callback for when the jump button is pressed
@@ -272,6 +275,7 @@ public class PlayerMovement : MonoBehaviour
             }
         }
     }
+
 
     private void MantleLedge()
     {

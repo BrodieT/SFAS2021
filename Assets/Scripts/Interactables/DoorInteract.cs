@@ -7,6 +7,11 @@ public class DoorInteract : Interactable
 {
     [SerializeField] private bool _isLoadDoor = false; //Determines whether interacting with this door will switch scenes
     [SerializeField] private SceneLoader.SceneName _linkedScene = SceneLoader.SceneName.None; //The scene that will be switched to if this is a load door
+    [Header("Audio")]
+    [SerializeField] private bool _playAudio = true;
+    [SerializeField] AudioClip _openSound = default;
+    [SerializeField] AudioClip _closeSound = default;
+
     private bool _isOpen = false; //Tracks whether the door is open or not
 
     public void OnValidate()
@@ -31,14 +36,28 @@ public class DoorInteract : Interactable
             if(transform.TryGetComponent<Animator>(out Animator _anim))
             {
                 _isOpen = !_isOpen;
+
+                if (_playAudio)
+                {
+                    if (transform.TryGetComponent<AudioSource>(out AudioSource source))
+                    {
+                        if (_isOpen)                      
+                            source.PlayOneShot(_openSound);                        
+                        else                        
+                            source.PlayOneShot(_closeSound);                        
+                    }
+                }
+
                 _anim.SetBool("Open", _isOpen);               
             }
+
+            if (_isOpen)
+                _interactPromptText = GameUtility.ReplaceWordInString(_interactPromptText, "Open", "Close");
+            else
+                _interactPromptText = GameUtility.ReplaceWordInString(_interactPromptText, "Close", "Open");
         }
 
-        if(_isOpen)
-            _interactPromptText = GameUtility.ReplaceWordInString(_interactPromptText, "Open", "Close");
-        else
-            _interactPromptText = GameUtility.ReplaceWordInString(_interactPromptText, "Close", "Open");
+       
 
 
 

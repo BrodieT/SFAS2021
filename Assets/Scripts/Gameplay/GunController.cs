@@ -14,8 +14,14 @@ public class GunController : MonoBehaviour
     [SerializeField] public float _gunRange = 100.0f;
     [SerializeField] public float _bulletSpeed = 5.0f;
     [SerializeField] public int _damageAmount = 10;
-  
-   
+    [SerializeField] private AudioClip _gunshotSound = default;
+    private AudioSource _audioSource = default;
+
+    private void Start()
+    {
+        _audioSource = GetComponent<AudioSource>();
+    }
+
     public virtual Vector3 GetTarget()
     {
         return _gunTip.forward * _gunRange;
@@ -38,6 +44,12 @@ public class GunController : MonoBehaviour
     {
         if (CanShoot())
         {
+            if (_audioSource == null)
+                _audioSource = GetComponent<AudioSource>();
+
+            if (_audioSource == null)
+                _audioSource.PlayOneShot(_gunshotSound);
+           
             GameObject bullet = Instantiate(_bulletPrefab, _gunTip.transform.position, Quaternion.identity);
             bullet.transform.LookAt(GetTarget());
             bullet.GetComponent<BulletController>().Setup(_bulletSpeed, GetDirection(), _damageAmount, gameObject);

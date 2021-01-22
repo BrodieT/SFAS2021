@@ -15,6 +15,12 @@ public class SceneLoader : AutoCleanupSingleton<SceneLoader>
     public static bool _isFinishedLoading = false; //bool to track is the current scene load process is finished
     private List<SceneData> _allScenes = new List<SceneData>(); //A list of all possible scenes and the corresponding build index
     private SceneName _previousScene = 0;
+    private SceneName _currentScene = 0;
+
+    public SceneData GetCurrentScene()
+    {
+        return _allScenes.Find(x => x._sceneName == _currentScene);
+    }
 
     [System.Serializable] 
     public enum SceneName { None = 0, MainMenu = 1, Warehouse = 2, City = 3, Sewers = 4, Shop = 5, Palace = 6, End = 7} //Identifiers for each scene to be loaded
@@ -25,11 +31,13 @@ public class SceneLoader : AutoCleanupSingleton<SceneLoader>
     {
         public SceneName _sceneName;
         public int _sceneIndex;
+        public bool _firstTimeLoad;
     
         public SceneData(SceneName name, int index)
         {
             _sceneName = name;
             _sceneIndex = index;
+            _firstTimeLoad = true;
         }
     
     }
@@ -44,6 +52,8 @@ public class SceneLoader : AutoCleanupSingleton<SceneLoader>
         _allScenes.Add(new SceneData(SceneName.Warehouse, 0));
         _allScenes.Add(new SceneData(SceneName.City, 1));
 
+
+        _currentScene = _allScenes.Find(x => x._sceneIndex == SceneManager.GetActiveScene().buildIndex)._sceneName;
     }
 
     //This function will begin loading the desired scene
@@ -58,10 +68,21 @@ public class SceneLoader : AutoCleanupSingleton<SceneLoader>
         _loadingTxt = _currentLoadingScreen.GetComponentInChildren<TMP_Text>();     
         //Ensure the loading screen is not destroyed when changing scenes
         DontDestroyOnLoad(_currentLoadingScreen.gameObject);
+
+        _previousScene = _currentScene;
+        _currentScene = scene;
+
+        int targetBuildIndex = _allScenes.Find(x => x._sceneName == scene)._sceneIndex;
+
+        if (ProgressionTracker.instance.HasSceneBeenLoadedBefore(new SceneData(scene, targetBuildIndex)))
+        {
+            ProgressionTracker.instance.AddNewLoadedScene(new SceneData(scene, targetBuildIndex));
+        }
+
         //Start updating the Text on the loading screen
         StartCoroutine(UpdateLoadingUI());
         //begin the load operation
-        StartCoroutine(LoadAsync(_allScenes.Find(x => x._sceneName == scene)._sceneIndex));
+        StartCoroutine(LoadAsync(targetBuildIndex));
     }
 
     //This coroutine will update the loading screen text to animate the elipses 
@@ -105,6 +126,21 @@ public class SceneLoader : AutoCleanupSingleton<SceneLoader>
             //E.g. updating a percentage bar
             yield return null;
         }
+
+
+        yield return new WaitForSeconds(2.0f);
+
+        //Try to find a spawn point for the player in the new scene
+        foreach (SceneSpawnPoint spawnPnt in GameObject.FindObjectsOfType<SceneSpawnPoint>())
+        {
+            if(spawnPnt._linkedScene == _previousScene)
+            {
+                Debug.Log("Spawn Point Found");
+                Game_Manager.instance._player.transform.position = spawnPnt.transform.position;
+                Game_Manager.instance._player.transform.rotation = spawnPnt.transform.rotation;
+                break;
+            }
+        } 
 
         //Delay the removal of the loading screen to ensure everything in the new scene is in place
         yield return new WaitForSeconds(2.0f);

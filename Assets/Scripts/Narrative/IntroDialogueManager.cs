@@ -6,11 +6,22 @@ public class IntroDialogueManager : TerminalManager
 {
     public override void Start()
     {
-        base.Start();
+        if (!ProgressionTracker.instance.HasSceneBeenLoadedBefore(SceneLoader.instance.GetCurrentScene()))
+        {
+            ProgressionTracker.instance.AddNewLoadedScene(SceneLoader.instance.GetCurrentScene());
 
-        PlayerInteract interact = Game_Manager.instance._player.GetComponent<PlayerInteract>();
-        interact._targetInteractable = GetComponent<Interactable>();
-        interact.Interact();
+            base.Start();
+
+            PlayerInteract interact = Game_Manager.instance._player.GetComponent<PlayerInteract>();
+            interact._targetInteractable = GetComponent<Interactable>();
+            interact.Interact();
+        }
+        else
+        {
+            base.Start();
+
+            FinishDisplay();
+        }
     }
 
     public override void UpdateInput()
