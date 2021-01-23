@@ -31,21 +31,20 @@ public class SceneLoader : AutoCleanupSingleton<SceneLoader>
     {
         public SceneName _sceneName;
         public int _sceneIndex;
-        public bool _firstTimeLoad;
     
         public SceneData(SceneName name, int index)
         {
             _sceneName = name;
             _sceneIndex = index;
-            _firstTimeLoad = true;
         }
     
     }
   
     
     // Start is called before the first frame update
-    void Awake()
+    public override void Awake()
     {
+        base.Awake();
         //Ensure this is carried between scenes
         DontDestroyOnLoad(this.gameObject);
 
@@ -70,14 +69,16 @@ public class SceneLoader : AutoCleanupSingleton<SceneLoader>
         DontDestroyOnLoad(_currentLoadingScreen.gameObject);
 
         _previousScene = _currentScene;
+        Game_Manager.instance.GetComponent<PlayerQuestLog>().SaveQuestData();
         _currentScene = scene;
 
         int targetBuildIndex = _allScenes.Find(x => x._sceneName == scene)._sceneIndex;
 
-        if (ProgressionTracker.instance.HasSceneBeenLoadedBefore(new SceneData(scene, targetBuildIndex)))
+        if (!ProgressionTracker.instance.HasSceneBeenLoadedBefore(new SceneData(scene, targetBuildIndex)))
         {
             ProgressionTracker.instance.AddNewLoadedScene(new SceneData(scene, targetBuildIndex));
         }
+
 
         //Start updating the Text on the loading screen
         StartCoroutine(UpdateLoadingUI());
@@ -140,7 +141,11 @@ public class SceneLoader : AutoCleanupSingleton<SceneLoader>
                 Game_Manager.instance._player.transform.rotation = spawnPnt.transform.rotation;
                 break;
             }
-        } 
+        }
+
+
+        //Update the quest data
+        Game_Manager.instance.GetComponent<PlayerQuestLog>().LoadQuestData();
 
         //Delay the removal of the loading screen to ensure everything in the new scene is in place
         yield return new WaitForSeconds(2.0f);

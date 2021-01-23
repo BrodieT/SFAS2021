@@ -19,7 +19,7 @@ public class QuestLogUI : MonoBehaviour
 
     private PlayerQuestLog _questLog = default; //Local store of the player's quest log
     [SerializeField] TMPro.FontStyles _completedFontStyle = default; //Strikethrough font style to show completed objectives
-    private QuestLogEntry _currentQuestBreakdown = default;
+    private ProgressionTracker.QuestInfo _currentQuestBreakdown = default;
 
     // Start is called before the first frame update
     void Start()
@@ -30,37 +30,38 @@ public class QuestLogUI : MonoBehaviour
    
     public void QuestLogOpened()
     {
-        ShowQuestBreakdown(_questLog.GetCurrentQuest());
+        ShowQuestBreakdown(ProgressionTracker.instance.GetCurrentQuest());
         UpdateQuestList();
         UpdateQuestBreakdown();
     }
 
-    private void ShowQuestBreakdown(QuestLogEntry newQuest)
+    private void ShowQuestBreakdown(ProgressionTracker.QuestInfo newQuest)
     {
         _currentQuestBreakdown = newQuest;
         UpdateQuestBreakdown();
     }
 
-    public void SetQuestAsCurrent(QuestLogEntry quest)
+    public void SetQuestAsCurrent(ProgressionTracker.QuestInfo quest)
     {
-        _questLog.SetQuestAsCurrent(quest._quest._questID);
+        ProgressionTracker.instance.SetCurrentQuest(quest._quest);
+        PlayerQuestLog.instance.UpdateQuestmarker();
     }
 
     private void UpdateQuestList()
     {
         GameUtility.DestroyAllChildren(_questList.transform);
 
-        foreach (QuestLogEntry quest in _questLog.GetAllActiveQuests())
+        foreach (ProgressionTracker.QuestInfo quest in ProgressionTracker.instance.GetAllActiveQuests())
         {
             GameObject newQuest = Instantiate(_questListEntryPrefab, _questList.transform);
-            newQuest.transform.GetComponentInChildren<TMP_Text>().text = quest._name;
+            newQuest.transform.GetComponentInChildren<TMP_Text>().text = quest._quest._questName;
             newQuest.GetComponentInChildren<Button>().onClick.AddListener(delegate { ShowQuestBreakdown(quest); SetQuestAsCurrent(quest); });
         }
     }
 
     private void UpdateQuestBreakdown()
     {
-        if(_currentQuestBreakdown == null)
+        if(_currentQuestBreakdown._quest == null)
         {
             _questName.text = "No Quest To Show";
             _questDescription.text = "";
@@ -76,19 +77,20 @@ public class QuestLogUI : MonoBehaviour
         GameUtility.DestroyAllChildren(_objectivesList.transform);
 
         //Loop through the quest stages and instantiate an objective entry for each active one
-        foreach (QuestStageLog stage in _currentQuestBreakdown._questStages)
+        foreach (QuestStage stage in _currentQuestBreakdown._quest._questStages)
         {
-            if (stage._isActive || stage._isCompleted)
+
+            //Previously completed stages
+            if(_currentQuestBreakdown._currentStage >= stage._stageID)
             {
                 GameObject entry = Instantiate(_questStageEntryPrefab, _objectivesList.transform);
-                entry.transform.GetComponentInChildren<TMP_Text>().text = "- " + stage._stage._stageObjective;
+                entry.transform.GetComponentInChildren<TMP_Text>().text = "- " + stage._stageObjective;
 
-                //Strikethrough objective if complete
-                if (stage._isCompleted)
-                {
+                if (_currentQuestBreakdown._currentStage != stage._stageID)
                     entry.transform.GetComponentInChildren<TMP_Text>().fontStyle = _completedFontStyle;
-                }
             }
+
+        
         }
     }
 

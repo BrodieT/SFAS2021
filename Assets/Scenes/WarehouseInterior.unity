@@ -14558,6 +14558,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7456589214596868169, guid: ead2c02f4bef20847b2811f557248473, type: 3}
+      propertyPath: _questTracker.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7456589214596868169, guid: ead2c02f4bef20847b2811f557248473, type: 3}
+      propertyPath: _singletonCleanupGameObject
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7456589214596868170, guid: ead2c02f4bef20847b2811f557248473, type: 3}
       propertyPath: m_Name
       value: ProgressionTracker
@@ -39851,6 +39859,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1827493022080658187, guid: c28582ae544ed5b4ba2f5d977577d623, type: 3}
+      propertyPath: _singletonCleanupGameObject
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c28582ae544ed5b4ba2f5d977577d623, type: 3}
 --- !u!4 &1905777687250225591 stripped
@@ -40365,6 +40377,10 @@ PrefabInstance:
       propertyPath: _playerCamera
       value: 
       objectReference: {fileID: 1082114776}
+    - target: {fileID: 5450787781660470696, guid: 2c6ebf289f27736429fca1c6dd75ecb7, type: 3}
+      propertyPath: _singletonCleanupGameObject
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5450787781660470698, guid: 2c6ebf289f27736429fca1c6dd75ecb7, type: 3}
       propertyPath: _allQuests.Array.data[0]._questStages.Array.data[0]._onCompleted.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 

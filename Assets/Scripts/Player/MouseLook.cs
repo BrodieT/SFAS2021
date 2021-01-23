@@ -123,20 +123,26 @@ public class MouseLook : MonoBehaviour
 
     private bool _isPlayingAudio = false;
     IEnumerator PlayFootsteps()
-    {
+    {    
         _isPlayingAudio = true;
-        AudioSource source = GetComponent<AudioSource>();
 
-        while (_playerMovement.IsMoving())
+        if (_footstepSounds.Count > 0)
         {
-            if (_playerMovement.IsSprinting())
-                yield return new WaitForSeconds(0.25f);
-            else
-                yield return new WaitForSeconds(0.5f);
+            AudioSource source = GetComponent<AudioSource>();
 
-            source.PlayOneShot(_footstepSounds[Random.Range(0, _footstepSounds.Count)]);
+            if (source != null)
+            {
+                while (_playerMovement.IsMoving())
+                {
+                    if (_playerMovement.IsSprinting())
+                        yield return new WaitForSeconds(0.25f);
+                    else
+                        yield return new WaitForSeconds(0.5f);
+
+                    source.PlayOneShot(_footstepSounds[Random.Range(0, _footstepSounds.Count)]);
+                }
+            }
         }
-
         _isPlayingAudio = false;
     }
 

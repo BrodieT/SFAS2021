@@ -32,13 +32,13 @@ public class AutoCleanupSingleton<T> : MonoBehaviour where T : MonoBehaviour
         }
     }
 
-    private void Awake()
+    public virtual void Awake()
     {
         //Prevents duplicates by destroying this version if another already exists
         if (_instance != null)
         {
             Debug.LogWarning(typeof(T) + " appears more than once on " + _instance.name + " and " + name);
-            Destroy(gameObject.GetComponent<T>());
+            Destroy(gameObject);
         }
     }
 }
