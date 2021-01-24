@@ -14461,6 +14461,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ProgressionTracker
       objectReference: {fileID: 0}
+    - target: {fileID: 7456589214596868170, guid: ead2c02f4bef20847b2811f557248473, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ead2c02f4bef20847b2811f557248473, type: 3}
 --- !u!1 &679198014
@@ -16681,6 +16685,10 @@ PrefabInstance:
     - target: {fileID: 379810598425833337, guid: c28582ae544ed5b4ba2f5d977577d623, type: 3}
       propertyPath: m_Name
       value: SceneSwitcher
+      objectReference: {fileID: 0}
+    - target: {fileID: 379810598425833337, guid: c28582ae544ed5b4ba2f5d977577d623, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 379810598425833339, guid: c28582ae544ed5b4ba2f5d977577d623, type: 3}
       propertyPath: m_LocalPosition.x

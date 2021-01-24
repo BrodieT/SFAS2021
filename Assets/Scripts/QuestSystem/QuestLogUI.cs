@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -43,6 +44,7 @@ public class QuestLogUI : MonoBehaviour
 
     public void SetQuestAsCurrent(ProgressionTracker.QuestInfo quest)
     {
+        Debug.Log("Setting " + quest._quest._questName.ToString() + " as current");
         ProgressionTracker.instance.SetCurrentQuest(quest._quest);
         PlayerQuestLog.instance.UpdateQuestmarker();
     }

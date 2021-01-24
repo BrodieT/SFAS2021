@@ -1,0 +1,92 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf5d5e33bab057c43929a11bc8f25f44, type: 3}
+  m_Name: ShadyDealer
+  m_EditorClassIdentifier: 
+  _beats:
+  - _choices:
+    - _text: Who me?
+      _beatId: 2
+      AutoProgress: 0
+      OnSelected:
+        m_PersistentCalls:
+          m_Calls: []
+      _linkedQuest: {fileID: 0}
+      _stageID: 0
+    - _text: Whats it to ya?
+      _beatId: 3
+      AutoProgress: 0
+      OnSelected:
+        m_PersistentCalls:
+          m_Calls: []
+      _linkedQuest: {fileID: 0}
+      _stageID: 0
+    _text: Hey You! You ain't from around here are you?
+    _id: 1
+    DisplayTime: 0
+  - _choices:
+    - _text: A favour?
+      _beatId: 4
+      AutoProgress: 0
+      OnSelected:
+        m_PersistentCalls:
+          m_Calls: []
+      _linkedQuest: {fileID: 0}
+      _stageID: 0
+    _text: Yeah you wise guy! Look it don't matter anyway. You look pretty tough
+      so I gots a favour to ask ya.
+    _id: 2
+    DisplayTime: 0
+  - _choices:
+    - _text: A favour?
+      _beatId: 4
+      AutoProgress: 0
+      OnSelected:
+        m_PersistentCalls:
+          m_Calls: []
+      _linkedQuest: {fileID: 0}
+      _stageID: 0
+    _text: My kinda guy! Look I gots a favour ta ask ya.
+    _id: 3
+    DisplayTime: 0
+  - _choices:
+    - _text: Sure thing
+      _beatId: 0
+      AutoProgress: 0
+      OnSelected:
+        m_PersistentCalls:
+          m_Calls: []
+      _linkedQuest: {fileID: 0}
+      _stageID: 0
+    - _text: Not a chance
+      _beatId: 0
+      AutoProgress: 0
+      OnSelected:
+        m_PersistentCalls:
+          m_Calls: []
+      _linkedQuest: {fileID: 0}
+      _stageID: 0
+    _text: "Y'know those turrets that're everywhere? I need something off one of
+      them. Could you steal a laser cannon off one of them for me?\n Rough a couple
+      of em up tho so it dont look suspicious."
+    _id: 4
+    DisplayTime: 0
+  - _choices: []
+    _text: Thanks
+    _id: 5
+    DisplayTime: 0
+  - _choices: []
+    _text: Suit yourself
+    _id: 6
+    DisplayTime: 0
+  _isCompleted: 0
+  _isRepeatable: 0

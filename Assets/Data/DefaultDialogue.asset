@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf5d5e33bab057c43929a11bc8f25f44, type: 3}
+  m_Name: DefaultDialogue
+  m_EditorClassIdentifier: 
+  _beats:
+  - _choices:
+    - _text: Workin hard or hardly workin eh mac?
+      _beatId: 2
+      AutoProgress: 0
+      OnSelected:
+        m_PersistentCalls:
+          m_Calls: []
+      _linkedQuest: {fileID: 0}
+      _stageID: 0
+    - _text: Alright, how's you?
+      _beatId: 3
+      AutoProgress: 0
+      OnSelected:
+        m_PersistentCalls:
+          m_Calls: []
+      _linkedQuest: {fileID: 0}
+      _stageID: 0
+    _text: Hey, how ya doing?
+    _id: 1
+    DisplayTime: 0
+  - _choices: []
+    _text: 'Very Funny
+
+'
+    _id: 2
+    DisplayTime: 0
+  - _choices: []
+    _text: Not bad, you're alright new guy
+    _id: 3
+    DisplayTime: 0
+  _isCompleted: 0
+  _isRepeatable: 0

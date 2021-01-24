@@ -2,16 +2,17 @@
 using UnityEngine;
 using TMPro;
 
+//This script displays text to a given output
 public class TextDisplay : MonoBehaviour
 {
     public enum State { Initialising, Idle, Busy }
 
-    [SerializeField] private TMP_Text _displayText;
-    private string _displayString;
-    private WaitForSeconds _displayWaitTime;
-    private WaitForSeconds _cursorBlinkTime;
-    private State _state = State.Initialising;
-    private string _CurrentText = default;
+    [SerializeField] private TMP_Text _displayText; //Where the text will be displayed
+    private string _displayString; //the string to be displayed
+    private WaitForSeconds _displayWaitTime; //the frequency of displaying letters 
+    private WaitForSeconds _cursorBlinkTime; //the frequency of the cursor blink
+    private State _state = State.Initialising; //Whether an operation is underway
+    private string _CurrentText = default; //the current display text
 
     public bool IsIdle { get { return _state == State.Idle; } }
     public bool IsBusy { get { return _state != State.Idle; } }

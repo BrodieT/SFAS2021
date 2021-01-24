@@ -14,9 +14,9 @@ public class QuestEditor : EditorWindow
     private Vector2 _scroll = new Vector2(); //The scroll vector in the editor
     SerializedProperty _currentQuestStages = default;
 
-    private enum View { List = 0, Stage = 1}
-    private View _view = 0;
-    private int _currentIndex = -1;
+    private enum View { List = 0, Stage = 1} 
+    private View _view = 0; //Determines whether the list of quest stages or the individual stage should be shown
+    private int _currentIndex = -1; //The current quest stage to be shown
 
     private void OnEnable()
     {
@@ -221,8 +221,6 @@ public class QuestEditor : EditorWindow
         EditorGUILayout.Space(25);
         EditorGUILayout.BeginVertical();
 
-
-
         //Show the quest ID
         //SerializedProperty questID = _currentQuestData.FindProperty("_questID");
         //questID.intValue = EditorGUILayout.IntField("Quest ID", questID.intValue);
@@ -318,6 +316,7 @@ public class QuestEditor : EditorWindow
         EditorGUILayout.EndVertical();
     }
 
+    //This function adds a new quest stage when the editor button is pressed
     private void AddQuestStage(SerializedProperty questStageList, int questStageID, string initialText = "New Quest Stage")
     {
         int index = questStageList.arraySize;

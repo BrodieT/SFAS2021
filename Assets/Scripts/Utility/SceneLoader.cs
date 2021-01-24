@@ -205,6 +205,8 @@ public class SceneLoader : AutoCleanupSingleton<SceneLoader>
 
             Game_Manager.instance._player.GetComponent<PlayerGunController>().UpdateAmmoCounter();
 
+            ProgressionTracker.instance.ClearDefeatedEnemies();
+
             //Update the quest data
             Game_Manager.instance.GetComponent<PlayerQuestLog>().LoadQuestData();
         }

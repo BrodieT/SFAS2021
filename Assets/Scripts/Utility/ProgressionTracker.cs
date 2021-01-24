@@ -11,6 +11,38 @@ public class ProgressionTracker : AutoCleanupSingleton<ProgressionTracker>
         DontDestroyOnLoad(this);
     }
 
+    public struct DeadEnemyLog
+    {
+        public SceneLoader.SceneName _scene;
+        public int _index;
+
+        public DeadEnemyLog(int id, SceneLoader.SceneName name)
+        {
+            _scene = name;
+            _index = id;
+        }
+    }
+
+    public List<DeadEnemyLog> _deadEnemies = new List<DeadEnemyLog>();
+
+    public void ClearDefeatedEnemies()
+    {
+        if (EnemyManager.instance)
+        {
+            List<DeadEnemyLog> toClear = _deadEnemies.FindAll(x => x._scene == SceneLoader.instance.GetCurrentScene()._sceneName);
+            for (int i = 0; i < toClear.Count; i++)
+            {
+                Destroy(EnemyManager.instance._allEnemies[toClear[i]._index]);
+            }
+        }
+    }
+    public void AddDefeatedEnemy(int index)
+    {
+        _deadEnemies.Add(new DeadEnemyLog(index, SceneLoader.instance.GetCurrentScene()._sceneName));
+    }
+
+
+
     #region SaveLoad
     public void StartNewGame()
     {
@@ -89,7 +121,7 @@ public class ProgressionTracker : AutoCleanupSingleton<ProgressionTracker>
     {
         _turretsKilled++;
         IncrementEnemyKillCount();
-        if (_turretsKilled > 15)
+        if (_turretsKilled > 10)
             UnlockAchievement(9);
     }
     #endregion
@@ -99,12 +131,12 @@ public class ProgressionTracker : AutoCleanupSingleton<ProgressionTracker>
     {
         _chargersKilled++;
         IncrementEnemyKillCount();
-        if (_chargersKilled > 15)
+        if (_chargersKilled > 5)
             UnlockAchievement(10);
     }
     #endregion
     #region Oncoming Storm Achievement
-    [SerializeField, Min(25)] private int _totalNumberOfEnemies = 25;
+    [SerializeField] private int _totalNumberOfEnemies = 20;
     private int _enemiesKilled = 0;
     public void IncrementEnemyKillCount()
     {

@@ -44,9 +44,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playersLastPosition: {x: 0, y: 0, z: 0}
+  _loadedAmmo: 6
+  _spareAmmo: 30
   _collectiblesFound: 0
-  _totalCollectibleCount: 3
-  _totalNumberOfEnemies: 25
+  _totalCollectibleCount: 10
+  _totalNumberOfEnemies: 20
   _allAchievements:
   - _achievementName: Completionist
     _isAchieved: 0

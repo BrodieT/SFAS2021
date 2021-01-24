@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+//This class handles the health of a character in the game
 [DisallowMultipleComponent]
 public class CharacterStats : MonoBehaviour
 {
@@ -23,16 +24,19 @@ public class CharacterStats : MonoBehaviour
         return _currentHP;
     }
 
+    //Uding the current and max health return a percentage value
     public float GetPercentHP()
     {
         return (float)(_currentHP) / (float)(_maxHP);
     }
 
+    //begin the process of slowly regenerating health
     public void RestoreHP(int amount)
     {
         StartCoroutine(ChangeHP(_currentHP + amount));
     }
 
+    //Reduce health and die if below 0
     public void TakeDamage(int amount)
     {
         if (_currentHP - amount <= 0)
@@ -57,6 +61,7 @@ public class CharacterStats : MonoBehaviour
 
     }
 
+    //This coroutine restores health by the regen rate per second
     IEnumerator ChangeHP(int target)
     {
         bool done = false;
