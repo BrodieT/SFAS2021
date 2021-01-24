@@ -16,11 +16,12 @@ public class BulletController : MonoBehaviour
         GetComponent<Rigidbody>().velocity = direction * speed;
         _damageAmount = dmgAmount;
         _bulletOwner = owner;
+        Physics.IgnoreCollision(GetComponent<Collider>(), owner.GetComponent<Collider>());
+        Physics.IgnoreLayerCollision(gameObject.layer, LayerMask.NameToLayer("Ignore"));
     }
 
     private void OnTriggerEnter(Collider other)
     {
-
         if (other.gameObject != _bulletOwner)
         {
             if (other.TryGetComponent<CharacterStats>(out CharacterStats stats))

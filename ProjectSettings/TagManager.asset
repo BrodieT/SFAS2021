@@ -29,7 +29,7 @@ TagManager:
   - Boundary
   - Non-WallRunable
   - Non-Grapplable
-  - Non-WallRunOrGrapple
+  - Ignore
   - 
   - 
   - 

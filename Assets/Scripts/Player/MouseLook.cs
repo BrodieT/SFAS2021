@@ -11,7 +11,7 @@ public class MouseLook : MonoBehaviour
     //The raw look direction based on player input
     private Vector2 _lookDirection = new Vector2();
     //The sensitivity of the mouse for camera rotation 
-    [SerializeField] private float _mouseSensitivity = 100.0f;
+    //[SerializeField] private float _mouseSensitivity = 100.0f;
 
     [Header("Audio")]
     [SerializeField] List<AudioClip> _footstepSounds = new List<AudioClip>();
@@ -74,7 +74,7 @@ public class MouseLook : MonoBehaviour
         if (!GameUtility._isPaused && GameUtility._isPlayerObjectBeingControlled)
         {
             //Multiply the raw look direction vector with a sensitivity parameter and delta time
-            Vector2 look = _lookDirection * _mouseSensitivity * Time.deltaTime;
+            Vector2 look = _lookDirection * SettingsStorage._lookSensitivity * Time.deltaTime;
 
             //Increment the rotation around the x-axis (vertical look) & clamp values to prevent full 360
             _xRotation -= look.y;

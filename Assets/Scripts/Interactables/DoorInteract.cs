@@ -1,12 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 //This script is used for an interactable with door functionality
 public class DoorInteract : Interactable
 {
     [SerializeField] private bool _isLoadDoor = false; //Determines whether interacting with this door will switch scenes
     [SerializeField] private SceneLoader.SceneName _linkedScene = SceneLoader.SceneName.None; //The scene that will be switched to if this is a load door
+
+    [Header("Additional Functionality")]
+    public UnityEvent _onDoorOpen = default;
+
     [Header("Audio")]
     [SerializeField] private bool _playAudio = true;
     [SerializeField] AudioClip _openSound = default;
@@ -29,6 +34,7 @@ public class DoorInteract : Interactable
         //otherwise look for an animator to open the door
         if(_isLoadDoor)
         {
+            _onDoorOpen?.Invoke();
             SceneLoader.instance.LoadLevel(_linkedScene);
         }
         else
@@ -36,6 +42,9 @@ public class DoorInteract : Interactable
             if(transform.TryGetComponent<Animator>(out Animator _anim))
             {
                 _isOpen = !_isOpen;
+                
+                if(_isOpen)
+                    _onDoorOpen?.Invoke();
 
                 if (_playAudio)
                 {

@@ -6,9 +6,9 @@ using UnityEngine;
 public class GunController : MonoBehaviour
 {
 
-    [HideInInspector] public int _totalAmmo = 20;
-    [HideInInspector] public int _loadedAmmo = 10;
-    [SerializeField] public int _maxAmmo = 10;
+    [SerializeField] public int _spareAmmo = 18; //The number of bullets that are not loaded into the gun
+    [SerializeField] public int _loadedAmmo = 6; //The number of bullets currently loaded into the gun
+    [SerializeField] public int _magCapacity = 6; //The maximum number of bullets that can be loaded into the gun
     [SerializeField] public GameObject _bulletPrefab = default;
     [SerializeField] public Transform _gunTip = default;
     [SerializeField] public float _gunRange = 100.0f;
@@ -16,8 +16,8 @@ public class GunController : MonoBehaviour
     [SerializeField] public int _damageAmount = 10;
     [SerializeField] private AudioClip _gunshotSound = default;
     private AudioSource _audioSource = default;
-
-    private void Start()
+    public bool _isReloading = false;
+    public virtual void Start()
     {
         _audioSource = GetComponent<AudioSource>();
     }
@@ -34,7 +34,7 @@ public class GunController : MonoBehaviour
 
     public virtual bool CanShoot()
     {
-        if (_loadedAmmo > 0)
+        if (_loadedAmmo > 0 && !_isReloading)
             return true;
 
         return false;
@@ -47,7 +47,7 @@ public class GunController : MonoBehaviour
             if (_audioSource == null)
                 _audioSource = GetComponent<AudioSource>();
 
-            if (_audioSource == null)
+            if (_audioSource != null)
                 _audioSource.PlayOneShot(_gunshotSound);
            
             GameObject bullet = Instantiate(_bulletPrefab, _gunTip.transform.position, Quaternion.identity);

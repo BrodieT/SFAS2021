@@ -10,16 +10,144 @@ public class ProgressionTracker : AutoCleanupSingleton<ProgressionTracker>
         base.Awake();
         DontDestroyOnLoad(this);
     }
+
+
+    #region Collectible-based Achievements
+
+    public int _collectiblesFound = 0;
+    public int _totalCollectibleCount = 3;
+
+    public void FoundCollectible()
+    {
+        _collectiblesFound++;
+
+        //25% of collectibles
+        if (_collectiblesFound == (int)(_totalCollectibleCount / 4))
+        {
+            UnlockAchievement(4);
+        }
+
+        //50% of collectibles
+        if (_collectiblesFound == (int)(_totalCollectibleCount / 2))
+        {
+            UnlockAchievement(5);
+        }
+
+        //75% of collectibles
+        if (_collectiblesFound == (int)((_totalCollectibleCount / 4) * 3))
+        {
+            UnlockAchievement(6);
+        }
+
+        //100% of collectibles
+        if (_collectiblesFound == _totalCollectibleCount)
+        {
+            UnlockAchievement(7);
+        }
+    }
+    #endregion
+    #region Turret Smasher Achievement
+    private int _turretsKilled = 0;
+    public void IncrementTurretCounter()
+    {
+        _turretsKilled++;
+        IncrementEnemyKillCount();
+        if (_turretsKilled > 15)
+            UnlockAchievement(9);
+    }
+    #endregion
+    #region Immovable Object Achievement
+    private int _chargersKilled = 0;
+    public void IncrementChargerCounter()
+    {
+        _chargersKilled++;
+        IncrementEnemyKillCount();
+        if (_chargersKilled > 15)
+            UnlockAchievement(10);
+    }
+    #endregion
+    #region Oncoming Storm Achievement
+    [SerializeField, Min(25)] private int _totalNumberOfEnemies = 25;
+    private int _enemiesKilled = 0;
+    public void IncrementEnemyKillCount()
+    {
+        _enemiesKilled++;
+
+        if (_enemiesKilled >= _totalNumberOfEnemies)
+            UnlockAchievement(11);
+    }
+    #endregion
+    #region Bloodthirsty Achievement
+    public void CheckBloodthirstyAchievementStatus()
+    {
+        QuestInfo easyWay = _questTracker.Find(x => x._quest._questName == "The Easy Way");
+        QuestInfo hardWay = _questTracker.Find(x => x._quest._questName == "The Hard Way");
+
+        if (easyWay._isComplete && hardWay._currentStage > 0)
+            UnlockAchievement(3);
+
+        //Find both The Easy Way and The Hard Way quest entries
+        //if The Easy Way is completed && The Hard Way is past the first quest stage
+        //Unlock Achievement
+
+        //NB Call function on completion of both The Easy Way's final stage and The Hard Way's first stage
+    }
+    #endregion
+    #region Sinking Ship Achievement
+    public void CheckSinkingShipAchievementStatus()
+    {
+        QuestInfo sinkingShip = _questTracker.Find(x => x._quest._questName == "Escape the Flooded District");
+        if (sinkingShip._isComplete)
+            UnlockAchievement(2);
+    }
+    #endregion
+    #region Recharged Achievement
+    public void CheckRechargedAchievementStatus()
+    {
+        QuestInfo tutorial = _questTracker.Find(x => x._quest._questName == "Tutorial Simulation");
+        if (tutorial._isComplete)
+            UnlockAchievement(1);
+    }
+    #endregion
+
+    public void UnlockAchievement(int id)
+    {
+        if (id >= 0 && id < _allAchievements.Count)
+        {
+            AchievementData data = _allAchievements[id];
+            data._isAchieved = true;
+            _allAchievements[id] = data;
+            Game_Manager.instance._UIManager._discoveryUI.Discover(new DiscoveryUI.Discovery("Achievement", true));
+
+            //Prevent infinite loop, only proceed if not completing the completionist trophy
+            if (id > 0)
+            {
+                //Check to see if completionist trophy is achieved
+                for (int i = 1; i < _allAchievements.Count; i++)
+                {
+                    //If any remain locked then return
+                    if (!_allAchievements[i]._isAchieved)
+                        return;
+                }
+
+                //if not returned then all others must be unlocked
+                UnlockAchievement(0);
+            }
+        }
+    }
+
     #region Achievement Progression
 
     [System.Serializable]
     public struct AchievementData
     {        
         [SerializeField] public string _achievementName;
-        [SerializeField, TextArea()] public string _achievementDescription;
-        [SerializeField, Min(0)] public int _achievementID;
-        [SerializeField] public Image _icon;
         [SerializeField] public bool _isAchieved;
+
+        public void Complete()
+        {
+            _isAchieved = true;
+        }
     }
 
     public List<AchievementData> _allAchievements = new List<AchievementData>();
@@ -86,19 +214,30 @@ public class ProgressionTracker : AutoCleanupSingleton<ProgressionTracker>
         if (index >= 0)
         {
 
+            if (info._currentStage < 0)
+            {
+                info._isComplete = true;
+            }
 
+            if (info._isComplete)
+                info._isCurrent = false;
 
             _questTracker[index] = info;
 
-            if (_questTracker[index]._isCurrent && _questTracker[index]._isComplete)
-                _questTracker[index].SetCurrent(false);
+            CheckBloodthirstyAchievementStatus();
+            CheckRechargedAchievementStatus();
+            CheckSinkingShipAchievementStatus();
 
         }
         else
         {
-            Debug.Log("Quest Not Found. Adding Now");
             _questTracker.Add(info);
         }
+
+        PlayerQuestLog.instance.UpdateQuestmarker();
+
+       
+
     }
 
     public List<QuestInfo> GetQuestData()

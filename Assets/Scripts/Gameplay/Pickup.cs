@@ -5,7 +5,9 @@ using UnityEngine;
 public class Pickup : MonoBehaviour
 {
     [SerializeField] private float _rotationSpeed = 1.0f;
-
+    [System.Serializable] private enum PickupType { None = 0, HP = 1, Ammo = 2, Collectible = 3};
+    [SerializeField] private PickupType _pickupType = 0;
+    [SerializeField] private int _resourceAmount = 10;
     // Update is called once per frame
     void Update()
     {
@@ -17,9 +19,23 @@ public class Pickup : MonoBehaviour
     {
         if(other.CompareTag("Player"))
         {
-            Debug.Log("Pickup");
-            other.gameObject.GetComponent<PlayerStats>().RestoreHP(10);
-           
+            switch(_pickupType)
+            {
+                case PickupType.HP:
+                    Game_Manager.instance._player.GetComponent<CharacterStats>().RestoreHP(_resourceAmount);
+                    break;
+                case PickupType.Ammo:
+                    Game_Manager.instance._player.GetComponent<PlayerGunController>().AddAmmo(_resourceAmount);
+                    break;
+                case PickupType.Collectible:
+                    Game_Manager.instance._UIManager._discoveryUI.Discover(new DiscoveryUI.Discovery("Collectible"));
+                    ProgressionTracker.instance.FoundCollectible();
+                    break;
+                default:
+                    break;            
+            }
+
+            Destroy(gameObject, 0.1f);
         }
     }
 }

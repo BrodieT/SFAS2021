@@ -53,6 +53,8 @@ public class SceneLoader : AutoCleanupSingleton<SceneLoader>
 
 
         _currentScene = _allScenes.Find(x => x._sceneIndex == SceneManager.GetActiveScene().buildIndex)._sceneName;
+
+
     }
 
     //This function will begin loading the desired scene
@@ -136,7 +138,6 @@ public class SceneLoader : AutoCleanupSingleton<SceneLoader>
         {
             if(spawnPnt._linkedScene == _previousScene)
             {
-                Debug.Log("Spawn Point Found");
                 Game_Manager.instance._player.transform.position = spawnPnt.transform.position;
                 Game_Manager.instance._player.transform.rotation = spawnPnt.transform.rotation;
                 break;
@@ -159,6 +160,8 @@ public class SceneLoader : AutoCleanupSingleton<SceneLoader>
 
         //Cleanup
         Destroy(_currentLoadingScreen.gameObject);
+
+
         StopAllCoroutines();
     }
 }

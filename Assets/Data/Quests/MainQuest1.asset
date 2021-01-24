@@ -13,17 +13,9 @@ MonoBehaviour:
   m_Name: MainQuest1
   m_EditorClassIdentifier: 
   _questName: Escape the Flooded District
-  _questDescription: Find a way past the guards to get out of the flooded district.
+  _questDescription: This area has long been abandoned. Find a way to get into the
+    main district of the city to begin your adventure.
   _questStages:
   - _stageID: 0
-    _stageObjective: Defeat all the guards.
-    _linkedStageID: 2
-  - _stageID: 1
-    _stageObjective: Use your parkour abilities to climb over the wall.
-    _linkedStageID: -1
-  - _stageID: 2
-    _stageObjective: Pull the lever to disable the defences.
-    _linkedStageID: 3
-  - _stageID: 3
-    _stageObjective: Leave the flooded district.
+    _stageObjective: Find a way out of the Flooded District.
     _linkedStageID: -1

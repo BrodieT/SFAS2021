@@ -11,10 +11,8 @@ public class PlayerQuestLog : AutoCleanupSingleton<PlayerQuestLog>
 {
 
     [SerializeField] public List<QuestLogEntry> _allQuests = new List<QuestLogEntry>(); //A list of all quests in the game, with the appropriate events assigned
-    private int _currentQuestIndex = -1; //The ID of the currently selected quest
     [SerializeField] TMP_Text _currentQuestName = default; //The UI Text for the quest name
     [SerializeField] TMP_Text _currentQuestObjective = default; //The UI text for the quest objective
-    public Quest currentQuest = default;
 
     //This function adds the provided quest to the active quests list
     public void AddNewActiveQuest(Quest quest)
@@ -29,6 +27,7 @@ public class PlayerQuestLog : AutoCleanupSingleton<PlayerQuestLog>
             _allQuests[index].GetCurrentQuestStage()._isActive = true;
             ProgressionTracker.instance.UpdateQuestProgression(new ProgressionTracker.QuestInfo(_allQuests[index]._quest,  _allQuests[index]._currentQuestStageID,  _allQuests[index]._isCompleted,  _allQuests[index]._isActive, true, SceneLoader.instance.GetCurrentScene()._sceneName));
             ProgressionTracker.instance.SetCurrentQuest(_allQuests[index]._quest);
+            Game_Manager.instance._UIManager._discoveryUI.Discover(new DiscoveryUI.Discovery("New Quest"));
 
         }
     }
@@ -38,54 +37,19 @@ public class PlayerQuestLog : AutoCleanupSingleton<PlayerQuestLog>
         UpdateQuestmarker();
     }
 
-    ////This function returns the currently active quest
-    //public QuestLogEntry GetCurrentQuest()
-    //{
-    //    if (_currentQuestIndex < 0)
-    //        return null;
-
-    //    return _allQuests[_currentQuestIndex];
-    //}
-
-    //public List<QuestLogEntry> GetAllActiveQuests()
-    //{
-    //    return _allQuests.Where(x => x._isActive == true).ToList();
-    //}
-
-    ////This function selects a new active quest and updates the UI and quest marker accordingly
-    //public void SetQuestAsCurrent(System.Guid ID)
-    //{
-    //    int index = -1;
-    //    index = _allQuests.FindIndex(x => x._quest._questID == ID);
-
-    //    if (index < 0)
-    //        return;
-
-    //    if (_currentQuestIndex == index)
-    //    {
-    //        _currentQuestIndex = -1;
-    //    }
-    //    else
-    //    {
-    //        if(_currentQuestIndex >= 0)
-    //            ProgressionTracker.instance.UpdateQuestProgression(new ProgressionTracker.QuestInfo(_allQuests[_currentQuestIndex]._quest, _allQuests[_currentQuestIndex]._currentQuestStageID, _allQuests[_currentQuestIndex]._isCompleted, _allQuests[_currentQuestIndex]._isActive, false, SceneLoader.instance.GetCurrentScene()._sceneName));
-
-    //        //Update the current ID
-    //        _currentQuestIndex = index;
-    //        ProgressionTracker.instance.UpdateQuestProgression(new ProgressionTracker.QuestInfo(_allQuests[_currentQuestIndex]._quest, _allQuests[_currentQuestIndex]._currentQuestStageID, _allQuests[_currentQuestIndex]._isCompleted, _allQuests[_currentQuestIndex]._isActive, true, SceneLoader.instance.GetCurrentScene()._sceneName));
-    //    }
-
-
-    //    //Update the quest marker
-    //    UpdateQuestmarker(_currentQuestIndex);
-    //}
-
-
     public void SaveQuestData()
     {
         foreach (QuestLogEntry quest in _allQuests)
         {
-            ProgressionTracker.instance.UpdateQuestProgression(new ProgressionTracker.QuestInfo(quest._quest, quest._currentQuestStageID, quest._isCompleted, quest._isActive, ProgressionTracker.instance.GetCurrentQuest()._quest._questID == quest._quest._questID ? true : false, SceneLoader.instance.GetCurrentScene()._sceneName));
+            ProgressionTracker.instance.UpdateQuestProgression(
+                      new ProgressionTracker.QuestInfo(
+                          quest._quest,
+                          quest._currentQuestStageID,
+                          quest._isCompleted,
+                          quest._isActive,
+                          ProgressionTracker.instance.GetCurrentQuest()._quest != null ? (ProgressionTracker.instance.GetCurrentQuest()._quest._questID == quest._quest._questID ? true : false) : false,
+                          SceneLoader.instance.GetCurrentScene()._sceneName
+                          ));
         }
     }
 
@@ -135,7 +99,7 @@ public class PlayerQuestLog : AutoCleanupSingleton<PlayerQuestLog>
         
         } 
 
-        if (ProgressionTracker.instance.GetAllActiveQuests().Count > 0 && currentQuest == null)
+        if (ProgressionTracker.instance.GetAllActiveQuests().Count > 0 && ProgressionTracker.instance.GetCurrentQuest()._quest == null)
         {
             ProgressionTracker.instance.SetCurrentQuest(ProgressionTracker.instance.GetAllActiveQuests()[0]._quest);
         }
@@ -152,6 +116,13 @@ public class PlayerQuestLog : AutoCleanupSingleton<PlayerQuestLog>
             id = _allQuests.FindIndex(x => x._quest == current._quest);
 
             Game_Manager.instance._UIManager.ShowQuestUI();
+
+            if(current._isComplete)
+            {
+                Game_Manager.instance._UIManager.HideQuestMarker();
+                return;
+            }
+
 
             //If the quest takes place in this scene
             if (id >= 0)
@@ -176,7 +147,6 @@ public class PlayerQuestLog : AutoCleanupSingleton<PlayerQuestLog>
             {
 
                 SceneSpawnPoint spawn = FindObjectsOfType<SceneSpawnPoint>().ToList().Find(x => x._linkedScene == current._scene);
-                Debug.Log("Searching for load door to " + current._scene);
                 if (spawn != null)
                 {
 
@@ -195,6 +165,7 @@ public class PlayerQuestLog : AutoCleanupSingleton<PlayerQuestLog>
                 }
 
             }
+            
             //Update the In-Game UI text
             _currentQuestName.text = current._quest._questName;
             _currentQuestObjective.text = current._quest._questStages[current._currentStage]._stageObjective;
@@ -249,7 +220,15 @@ public class PlayerQuestLog : AutoCleanupSingleton<PlayerQuestLog>
         }
 
 
-        ProgressionTracker.instance.UpdateQuestProgression(new ProgressionTracker.QuestInfo(_allQuests[targetIndex]._quest, _allQuests[targetIndex]._currentQuestStageID, _allQuests[targetIndex]._isCompleted, _allQuests[targetIndex]._isActive, ProgressionTracker.instance.GetCurrentQuest()._quest._questID == _allQuests[targetIndex]._quest._questID ? true : false, SceneLoader.instance.GetCurrentScene()._sceneName));
+        ProgressionTracker.instance.UpdateQuestProgression(
+            new ProgressionTracker.QuestInfo(
+                _allQuests[targetIndex]._quest, 
+                _allQuests[targetIndex]._currentQuestStageID,
+                _allQuests[targetIndex]._isCompleted, 
+                _allQuests[targetIndex]._isActive,
+                ProgressionTracker.instance.GetCurrentQuest()._quest != null ? (ProgressionTracker.instance.GetCurrentQuest()._quest._questID == _allQuests[targetIndex]._quest._questID ? true : false) : false,
+                SceneLoader.instance.GetCurrentScene()._sceneName
+                ));
 
         //Update the quest marker accordingly
         UpdateQuestmarker();
@@ -335,9 +314,9 @@ public class QuestLogEntry
 
     public void CompleteQuest()
     {
-        _currentQuestStageID = 0;
         _isCompleted = true;
-        _isActive = false;
+        _isActive = false;       
+        ProgressionTracker.instance.UpdateQuestProgression(new ProgressionTracker.QuestInfo(_quest, _currentQuestStageID, _isCompleted, _isActive, ProgressionTracker.instance.GetCurrentQuest()._quest._questID == _quest._questID ? true : false, SceneLoader.instance.GetCurrentScene()._sceneName));
     }
 
     public bool GetNextQuest(out Quest next)

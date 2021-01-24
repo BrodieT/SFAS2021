@@ -295,6 +295,10 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 5506fd27-2a47-4f3c-b6f8-b8fb9979efaf
     m_ActionName: Player/Crouch1[/Keyboard/ctrl,/Keyboard/c]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 779e1934-a707-404c-9ad0-ae02d0ac9ea1
+    m_ActionName: Player/Reload[/Keyboard/r]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -366,13 +370,13 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.975
   m_Pitch: 1
   Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 0
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500
@@ -462,9 +466,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9beacdcc589f7574fa1a5f7af07d37a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerCamera: {fileID: 1775356727829572373}
   _interactRange: 5
-  _interactUI: {fileID: 0}
   _interactLayer:
     serializedVersion: 2
     m_Bits: 512
@@ -494,6 +496,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxHP: 100
   _regenRate: 1
+  _isDead: 0
   _healthBar: {fileID: 0}
 --- !u!114 &2365277206636855110
 MonoBehaviour:
@@ -512,6 +515,9 @@ MonoBehaviour:
   _zipGrappleTime: 3
   _grappleFireTime: 2
   _grappleHookPrefab: {fileID: 1573385493617873046, guid: 57e228d4e9a94fd449b9ec5ef61a195c, type: 3}
+  _grapplableSurfaces:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &4066876492914142743
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -532,6 +538,7 @@ MonoBehaviour:
   _gunRange: 100
   _bulletSpeed: 15
   _damageAmount: 10
+  _gunshotSound: {fileID: 0}
   _gunAnimator: {fileID: 4439171162392896784}
 --- !u!1 &1775356727807555800
 GameObject:
@@ -713,6 +720,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerBody: {fileID: 1775356727400075062}
+  _footstepSounds: []
 --- !u!114 &1775356727829572374
 MonoBehaviour:
   m_ObjectHideFlags: 0

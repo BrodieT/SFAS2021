@@ -23,11 +23,14 @@ public class BerserkerController : EnemyController
     private AttackBehaviour _currentAttack = AttackBehaviour.Attack;
     private Vector3 _targetPosition = new Vector3();
 
+    private GunController _gun = default;
+
     // Start is called before the first frame update
     public override void Start()
     {
         base.Start();
         _animator = GetComponentInChildren<Animator>();
+        _gun = GetComponent<GunController>();
     }
 
     // Update is called once per frame
@@ -105,7 +108,6 @@ public class BerserkerController : EnemyController
             } //if close enough for ranged and cooldown has elapsed perform ranged attack
             else if (_playerDistance <= _shootingRange && _rangedTimer <= 0.0f)
             {
-                Debug.Log("Bang!");
 
                 _animator.SetBool("Idle", true);
                 _animator.SetBool("Shoot", true);
