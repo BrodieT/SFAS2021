@@ -13,6 +13,6 @@ public class PauseMenu : MonoBehaviour
     private void Start()
     {
         _resumeButton.onClick.AddListener(delegate { Game_Manager.instance._UIManager.Resume(); });
-        _quitButton.onClick.AddListener(delegate { Application.Quit(); });
+        _quitButton.onClick.AddListener(delegate { SceneLoader.instance.ReturnToMenu(); });
     }
 }

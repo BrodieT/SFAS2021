@@ -13,13 +13,13 @@ public class DiscoveryUI : MonoBehaviour
 
     public struct Discovery
     {
-        public string _text;
-        public bool _isAchivement;
+        public string _main;
+        public string _sub;
 
-        public Discovery(string text, bool achievement = false)
+        public Discovery(string text, string subtext = "Discovered")
         {
-            _text = text;
-            _isAchivement = achievement;
+            _main = text;
+            _sub = subtext;
         }
     }
 
@@ -33,12 +33,9 @@ public class DiscoveryUI : MonoBehaviour
     private void ShowDiscovery(Discovery discover)
     {
         _isReady = false;
-        _mainText.text = discover._text;
+        _mainText.text = discover._main;
+        _subText.text = discover._sub;
 
-        if(discover._isAchivement)
-            _subText.text = "Unlocked";
-        else
-            _subText.text = "Discovered";
 
         _anim.SetTrigger("Discovery");
         Invoke("ResetTrigger", 5.0f);

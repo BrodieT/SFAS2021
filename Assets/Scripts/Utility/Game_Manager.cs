@@ -11,4 +11,6 @@ public class Game_Manager : AutoCleanupSingleton<Game_Manager>
     [SerializeField] public Camera _playerCamera = default;
     [SerializeField] public UIManager _UIManager = default;
 
+   
+
 }

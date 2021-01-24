@@ -11,6 +11,43 @@ public class ProgressionTracker : AutoCleanupSingleton<ProgressionTracker>
         DontDestroyOnLoad(this);
     }
 
+    #region SaveLoad
+    public void StartNewGame()
+    {
+        _questTracker.Clear();
+        _loadedScenes.Clear();
+
+        for (int i = 0; i < _allAchievements.Count; i++)
+        {
+            AchievementData data = _allAchievements[i];
+            data._isAchieved = false;
+            _allAchievements[i] = data;
+        }
+    }
+
+    public Vector3 _playersLastPosition = new Vector3();
+    public void ContinueGame()
+    {
+        Game_Manager.instance._player.transform.position = _playersLastPosition;
+        Game_Manager.instance.GetComponent<PlayerQuestLog>().UpdateQuestmarker();
+    }
+    #endregion
+
+    #region Resource Management
+
+    public int _loadedAmmo = 6;
+    public int _spareAmmo = 30;
+
+    public void SetAmmoCounters(int loaded, int spare)
+    {
+        _loadedAmmo = loaded;
+        _spareAmmo = spare;
+    }
+
+    #endregion
+
+    #region Achievement Progression
+
 
     #region Collectible-based Achievements
 
@@ -117,7 +154,7 @@ public class ProgressionTracker : AutoCleanupSingleton<ProgressionTracker>
             AchievementData data = _allAchievements[id];
             data._isAchieved = true;
             _allAchievements[id] = data;
-            Game_Manager.instance._UIManager._discoveryUI.Discover(new DiscoveryUI.Discovery("Achievement", true));
+            Game_Manager.instance._UIManager._discoveryUI.Discover(new DiscoveryUI.Discovery("Achievement", "Unlocked"));
 
             //Prevent infinite loop, only proceed if not completing the completionist trophy
             if (id > 0)
@@ -135,8 +172,6 @@ public class ProgressionTracker : AutoCleanupSingleton<ProgressionTracker>
             }
         }
     }
-
-    #region Achievement Progression
 
     [System.Serializable]
     public struct AchievementData

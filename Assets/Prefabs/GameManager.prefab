@@ -19214,6 +19214,10 @@ PrefabInstance:
       propertyPath: _spareAmmo
       value: 30
       objectReference: {fileID: 0}
+    - target: {fileID: 4066876492914142743, guid: e50ccc62ed8ac4d40bbe4d8cbc7c4bd4, type: 3}
+      propertyPath: _damageAmount
+      value: 25
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1775356727400075052, guid: e50ccc62ed8ac4d40bbe4d8cbc7c4bd4, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: e50ccc62ed8ac4d40bbe4d8cbc7c4bd4, type: 3}

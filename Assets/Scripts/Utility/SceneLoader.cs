@@ -12,11 +12,12 @@ public class SceneLoader : AutoCleanupSingleton<SceneLoader>
     private TMP_Text _loadingTxt = default; //The text displayed on the loading screen
     private string _elipses = ""; //The elipses that will be placed at the end of the loading screen text
     private Canvas _currentLoadingScreen = default; //The instatiated version of the loading screen
-    public static bool _isFinishedLoading = false; //bool to track is the current scene load process is finished
+    public static bool _isFinishedLoading = true; //bool to track is the current scene load process is finished
     private List<SceneData> _allScenes = new List<SceneData>(); //A list of all possible scenes and the corresponding build index
     private SceneName _previousScene = 0;
     private SceneName _currentScene = 0;
-
+    private bool _continuingGame = false;
+  
     public SceneData GetCurrentScene()
     {
         return _allScenes.Find(x => x._sceneName == _currentScene);
@@ -40,7 +41,39 @@ public class SceneLoader : AutoCleanupSingleton<SceneLoader>
     
     }
   
-    
+    public void StartNewGame()
+    {
+        LoadLevel(SceneName.Warehouse);
+        ProgressionTracker.instance.StartNewGame();
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+
+    public void ContinueGame()
+    {
+        if (_previousScene == 0)
+        {
+            Debug.Log("No Game Data To Load.");
+            StartNewGame();
+        }
+        else
+        {
+            _continuingGame = true;
+            LoadLevel(_previousScene);
+        }
+    }
+
+    public void ReturnToMenu()
+    {
+        Game_Manager.instance._UIManager.Resume();
+        ProgressionTracker.instance._playersLastPosition = Game_Manager.instance._player.transform.position;
+        LoadLevel(SceneName.MainMenu);
+    }
+
+
     // Start is called before the first frame update
     public override void Awake()
     {
@@ -48,8 +81,9 @@ public class SceneLoader : AutoCleanupSingleton<SceneLoader>
         //Ensure this is carried between scenes
         DontDestroyOnLoad(this.gameObject);
 
-        _allScenes.Add(new SceneData(SceneName.Warehouse, 0));
-        _allScenes.Add(new SceneData(SceneName.City, 1));
+        _allScenes.Add(new SceneData(SceneName.MainMenu, 0));
+        _allScenes.Add(new SceneData(SceneName.Warehouse, 1));
+        _allScenes.Add(new SceneData(SceneName.City, 2));
 
 
         _currentScene = _allScenes.Find(x => x._sceneIndex == SceneManager.GetActiveScene().buildIndex)._sceneName;
@@ -57,9 +91,14 @@ public class SceneLoader : AutoCleanupSingleton<SceneLoader>
 
     }
 
+
+
     //This function will begin loading the desired scene
     public void LoadLevel(SceneName scene)
     {
+        if (!_isFinishedLoading)
+            return;
+
         if (scene == SceneName.None)
             return;
 
@@ -70,8 +109,13 @@ public class SceneLoader : AutoCleanupSingleton<SceneLoader>
         //Ensure the loading screen is not destroyed when changing scenes
         DontDestroyOnLoad(_currentLoadingScreen.gameObject);
 
+
         _previousScene = _currentScene;
-        Game_Manager.instance.GetComponent<PlayerQuestLog>().SaveQuestData();
+
+        if(_previousScene != SceneName.MainMenu && _currentScene != SceneName.MainMenu)
+            Game_Manager.instance.GetComponent<PlayerQuestLog>().SaveQuestData();
+        
+        
         _currentScene = scene;
 
         int targetBuildIndex = _allScenes.Find(x => x._sceneName == scene)._sceneIndex;
@@ -118,6 +162,7 @@ public class SceneLoader : AutoCleanupSingleton<SceneLoader>
     //This coroutine will load the desired scene
     IEnumerator LoadAsync(int scene)
     {
+        GameUtility._isPaused = true;
         //Artificially increase the load time slightly to prevent the loading screen from flashing up too quickly
         yield return new WaitForSeconds(5.0f);
         //begin loading
@@ -133,35 +178,52 @@ public class SceneLoader : AutoCleanupSingleton<SceneLoader>
 
         yield return new WaitForSeconds(2.0f);
 
-        //Try to find a spawn point for the player in the new scene
-        foreach (SceneSpawnPoint spawnPnt in GameObject.FindObjectsOfType<SceneSpawnPoint>())
+
+        //If not in the main menu, then the player must be positioned
+        if (_currentScene != SceneName.MainMenu)
         {
-            if(spawnPnt._linkedScene == _previousScene)
+            //If not continuing a previous playthrough, find a natural spawn point
+            if (!_continuingGame)
             {
-                Game_Manager.instance._player.transform.position = spawnPnt.transform.position;
-                Game_Manager.instance._player.transform.rotation = spawnPnt.transform.rotation;
-                break;
+                //Try to find a spawn point for the player in the new scene
+                foreach (SceneSpawnPoint spawnPnt in GameObject.FindObjectsOfType<SceneSpawnPoint>())
+                {
+                    if (spawnPnt._linkedScene == _previousScene)
+                    {
+                        Game_Manager.instance._player.transform.position = spawnPnt.transform.position;
+                        Game_Manager.instance._player.transform.rotation = spawnPnt.transform.rotation;
+                        break;
+                    }
+                }
             }
+            else //If continuing from the main menu
+            {
+                //Use the progression tracker to find the player's previous position in the scene
+                _continuingGame = false;
+                ProgressionTracker.instance.ContinueGame();
+            }
+
+            Game_Manager.instance._player.GetComponent<PlayerGunController>().UpdateAmmoCounter();
+
+            //Update the quest data
+            Game_Manager.instance.GetComponent<PlayerQuestLog>().LoadQuestData();
+        }
+        else
+        {
+            GameUtility.ShowCursor();
         }
 
-
-        //Update the quest data
-        Game_Manager.instance.GetComponent<PlayerQuestLog>().LoadQuestData();
-
         //Delay the removal of the loading screen to ensure everything in the new scene is in place
-        yield return new WaitForSeconds(2.0f);
+        yield return new WaitForSeconds(0.5f);
+
+        StopCoroutine(UpdateLoadingUI());
 
         //Remove the load screen and finish the process
         _currentLoadingScreen.gameObject.SetActive(false);
-        _isFinishedLoading = true;
-
-
-        yield return new WaitForSeconds(2.0f);
-
         //Cleanup
         Destroy(_currentLoadingScreen.gameObject);
+        GameUtility._isPaused = false;
 
-
-        StopAllCoroutines();
+        _isFinishedLoading = true;
     }
 }

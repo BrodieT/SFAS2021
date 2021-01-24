@@ -17,7 +17,13 @@ public class EnemyStats : CharacterStats
 
         _healthBar.gameObject.SetActive(false);
 
-        if(_onDeath != null)
+        if(transform.TryGetComponent<ChargerController>(out ChargerController charger))
+            ProgressionTracker.instance.IncrementChargerCounter();
+
+        if (transform.TryGetComponent<TurretController>(out TurretController turret))
+            ProgressionTracker.instance.IncrementTurretCounter();
+
+        if (_onDeath != null)
         {
             _onDeath?.Invoke();
         }

@@ -2379,7 +2379,19 @@ MonoBehaviour:
   _percentageTxt: {fileID: 3535989244574244711}
   _onDeath:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6710847293947025104}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &8734302386080773705
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2392,15 +2404,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddb44257ae9ded04890ba9cb6240ca5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _totalAmmo: 20
+  _spareAmmo: 18
   _loadedAmmo: 10
-  _maxAmmo: 10
+  _magCapacity: 6
   _bulletPrefab: {fileID: 8316585027372964064, guid: 8a6622f14c081b04b83f4e9e0ff97664, type: 3}
   _gunTip: {fileID: 6710847294286310490}
   _gunRange: 100
   _bulletSpeed: 5
   _damageAmount: 10
   _gunshotSound: {fileID: 8300000, guid: b530e5b364f80884c829246dc66b4ddf, type: 3}
+  _isReloading: 0
 --- !u!82 &4477555063279411056
 AudioSource:
   m_ObjectHideFlags: 0

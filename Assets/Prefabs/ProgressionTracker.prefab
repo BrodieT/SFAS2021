@@ -43,14 +43,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88c396b62d4c89148b2087356be96bfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playersLastPosition: {x: 0, y: 0, z: 0}
+  _collectiblesFound: 0
+  _totalCollectibleCount: 3
+  _totalNumberOfEnemies: 25
   _allAchievements:
   - _achievementName: Completionist
-    _achievementDescription: Find all 20 collectibles scattered throughout the game.
-    _achievementID: 0
-    _icon: {fileID: 0}
     _isAchieved: 0
-  _questTracker:
-  - _quest: {fileID: 0}
-    _currentStage: 0
-    _isComplete: 0
-    _isActive: 0
+  - _achievementName: Recharged
+    _isAchieved: 0
+  - _achievementName: Sinking Ship
+    _isAchieved: 0
+  - _achievementName: Bloodthirsty
+    _isAchieved: 0
+  - _achievementName: FindersKeepers
+    _isAchieved: 0
+  - _achievementName: Amateur Fortune Hunter
+    _isAchieved: 0
+  - _achievementName: Hoarder
+    _isAchieved: 0
+  - _achievementName: Ultimate Treasure Hunter
+    _isAchieved: 0
+  - _achievementName: Expert Novice
+    _isAchieved: 0
+  - _achievementName: Turret Smasher
+    _isAchieved: 0
+  - _achievementName: Immovable Object
+    _isAchieved: 0
+  - _achievementName: Oncoming Storm
+    _isAchieved: 0
+  _loadedScenes: []
+  _questTracker: []

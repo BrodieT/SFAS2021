@@ -41,6 +41,18 @@ public class PlayerGunController : GunController
         }
     }
 
+    public void StoreAmmoCounter()
+    {
+        ProgressionTracker.instance.SetAmmoCounters(_loadedAmmo, _spareAmmo);
+    }
+
+    public void UpdateAmmoCounter()
+    {
+        _loadedAmmo = ProgressionTracker.instance._loadedAmmo;
+        _spareAmmo = ProgressionTracker.instance._spareAmmo;
+        UpdateUI();
+    }
+
     public void Reload(InputAction.CallbackContext context)
     {
         if (context.performed && !GameUtility._isPaused && GameUtility._isPlayerObjectBeingControlled)
@@ -64,6 +76,7 @@ public class PlayerGunController : GunController
                     _loadedAmmo++;
                     _spareAmmo--;
                     UpdateUI();
+                    StoreAmmoCounter();
                     yield return new WaitForSeconds(_reloadRate);
                 }
             }
@@ -74,6 +87,7 @@ public class PlayerGunController : GunController
                     _loadedAmmo++;
                     _spareAmmo--;
                     UpdateUI();
+                    StoreAmmoCounter();
                     yield return new WaitForSeconds(_reloadRate);
                 }
             }
@@ -111,6 +125,8 @@ public class PlayerGunController : GunController
         if (CanShoot() && !_isRunning)
         {
             _loadedAmmo--;
+            StoreAmmoCounter();
+
             _gunAnimator.SetTrigger("Shoot");
 
             base.ShootGun();
@@ -123,6 +139,7 @@ public class PlayerGunController : GunController
     public void AddAmmo(int amount)
     {
         _spareAmmo += amount;
+        StoreAmmoCounter();
     }
 
     private void Update()

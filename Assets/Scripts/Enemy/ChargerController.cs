@@ -51,6 +51,9 @@ public class ChargerController : EnemyController
     {
         base.Patrol();
 
+        if (_patrolPoints.Count == 0)
+            return;
+
         //If the enemy is close enough to the destination
         if (Vector3.Distance(transform.position, _patrolPoints[_currentPatrolPoint].position) < _agent.stoppingDistance)
         {
